@@ -1,11 +1,11 @@
-package com.zhiyin.plugins.oneclicknavigation.xml;
+package com.zhiyin.plugins.oneClickNavigation.xml;
 
 import com.intellij.openapi.module.Module;
 import com.intellij.psi.xml.XmlFile;
 import com.intellij.psi.xml.XmlTag;
 import com.intellij.util.xml.DomFileDescription;
-import com.zhiyin.plugins.oneclicknavigation.xml.domelements.Mapper;
-import org.jetbrains.annotations.NonNls;
+import com.zhiyin.plugins.resources.Constants;
+import com.zhiyin.plugins.oneClickNavigation.xml.domElements.Mapper;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -17,12 +17,14 @@ import org.jetbrains.annotations.Nullable;
 public class MybatisXmlFileDescription extends DomFileDescription<Mapper> {
 
     public MybatisXmlFileDescription() {
-        this(Mapper.class, "mapper");
+        super(Mapper.class, "mapper", Constants.MYBATIS_POSSIBLE_NAMESPACES);
     }
 
-    public MybatisXmlFileDescription(Class<Mapper> rootElementClass, @NonNls String rootTagName, @NonNls String @NotNull ... allPossibleRootTagNamespaces) {
-        super(rootElementClass, rootTagName, allPossibleRootTagNamespaces);
-    }
+
+//    @Override
+//    protected void initializeFileDescription() {
+//        registerNamespacePolicy(Constants.MYBATIS_DTD_CLASSPATH, Constants.MYBATIS_POSSIBLE_NAMESPACES);
+//    }
 
     /**
      * 满足条件的才会被索引
@@ -39,6 +41,7 @@ public class MybatisXmlFileDescription extends DomFileDescription<Mapper> {
 
         XmlTag rootTag = file.getRootTag();
         String rootTagName = super.getRootTagName();
+        System.out.println("add mapper:" + fileName + ", namespace:" + rootTag.getNamespace());
         return null != rootTag && rootTag.getName()
                                          .equals(rootTagName);
 

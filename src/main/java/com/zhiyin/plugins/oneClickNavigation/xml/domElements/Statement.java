@@ -1,20 +1,21 @@
-package com.zhiyin.plugins.oneclicknavigation.xml.domelements;
+package com.zhiyin.plugins.oneClickNavigation.xml.domElements;
 
-import com.intellij.util.xml.Attribute;
-import com.intellij.util.xml.GenericAttributeValue;
+import com.intellij.util.xml.*;
 
 /**
  * Mybatis xml 文件中 ["select", "insert", "update", "delete"] 标签的 DOM 元素映射
  *
  * @author yan on 2024/2/25 00:44
  */
-public interface Statement {
+public interface Statement extends DomElement {
 
     /**
      * 对应 DAO 方法名
      * @return 标签的 id 属性
      */
     @Attribute("id")
+    @NameValue
+    @Required
     GenericAttributeValue<String> getId();
 
 }

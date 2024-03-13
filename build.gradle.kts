@@ -14,16 +14,16 @@ repositories {
 // Read more: https://plugins.jetbrains.com/docs/intellij/tools-gradle-intellij-plugin.html
 intellij {
   version.set("2022.1.4")
-  type.set("IC") // Target IDE Platform
+  type.set("IU") // Target IDE Platform
 
-  plugins.set(listOf(/* Plugin Dependencies */))
+  plugins.set(listOf("com.intellij.java", "properties", "JavaScript"))
 }
 
 tasks {
   // Set the JVM compatibility versions
   withType<JavaCompile> {
-    sourceCompatibility = "11"
-    targetCompatibility = "11"
+    sourceCompatibility = "8"
+    targetCompatibility = "8"
   }
 
   patchPluginXml {
@@ -40,4 +40,9 @@ tasks {
   publishPlugin {
     token.set(System.getenv("PUBLISH_TOKEN"))
   }
+
+  runIde {
+    jvmArgs("-Xmx4096m","-XX:ReservedCodeCacheSize=512m","-Xms1024m","-javaagent:/Users/yan/Downloads/jetbra/ja-netfilter.jar=jetbrains")
+  }
+
 }

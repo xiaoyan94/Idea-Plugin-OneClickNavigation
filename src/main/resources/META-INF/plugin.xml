@@ -21,11 +21,42 @@
     <!-- Product and plugin compatibility requirements.
          Read more: https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html -->
     <depends>com.intellij.modules.platform</depends>
+    <depends>com.intellij.modules.xml</depends>
+    <depends>com.intellij.modules.java</depends>
+    <depends>com.intellij.properties</depends>
+    <depends>JavaScript</depends>
 
     <!-- Extension points defined by the plugin.
          Read more: https://plugins.jetbrains.com/docs/intellij/plugin-extension-points.html -->
     <extensions defaultExtensionNs="com.intellij">
-        <dom.fileMetaData implementation="com.zhiyin.plugins.oneclicknavigation.xml.MybatisXmlFileDescription" rootTagName="mapper"/>
 
+        <lang.foldingBuilder language="JAVA" implementationClass="com.zhiyin.plugins.foldingBuilder.MyJavaFoldingBuilder"/>
+
+        <!--JavaScript: js 文件和 html 中嵌入的script 标签 js-->
+        <lang.foldingBuilder language="JavaScript" implementationClass="com.zhiyin.plugins.foldingBuilder.MyJavaScriptFoldingBuilder"/>
+
+        <!--HTML: js 文件中的 js 不生效, 仅 html 中嵌入的script 标签内的 js生效-->
+<!--        <lang.foldingBuilder language="HTML" implementationClass="com.zhiyin.plugins.foldingBuilder.MyJavaScriptFoldingBuilder"/>-->
+
+        <lang.foldingBuilder language="HTML" implementationClass="com.zhiyin.plugins.foldingBuilder.MyHTMLFoldingBuilder"/>
+
+        <annotator language="JAVA" implementationClass="com.zhiyin.plugins.annotator.MyJavaAnnotator"/>
+
+        <annotator language="HTML" implementationClass="com.zhiyin.plugins.annotator.MyHTMLAnnotator"/>
+
+        <psi.referenceContributor language="JAVA" implementation="com.zhiyin.plugins.referenceContributor.MyJavaReferenceContributor"/>
+
+        <completion.confidence language="JAVA" implementationClass="com.zhiyin.plugins.referenceContributor.MyCompletionConfidence"/>
+
+        <!--
+                <dom.fileMetaData implementation="com.zhiyin.plugins.oneClickNavigation.xml.MybatisXmlFileDescription" rootTagName="mapper"/>
+        -->
+        <!--
+                <standardResourceProvider implementation="com.zhiyin.plugins.oneClickNavigation.xml.MyBatisSchemaProvider"/>
+        -->
+
+        <!--
+                <codeInsight.lineMarkerProvider language="JAVA" implementationClass="com.zhiyin.plugins.oneClickNavigation.codeInsight.JavaLineMarkerProvider"/>
+        -->
     </extensions>
 </idea-plugin>
