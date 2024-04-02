@@ -14,8 +14,12 @@
          Simple HTML elements (text formatting, paragraphs, and lists) can be added inside of <![CDATA[ ]]> tag.
          Guidelines: https://plugins.jetbrains.com/docs/marketplace/plugin-overview-page.html#plugin-description -->
     <description><![CDATA[
-    An lightweight one-click navigation tool. The following features are provided:<br>
-    <li>One-click navigate to Mybatis XML from Java DAO mapper class.</li>
+    一个针对智引Mes开发的Idea插件, 目前有以下功能:<br>
+      <ul>
+      <li>queryDaoDataT参数和对应dao方法互相跳转,自动补全提示.</li>
+      <li>I18nUtils.getMessage中文资源串提示,中文折叠显示.</li>
+      <li>其他...</li>
+      </ul>
   ]]></description>
 
     <!-- Product and plugin compatibility requirements.
@@ -48,15 +52,51 @@
 
         <completion.confidence language="JAVA" implementationClass="com.zhiyin.plugins.referenceContributor.MyCompletionConfidence"/>
 
-        <!--
-                <dom.fileMetaData implementation="com.zhiyin.plugins.oneClickNavigation.xml.MybatisXmlFileDescription" rootTagName="mapper"/>
-        -->
+        <dom.fileMetaData implementation="com.zhiyin.plugins.oneClickNavigation.xml.MybatisXmlFileDescription" rootTagName="mapper"/>
         <!--
                 <standardResourceProvider implementation="com.zhiyin.plugins.oneClickNavigation.xml.MyBatisSchemaProvider"/>
         -->
 
-        <!--
-                <codeInsight.lineMarkerProvider language="JAVA" implementationClass="com.zhiyin.plugins.oneClickNavigation.codeInsight.JavaLineMarkerProvider"/>
-        -->
+        <codeInsight.lineMarkerProvider language="JAVA" implementationClass="com.zhiyin.plugins.oneClickNavigation.codeInsight.JavaLineMarkerProvider"/>
+        <codeInsight.lineMarkerProvider language="XML" implementationClass="com.zhiyin.plugins.oneClickNavigation.codeInsight.MapperXmlLineMarkerProvider"/>
+
+        <notificationGroup displayType="BALLOON" id="ZhiyinOneClickNavigation"/>
+
+        <applicationConfigurable parentId="tools" instance="com.zhiyin.plugins.settings.AppSettingsConfigurable"
+                                 id="com.zhiyin.plugins.settings.AppSettingsConfigurable"
+                                 displayName="OneClickNavigation插件设置"/>
     </extensions>
+    <actions>
+        <action id="com.zhiyin.plugins.actions.testAction"
+                icon="com.zhiyin.plugins.resources.MyIcons.pandaIconSVG16_2"
+                class="com.zhiyin.plugins.oneClickNavigation.actions.TestAction" text="刷新数据"
+                description="刷新缓存的数据">
+            <add-to-group group-id="ToolsMenu" anchor="first"/>
+        </action>
+
+    </actions>
+
+    <projectListeners>
+        <!--在轻服务中使用代码注册-->
+        <!--<listener
+                class="com.zhiyin.plugins.listeners.MyXmlFileListener"
+                topic="com.intellij.openapi.vfs.newvfs.BulkFileListener"/>-->
+
+        <listener class="com.zhiyin.plugins.listeners.MyProjectManagerListener"
+                  topic="com.intellij.openapi.project.ProjectManagerListener"/>
+
+        <listener class="com.zhiyin.plugins.listeners.MyFileEditorManagerListener"
+                  topic="com.intellij.openapi.fileEditor.FileEditorManagerListener"/>
+
+        <listener class="com.zhiyin.plugins.listeners.MyFileEditorManagerListener$Before"
+                  topic="com.intellij.openapi.fileEditor.FileEditorManagerListener$Before"/>
+
+        <!--NOT WORKING-->
+        <!--<listener class="com.zhiyin.plugins.listeners.MyFileEditorManagerListener$MyCaretListener"
+                  topic="com.intellij.openapi.editor.event.CaretListener"/>-->
+        <!--<listener class="com.zhiyin.plugins.listeners.MyFileEditorManagerListener$MyEditorMouseMotionListener"
+                  topic="com.intellij.openapi.editor.event.EditorMouseMotionListener"/>-->
+    </projectListeners>
+
+
 </idea-plugin>

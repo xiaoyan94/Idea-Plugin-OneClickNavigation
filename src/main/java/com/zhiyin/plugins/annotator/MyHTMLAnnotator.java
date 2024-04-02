@@ -70,7 +70,10 @@ public class MyHTMLAnnotator implements Annotator {
         String key = text2.substring(start, end);
         TextRange textRange = new TextRange(element.getTextOffset(), element.getTextOffset() + element.getTextLength());
         Module module = MyPsiUtil.getModuleByPsiElement(element);
-        Project project = module.getProject();
+        if (module == null) {
+            return;
+        }
+        Project project = element.getProject();
         List<Property> properties = MyPropertiesUtil.findModuleI18nProperties(project, module, key);
         LOG.info("key:" + key + ", properties size:" + properties.size());
         if (!properties.isEmpty()) {

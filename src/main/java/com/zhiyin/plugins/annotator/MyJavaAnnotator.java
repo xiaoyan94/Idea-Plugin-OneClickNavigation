@@ -32,6 +32,12 @@ public final class MyJavaAnnotator implements Annotator {
 
     @Override
     public void annotate(@NotNull PsiElement element, @NotNull AnnotationHolder holder) {
+
+        Module module = MyPsiUtil.getModuleByPsiElement(element);
+        if (module == null) {
+            return;
+        }
+
         // Ensure the PSI Element is an expression
         if (!(element instanceof PsiLiteralExpression)) {
             return;
@@ -47,12 +53,16 @@ public final class MyJavaAnnotator implements Annotator {
         if (!(parent instanceof PsiMethodCallExpression)) {
             return;
         }
+        PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression) parent;
+        if (!methodCallExpression.getMethodExpression().textMatches(Constants.I18N_METHOD_EXPRESSION)) {
+            return;
+        }
 
         // Ensure the PSI element contains a string that starts with the prefix and separator
         String i18Key = literalExpression.getValue() instanceof String ? (String) literalExpression.getValue() : null;
-        if (i18Key == null || !i18Key.startsWith(Constants.I18N_KEY_PREFIX)) {
-            return;
-        }
+//        if (i18Key == null || !i18Key.startsWith(Constants.I18N_KEY_PREFIX)) {
+//            return;
+//        }
 
         // Define the text ranges (start is inclusive, end is exclusive)
         //        TextRange keyRange = literalExpression.getTextRange();
@@ -63,8 +73,8 @@ public final class MyJavaAnnotator implements Annotator {
         //              .range(keyRange).textAttributes(DefaultLanguageHighlighterColors.KEYWORD).create();
 
         // Get the list of properties for given key
-        Module module = MyPsiUtil.getModuleByPsiElement(element);
-        Project project = module.getProject();
+
+        Project project = element.getProject();
         List<Property> properties = MyPropertiesUtil.findModuleI18nProperties(project, module, i18Key);
         if (properties.isEmpty()) {
 
@@ -134,6 +144,10 @@ public final class MyJavaAnnotator implements Annotator {
 
         @Override
         public boolean equals(Object obj) {
+            /*if (obj instanceof MyRenderer) {
+                return psiElement.equals(((MyRenderer) obj).psiElement) && tips.equals(((MyRenderer) obj).tips);
+            }*/
+
             return false;
         }
 

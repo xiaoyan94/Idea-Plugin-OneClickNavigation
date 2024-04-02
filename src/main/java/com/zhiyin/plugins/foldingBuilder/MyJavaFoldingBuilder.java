@@ -37,7 +37,10 @@ public class MyJavaFoldingBuilder extends FoldingBuilderEx {
         List<FoldingDescriptor> descriptors = new ArrayList<>();
 
         Module module = MyPsiUtil.getModuleByPsiElement(root);
-        Project project = module.getProject();
+        if (module == null) {
+            return descriptors.toArray(FoldingDescriptor.EMPTY);
+        }
+        Project project = root.getProject();
 
         root.accept(new JavaRecursiveElementWalkingVisitor() {
 

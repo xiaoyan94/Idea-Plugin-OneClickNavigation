@@ -4,7 +4,6 @@ import com.intellij.openapi.module.Module;
 import com.intellij.psi.xml.XmlFile;
 import com.intellij.psi.xml.XmlTag;
 import com.intellij.util.xml.DomFileDescription;
-import com.zhiyin.plugins.resources.Constants;
 import com.zhiyin.plugins.oneClickNavigation.xml.domElements.Mapper;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -17,7 +16,7 @@ import org.jetbrains.annotations.Nullable;
 public class MybatisXmlFileDescription extends DomFileDescription<Mapper> {
 
     public MybatisXmlFileDescription() {
-        super(Mapper.class, "mapper", Constants.MYBATIS_POSSIBLE_NAMESPACES);
+        super(Mapper.class, "mapper");
     }
 
 
@@ -35,15 +34,9 @@ public class MybatisXmlFileDescription extends DomFileDescription<Mapper> {
     @Override
     public boolean isMyFile(@NotNull XmlFile file, @Nullable Module module) {
 
-        boolean isMyFile = super.isMyFile(file, module);
-
-        String fileName = file.getName();
-
         XmlTag rootTag = file.getRootTag();
         String rootTagName = super.getRootTagName();
-        System.out.println("add mapper:" + fileName + ", namespace:" + rootTag.getNamespace());
-        return null != rootTag && rootTag.getName()
-                                         .equals(rootTagName);
+        return rootTag != null && rootTagName.equals(rootTag.getName());
 
 //        return super.isMyFile(file, module);
     }

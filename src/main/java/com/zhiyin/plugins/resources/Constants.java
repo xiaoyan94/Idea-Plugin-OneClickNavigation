@@ -6,9 +6,13 @@ import org.jetbrains.annotations.NonNls;
  * @author yan on 2024/2/28 00:10
  */
 public class Constants {
-    private Constants() {
+    private Constants() {}
 
-    }
+    public static final String SCOPE_NAME_PROJECT = "Project";
+    public static final String SCOPE_NAME_MODULE = "Module";
+
+    public static final String I18N_METHOD_EXPRESSION = "I18nUtil.getMessage";
+    public static final String QUERY_DAO_METHOD_EXPRESSION = "queryDaoDataT";
 
     public static final String FOLDING_GROUP = "i18n_key";
     public static final String I18N_KEY_PREFIX = "com.zhiyin.";
@@ -28,5 +32,8 @@ public class Constants {
     @NonNls
     public static final String MYBATIS_NAMESPACE_KEY = "mybatis namespace";
 
+    public static final String NO_SUCH_METHOD_IN_MAPPER = "Mapper XML中没有该方法";
 
+    public static final String NAVIGATE_TO_MAPPER = "跳转到 Mapper XML";
+    public static final String NAVIGATE_TO_DAO_INTERFACE = "跳转到 Dao 接口";
 }

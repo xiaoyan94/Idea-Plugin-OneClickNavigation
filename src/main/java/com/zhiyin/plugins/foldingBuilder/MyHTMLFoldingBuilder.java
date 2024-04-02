@@ -46,7 +46,10 @@ public class MyHTMLFoldingBuilder extends FoldingBuilderEx {
 
 //        Project project = root.getProject();
         Module module = MyPsiUtil.getModuleByPsiElement(root);
-        Project project = module.getProject();
+        if (module == null) {
+            return descriptors.toArray(new FoldingDescriptor[0]);
+        }
+        Project project = root.getProject();
 
         root.accept(new XmlRecursiveElementVisitor() {
             private void visitXmlAttributeValueToken(XmlToken xmlToken) {

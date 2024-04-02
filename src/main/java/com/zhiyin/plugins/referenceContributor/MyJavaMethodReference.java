@@ -3,14 +3,28 @@ package com.zhiyin.plugins.referenceContributor;
 import com.intellij.codeInsight.lookup.AutoCompletionPolicy;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
+import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
+import com.intellij.psi.tree.xml.IXmlLeafElementType;
+import com.intellij.psi.util.PsiTreeUtil;
+import com.intellij.psi.xml.XmlAttributeValue;
+import com.intellij.psi.xml.XmlToken;
 import com.intellij.util.PlatformIcons;
+import com.intellij.util.xml.DomJavaUtil;
+import com.intellij.util.xml.GenericAttributeValue;
+import com.intellij.util.xml.GenericValue;
+import com.zhiyin.plugins.oneClickNavigation.xml.domElements.Mapper;
+import com.zhiyin.plugins.oneClickNavigation.xml.domElements.Statement;
 import com.zhiyin.plugins.resources.MyIcons;
+import com.zhiyin.plugins.service.MyProjectService;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Stream;
 
 /**
  * 扩展额外引用
@@ -57,13 +71,13 @@ final class MyJavaMethodReference extends PsiReferenceBase<PsiLiteralExpression>
         for (final PsiMethod psiMethod : methods) {
             if (psiMethod != null) {
                 variants.add(LookupElementBuilder.create(psiMethod)
-                                                 .withIcon(MyIcons.pandaIconSVG16_2)
-                                                 .withItemTextItalic(true)
-                                                 .withTypeText(psiClass.getName(), PlatformIcons.INTERFACE_ICON, true)
-                                                 .withBoldness(true)
-                                                 .withCaseSensitivity(false)
-                                                 .withTailText(psiClass.getQualifiedName(), true)
-                                                 .withAutoCompletionPolicy(AutoCompletionPolicy.ALWAYS_AUTOCOMPLETE));
+                        .withIcon(MyIcons.pandaIconSVG16_2)
+                        .withItemTextItalic(true)
+                        .withTypeText(psiClass.getName(), null, true)
+                        .withBoldness(true)
+                        .withCaseSensitivity(false)
+                        .withTailText(psiClass.getQualifiedName(), true)
+                        .withAutoCompletionPolicy(AutoCompletionPolicy.ALWAYS_AUTOCOMPLETE));
             }
         }
         return variants.toArray();

@@ -8,6 +8,7 @@ import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.search.PsiShortNamesCache;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.ProcessingContext;
+import com.zhiyin.plugins.resources.Constants;
 import com.zhiyin.plugins.utils.MyPsiUtil;
 import org.jetbrains.annotations.NotNull;
 
@@ -32,7 +33,7 @@ public class MyJavaReferenceContributor extends PsiReferenceContributor {
                     return new PsiReference[0];
                 }
                 PsiReferenceExpression methodExpression = psiMethodCallExpression.getMethodExpression();
-                if (!methodExpression.textMatches("queryDaoDataT")) {
+                if (!methodExpression.textMatches(Constants.QUERY_DAO_METHOD_EXPRESSION)) {
                     return new PsiReference[0];
                 }
 
@@ -50,12 +51,23 @@ public class MyJavaReferenceContributor extends PsiReferenceContributor {
 
                 PsiType[] expressionTypes = argumentList.getExpressionTypes();
                 PsiType secondExpressionType = expressionTypes[1];
+                if (null == secondExpressionType) {
+                    return new PsiReference[0];
+                }
 
                 Project project = element.getProject();
                 Module module = MyPsiUtil.getModuleByPsiElement(element);
                 PsiShortNamesCache psiShortNamesCache = PsiShortNamesCache.getInstance(project);
-                @NotNull PsiClass[] classesByName = psiShortNamesCache.getClassesByName(secondExpressionType.getPresentableText(),
-                        GlobalSearchScope.moduleScope(module));
+                GlobalSearchScope scope;
+                if (module != null) {
+                    scope = GlobalSearchScope.moduleScope(module);
+                } else {
+                    scope = GlobalSearchScope.allScope(project);
+                }
+
+//                PsiClass[] classesByName = psiShortNamesCache.getClassesByName(secondExpressionType.getPresentableText(), scope);
+
+                PsiClass[] classesByName = JavaPsiFacade.getInstance(project).findClasses(secondExpressionType.getCanonicalText(), scope);
 
                 for (PsiClass psiClass : classesByName) {
 //                    PsiMethod[] methodsByName = psiClass.findMethodsByName(queryDaoMethodName, true);
