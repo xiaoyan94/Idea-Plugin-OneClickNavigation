@@ -4,7 +4,7 @@ plugins {
 }
 
 group = "com.zhiyin.plugins"
-version = "1.0.1"
+version = "1.0.2"
 
 repositories {
   mavenCentral()
@@ -33,6 +33,10 @@ tasks {
 
     changeNotes.set(
       """
+      <h4>1.0.2</h4>
+      <ul>
+      <li>支持XML(Layout/ImpMapper)中折叠显示I18n中文资源串.</li>
+      </ul>
       <h4>1.0.1</h4>
       <ul>
       <li>支持新版Idea (233). </li>

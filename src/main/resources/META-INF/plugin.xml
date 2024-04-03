@@ -44,6 +44,8 @@
 
         <lang.foldingBuilder language="HTML" implementationClass="com.zhiyin.plugins.foldingBuilder.MyHTMLFoldingBuilder"/>
 
+        <lang.foldingBuilder language="XML" implementationClass="com.zhiyin.plugins.foldingBuilder.MyXMLFoldingBuilder"/>
+
         <annotator language="JAVA" implementationClass="com.zhiyin.plugins.annotator.MyJavaAnnotator"/>
 
         <annotator language="HTML" implementationClass="com.zhiyin.plugins.annotator.MyHTMLAnnotator"/>
@@ -70,7 +72,7 @@
         <action id="com.zhiyin.plugins.actions.testAction"
                 icon="com.zhiyin.plugins.resources.MyIcons.pandaIconSVG16_2"
                 class="com.zhiyin.plugins.oneClickNavigation.actions.TestAction" text="刷新数据"
-                description="刷新缓存的数据">
+                description="Refresh cache map">
             <add-to-group group-id="ToolsMenu" anchor="first"/>
         </action>
 
