@@ -103,7 +103,7 @@ public class MyXMLFoldingBuilder extends FoldingBuilderEx {
                 XmlAttributeValue valueElement = xmlAttribute.getValueElement();
                 FoldingDescriptor foldingDescriptor = new FoldingDescriptor(valueElement,
                         valueElement.getTextOffset() - 1,
-                        valueElement.getTextOffset() + valueElement.getTextLength(),
+                        valueElement.getTextOffset() + valueElement.getTextLength() -1,
                         group,
                         placeholderText);
                 descriptors.add(foldingDescriptor);

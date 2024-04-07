@@ -58,12 +58,18 @@ public class MyJavaFoldingBuilder extends FoldingBuilderEx {
                     return;
                 }
 
+                PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression) parent;
+                PsiReferenceExpression psiReferenceExpression = methodCallExpression.getMethodExpression();
+                boolean isI18nResourceMethod = psiReferenceExpression.textMatches(Constants.I18N_METHOD_EXPRESSION)
+                        || psiReferenceExpression.textMatches(Constants.I18N_METHOD_EXPRESSION_GET_SYS_I18N_RESOURCE);
+                if (!isI18nResourceMethod) {
+                    return;
+                }
+
                 String value = PsiLiteralUtil.getStringLiteralContent(literalExpression);
                 if (value != null && value.startsWith(Constants.I18N_KEY_PREFIX)) {
-                    // find SimpleProperty for the given key in the project
                     Property simpleProperty = MyPropertiesUtil.findModuleI18nProperty(project, module, value);
                     if (simpleProperty != null) {
-                        // Add a folding descriptor for the literal expression at this node.
                         String propertyValue = simpleProperty.getValue();
                         if (propertyValue != null) {
                             propertyValue = propertyValue.replaceAll("\n", "\\n")
