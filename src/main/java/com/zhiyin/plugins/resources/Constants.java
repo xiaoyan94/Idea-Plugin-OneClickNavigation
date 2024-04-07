@@ -11,6 +11,7 @@ public class Constants {
 
     public static final String I18N_METHOD_EXPRESSION = "I18nUtil.getMessage";
     public static final String I18N_METHOD_EXPRESSION_GET_SYS_I18N_RESOURCE = "getSysI18nResource";
+    public static final String I18N_METHOD_EXPRESSION_GET_MESSAGE_BY_FACTORY = "I18nUtil.getMessageByFactory";
     public static final String QUERY_DAO_METHOD_EXPRESSION = "queryDaoDataT";
 
     public static final String FOLDING_GROUP = "i18n_key";

@@ -1,6 +1,5 @@
 package com.zhiyin.plugins.utils;
 
-import com.intellij.openapi.compiler.ex.CompilerPathsEx;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleManager;
 import com.intellij.openapi.module.ModuleUtilCore;
@@ -10,6 +9,9 @@ import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiLiteralExpression;
+import com.intellij.psi.PsiMethodCallExpression;
+import com.intellij.psi.PsiReferenceExpression;
+import com.zhiyin.plugins.resources.Constants;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -94,4 +96,12 @@ public class MyPsiUtil {
         }
         return true;
     }
+
+    public static boolean isI18nResourceMethod(@NotNull PsiMethodCallExpression psiMethodCallExpression) {
+        PsiReferenceExpression psiReferenceExpression = psiMethodCallExpression.getMethodExpression();
+        return psiReferenceExpression.textMatches(Constants.I18N_METHOD_EXPRESSION)
+                || psiReferenceExpression.textMatches(Constants.I18N_METHOD_EXPRESSION_GET_SYS_I18N_RESOURCE)
+                || psiReferenceExpression.textMatches(Constants.I18N_METHOD_EXPRESSION_GET_MESSAGE_BY_FACTORY);
+    }
+
 }

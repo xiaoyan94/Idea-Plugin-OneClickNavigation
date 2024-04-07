@@ -58,10 +58,7 @@ public class MyJavaFoldingBuilder extends FoldingBuilderEx {
                     return;
                 }
 
-                PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression) parent;
-                PsiReferenceExpression psiReferenceExpression = methodCallExpression.getMethodExpression();
-                boolean isI18nResourceMethod = psiReferenceExpression.textMatches(Constants.I18N_METHOD_EXPRESSION)
-                        || psiReferenceExpression.textMatches(Constants.I18N_METHOD_EXPRESSION_GET_SYS_I18N_RESOURCE);
+                boolean isI18nResourceMethod = MyPsiUtil.isI18nResourceMethod((PsiMethodCallExpression) parent);
                 if (!isI18nResourceMethod) {
                     return;
                 }
@@ -87,6 +84,7 @@ public class MyJavaFoldingBuilder extends FoldingBuilderEx {
                     }
                 }
             }
+
         });
 
         return descriptors.toArray(FoldingDescriptor.EMPTY);
