@@ -1,5 +1,6 @@
 package com.zhiyin.plugins.referenceContributor;
 
+import com.intellij.codeInsight.highlighting.HighlightedReference;
 import com.intellij.codeInsight.lookup.AutoCompletionPolicy;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
@@ -30,7 +31,7 @@ import java.util.stream.Stream;
  * 扩展额外引用
  *
  */
-final class MyJavaMethodReference extends PsiReferenceBase<PsiLiteralExpression> implements PsiPolyVariantReference {
+final class MyJavaMethodReference extends PsiReferenceBase<PsiLiteralExpression> implements PsiPolyVariantReference, HighlightedReference {
 
     private final PsiClass psiClass;
 
