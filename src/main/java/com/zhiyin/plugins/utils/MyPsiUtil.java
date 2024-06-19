@@ -123,7 +123,7 @@ public class MyPsiUtil {
 
     /**
      * 判断是否是XML文件
-     * @param element PSI元素
+     * @param psiFile PSI文件
      * @return 是否是XML文件
      */
     public static boolean isXmlFile(PsiFile psiFile) {
