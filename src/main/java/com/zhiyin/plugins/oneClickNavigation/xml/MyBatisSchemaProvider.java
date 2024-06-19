@@ -5,7 +5,7 @@ import com.intellij.javaee.StandardResourceProvider;
 import com.zhiyin.plugins.resources.Constants;
 
 /**
- * @author yan on 2024/2/28 00:08
+ * 
  */
 public class MyBatisSchemaProvider implements StandardResourceProvider {
     @Override

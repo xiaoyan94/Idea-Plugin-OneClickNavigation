@@ -1,38 +1,11 @@
-package com.zhiyin.plugins.oneClickNavigation.actions;
+package com.zhiyin.plugins.actions;
 
-import com.intellij.ide.highlighter.XmlFileType;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.actionSystem.CommonDataKeys;
-import com.intellij.openapi.compiler.ex.CompilerPathsEx;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.module.ModuleManager;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.roots.ModuleRootManager;
-import com.intellij.openapi.roots.ModuleRootManagerEx;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiManager;
-import com.intellij.psi.search.FileTypeIndex;
-import com.intellij.psi.search.FilenameIndex;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.xml.XmlFile;
-import com.intellij.util.PsiNavigateUtil;
-import com.intellij.util.indexing.FileBasedIndex;
-import com.intellij.util.xml.DomFileElement;
-import com.intellij.util.xml.DomFileIndex;
-import com.intellij.util.xml.DomManager;
-import com.intellij.util.xml.DomService;
-import com.zhiyin.plugins.oneClickNavigation.xml.domElements.Mapper;
-import com.zhiyin.plugins.oneClickNavigation.xml.domElements.Statement;
 import com.zhiyin.plugins.service.MyProjectService;
-import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
-
-import static com.zhiyin.plugins.utils.MyPsiUtil.*;
-
-public class TestAction extends AnAction {
+public class ReloadXmlFileCacheMapAction extends AnAction {
 
     @Override
     public void actionPerformed(AnActionEvent e) {

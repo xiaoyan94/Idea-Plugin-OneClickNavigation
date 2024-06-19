@@ -34,7 +34,6 @@ import java.util.stream.Collectors;
  * 从 Java 代码导航跳转到 MyBatis 的 Mapper XML 文件
  * TODO 拆分优化该类 分别收集 提升响应速度
  *
- * @author yan on 2024/2/25
  */
 public class JavaLineMarkerProvider extends RelatedItemLineMarkerProvider {
 
@@ -159,7 +158,8 @@ public class JavaLineMarkerProvider extends RelatedItemLineMarkerProvider {
             return false;
         }
         PsiReferenceExpression psiReferenceExpression = psiMethodCallExpression.getMethodExpression();
-        if (!psiReferenceExpression.textMatches(Constants.QUERY_DAO_METHOD_EXPRESSION)) {
+        // 适配bizCommonService.queryDaoDataT调用
+        if (!psiReferenceExpression.getCanonicalText().endsWith(Constants.QUERY_DAO_METHOD_EXPRESSION)) {
             return false;
         }
         PsiLiteralExpression literalExpression;
@@ -178,6 +178,9 @@ public class JavaLineMarkerProvider extends RelatedItemLineMarkerProvider {
         }
         PsiType[] expressionTypes = argumentList.getExpressionTypes();
         PsiType secondExpressionType = expressionTypes[1];
+        if (secondExpressionType == null) {
+            return true;
+        }
         Module module = MyPsiUtil.getModuleByPsiElement(element);
         PsiShortNamesCache psiShortNamesCache = PsiShortNamesCache.getInstance(project);
         GlobalSearchScope scope;

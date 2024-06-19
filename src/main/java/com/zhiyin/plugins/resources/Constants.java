@@ -1,9 +1,11 @@
 package com.zhiyin.plugins.resources;
 
 /**
- * @author yan on 2024/2/28 00:10
+ * 
  */
 public class Constants {
+    public static final String NOTIFICATION_GROUP_ID = "OneClickNavigation";
+
     private Constants() {}
 
     public static final String SCOPE_NAME_PROJECT = "Project";
@@ -34,5 +36,6 @@ public class Constants {
 //    public static final String[] MYBATIS_POSSIBLE_NAMESPACES = new String[]{MYBATIS_DTD_CLASSPATH, MYBATIS_DTD_DEFAULT};
 
     public static final String NAVIGATE_TO_MAPPER = "跳转到 Mapper XML";
+    public static final String NAVIGATE_TO_MOC = "跳转到 Moc XML";
     public static final String NAVIGATE_TO_DAO_INTERFACE = "跳转到 Dao 接口";
 }

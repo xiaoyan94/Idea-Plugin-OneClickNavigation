@@ -1,0 +1,7 @@
+<Column name="Code" type="string">
+    <Field value="Code"/>
+    <spot><Title value="com.zhiyin.mes.app.web.basegroup.groupgrid.code" chs="班组编号" eng="Code" /></spot>
+    <Align value="left"/>
+    <Width value="120"/>
+    <Hidden value="false"/>
+</Column>

@@ -4,6 +4,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.xml.XmlAttributeValue;
 import com.intellij.util.xml.GenericAttributeValue;
 import com.zhiyin.plugins.oneClickNavigation.xml.domElements.Mapper;
+import com.zhiyin.plugins.oneClickNavigation.xml.domElements.Moc;
 import com.zhiyin.plugins.oneClickNavigation.xml.domElements.Statement;
 import com.zhiyin.plugins.service.MyProjectService;
 import org.apache.commons.collections.CollectionUtils;
@@ -38,4 +39,16 @@ public final class MyMapperUtils {
         return statements;
     }
 
+    // -- MOC
+    public static List<XmlAttributeValue> getMocListByName(Project project, String mocName) {
+        List<XmlAttributeValue> mocList = new ArrayList<>();
+        Map<String, List<Moc>> xmlFileMap = project.getService(MyProjectService.class).getMocFileMap();
+        List<Moc> mappers = xmlFileMap.get(mocName);
+        if (!CollectionUtils.isEmpty(mappers)) {
+            for (Moc moc : mappers) {
+                mocList.add(moc.getName().getXmlAttributeValue());
+            }
+        }
+        return mocList;
+    }
 }

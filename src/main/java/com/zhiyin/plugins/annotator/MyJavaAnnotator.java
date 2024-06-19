@@ -14,6 +14,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiExpressionList;
 import com.intellij.psi.PsiLiteralExpression;
 import com.intellij.psi.PsiMethodCallExpression;
+import com.zhiyin.plugins.intention.TranslateAndReplaceIntentionAction;
 import com.zhiyin.plugins.resources.Constants;
 import com.zhiyin.plugins.resources.MyIcons;
 import com.zhiyin.plugins.utils.MyPropertiesUtil;
@@ -26,7 +27,7 @@ import java.util.List;
 /**
  * 提供语法高亮和注释提示
  *
- * @author yan on 2024/3/7 23:21
+ * 
  */
 public final class MyJavaAnnotator implements Annotator {
 
@@ -86,11 +87,9 @@ public final class MyJavaAnnotator implements Annotator {
                           //                          new CssColorGutterRenderer(element, JBColor.RED)
                           new MyRenderer(element, MyIcons.pandaIcon16, Constants.INVALID_I18N_KEY)
                   )
-                  // ** Tutorial step 19. - Add a quick fix for the string containing possible properties
                   // TODO quickfix
-                  // TODO Action
-                  //                  .withFix(new SimpleCreatePropertyQuickFix(key))
-                  .create();
+                    .withFix(new TranslateAndReplaceIntentionAction())
+                    .create();
         } else {
             /*
  Found at least one property, force the text attributes to Simple syntax value character

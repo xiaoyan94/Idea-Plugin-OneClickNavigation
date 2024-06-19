@@ -48,18 +48,27 @@
 
         <annotator language="JAVA" implementationClass="com.zhiyin.plugins.annotator.MyJavaAnnotator"/>
 
+        <annotator language="XML" implementationClass="com.zhiyin.plugins.annotator.MyLayoutXMLAnnotator"/>
+
         <annotator language="HTML" implementationClass="com.zhiyin.plugins.annotator.MyHTMLAnnotator"/>
+
+        <annotator language="JavaScript" implementationClass="com.zhiyin.plugins.annotator.MyJavaScriptBlockAnnotator"/>
+
+<!--        <annotator language="HTML" implementationClass="com.zhiyin.plugins.annotator.MyFreemarkerHTMLAnnotator"/>-->
 
         <psi.referenceContributor language="JAVA" implementation="com.zhiyin.plugins.referenceContributor.MyJavaReferenceContributor"/>
 
         <completion.confidence language="JAVA" implementationClass="com.zhiyin.plugins.referenceContributor.MyCompletionConfidence"/>
 
         <dom.fileMetaData implementation="com.zhiyin.plugins.oneClickNavigation.xml.MybatisXmlFileDescription" rootTagName="mapper"/>
+
+        <dom.fileMetaData implementation="com.zhiyin.plugins.oneClickNavigation.xml.MocXmlFileDescription" rootTagName="Moc"/>
         <!--
                 <standardResourceProvider implementation="com.zhiyin.plugins.oneClickNavigation.xml.MyBatisSchemaProvider"/>
         -->
 
         <codeInsight.lineMarkerProvider language="JAVA" implementationClass="com.zhiyin.plugins.oneClickNavigation.codeInsight.JavaLineMarkerProvider"/>
+        <codeInsight.lineMarkerProvider language="JAVA" implementationClass="com.zhiyin.plugins.oneClickNavigation.codeInsight.JavaToMocLineMarkerProvider"/>
         <codeInsight.lineMarkerProvider language="XML" implementationClass="com.zhiyin.plugins.oneClickNavigation.codeInsight.MapperXmlLineMarkerProvider"/>
 
         <notificationGroup displayType="BALLOON" id="ZhiyinOneClickNavigation"/>
@@ -67,14 +76,78 @@
         <applicationConfigurable parentId="tools" instance="com.zhiyin.plugins.settings.AppSettingsConfigurable"
                                  id="com.zhiyin.plugins.settings.AppSettingsConfigurable"
                                  displayName="OneClickNavigation插件设置"/>
+
+        <applicationConfigurable parentId="tools" id="com.zhiyin.plugins.settings.TranslateSettingsConfigurable"
+                                 displayName="OneClickNavigation插件翻译设置" groupId="tools"
+                                 instance="com.zhiyin.plugins.settings.TranslateSettingsConfigurable"/>
+
+        <intentionAction order="first" id="com.zhiyin.plugins.intention.TranslateAndReplaceIntentionAction">
+            <!-- available in 2022.3 and later -->
+            <!-- <language>JAVA</language> -->
+            <className>com.zhiyin.plugins.intention.TranslateAndReplaceIntentionAction</className>
+            <category>OneClickNavigation intentions</category>
+        </intentionAction>
+        <intentionAction order="first" id="com.zhiyin.plugins.intention.XMLTranslateIntentionAction">
+            <className>com.zhiyin.plugins.intention.XMLTranslateIntentionAction</className>
+            <category>OneClickNavigation intentions</category>
+        </intentionAction>
+        <intentionAction order="first" id="com.zhiyin.plugins.intention.JavaScriptI18nTranslateIntentionAction">
+            <className>com.zhiyin.plugins.intention.JavaScriptI18nTranslateIntentionAction</className>
+            <category>OneClickNavigation intentions</category>
+        </intentionAction>
+        <!--<intentionAction order="first" id="com.zhiyin.plugins.intention.FreemarkerI18nTranslateIntentionAction">
+            <className>com.zhiyin.plugins.intention.FreemarkerI18nTranslateIntentionAction</className>
+            <category>OneClickNavigation intentions</category>
+        </intentionAction>-->
     </extensions>
     <actions>
+        <group id="com.zhiyin.plugins.ToolsMenuGroup" text="OneClickNavigation插件" popup="true"
+               description="OneClickNavigation tools" icon="com.zhiyin.plugins.resources.MyIcons.pandaIconSVG16_2">
+            <add-to-group group-id="ToolsMenu" anchor="first"/>
+
+            <action id="ZYPlugin.ClearTranslationCache" class="com.zhiyin.plugins.actions.ClearTranslationCacheAction"
+                    text="清空翻译缓存" description="Clear translation cache" icon="AllIcons.Actions.Refresh"/>
+
+            <action id="ZYPlugin.TestTranslate" class="com.zhiyin.plugins.actions.TranslateTestAction" text="测试翻译"
+                    description="Test translate"/>
+
+            <action id="com.zhiyin.plugins.actions.TestCredentialAction" class="com.zhiyin.plugins.actions.TestCredentialAction"
+                    text="测试保存密码凭证">
+            </action>
+        </group>
+
         <action id="com.zhiyin.plugins.actions.testAction"
                 icon="com.zhiyin.plugins.resources.MyIcons.pandaIconSVG16_2"
-                class="com.zhiyin.plugins.oneClickNavigation.actions.TestAction" text="刷新数据"
+                class="com.zhiyin.plugins.actions.ReloadXmlFileCacheMapAction" text="刷新数据"
                 description="Refresh cache map">
-            <add-to-group group-id="ToolsMenu" anchor="first"/>
+            <add-to-group group-id="com.zhiyin.plugins.ToolsMenuGroup" anchor="first"/>
         </action>
+
+        <group id="com.zhiyin.plugins.EditorPopupMenu" popup="false"
+               icon="com.zhiyin.plugins.resources.MyIcons.pandaIconSVG16_2">
+            <add-to-group group-id="EditorPopupMenu" anchor="first"/>
+
+            <action id="com.zhiyin.plugins.actions.ImportMapperXMLSortColumnAction"
+                    icon="com.zhiyin.plugins.resources.MyIcons.pandaIconSVG16_2"
+                    class="com.zhiyin.plugins.actions.ImportMapperXMLSortColumnAction"
+                    text="排序column字段"
+                    description="Import mapper: 根据column顺序一键排序col字段值">
+            </action>
+
+            <action id="com.zhiyin.plugins.actions.OpenClassFileAction"
+                    class="com.zhiyin.plugins.actions.OpenClassFileAction"
+                    text="打开class文件"
+                    icon="com.zhiyin.plugins.resources.MyIcons.pandaIconSVG16_2"
+                    description="Opens the corresponding .class file for the current Java file">
+            </action>
+
+            <action id="com.zhiyin.plugins.actions.InsertFreeMarkerI18nDirectiveAction"
+                    class="com.zhiyin.plugins.actions.InsertFreeMarkerI18nDirectiveAction"
+                    text="FreeMarker: 插入I18n指令"
+                    icon="com.zhiyin.plugins.resources.MyIcons.pandaIconSVG16_2"
+                    description="Insert FreeMarker i18n directive">
+            </action>
+        </group>
 
     </actions>
 

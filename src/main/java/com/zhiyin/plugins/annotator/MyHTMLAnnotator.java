@@ -20,10 +20,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-/**
- *
- * @author yan on 2024/3/10 06:31
- */
 public class MyHTMLAnnotator implements Annotator {
     public static final Logger LOG = Logger.getInstance(MyHTMLAnnotator.class);
     @Override
@@ -75,6 +71,7 @@ public class MyHTMLAnnotator implements Annotator {
         }
         Project project = element.getProject();
         List<Property> properties = MyPropertiesUtil.findModuleI18nProperties(project, module, key);
+        properties.addAll(MyPropertiesUtil.findModuleWebI18nProperties(project, module, key));
         LOG.info("key:" + key + ", properties size:" + properties.size());
         if (!properties.isEmpty()) {
             String i18nValue = MyPropertiesUtil.getTop3PropertiesValueString(properties);

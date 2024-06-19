@@ -23,7 +23,7 @@ import java.util.List;
 /**
  * A folding builder identifies the folding regions in the code.
  *
- * @author yan on 2024/3/6 22:41
+ * 
  */
 public class MyJavaFoldingBuilder extends FoldingBuilderEx {
 
@@ -65,10 +65,12 @@ public class MyJavaFoldingBuilder extends FoldingBuilderEx {
 
                 String value = PsiLiteralUtil.getStringLiteralContent(literalExpression);
                 if (value != null && value.startsWith(Constants.I18N_KEY_PREFIX)) {
-                    Property simpleProperty = MyPropertiesUtil.findModuleI18nProperty(project, module, value);
-                    if (simpleProperty != null) {
-                        String propertyValue = simpleProperty.getValue();
-                        if (propertyValue != null) {
+//                    Property simpleProperty = MyPropertiesUtil.findModuleI18nProperty(project, module, value);
+                    String i18nPropertyValue = MyPropertiesUtil.findModuleI18nPropertyValue(project, module, value);
+                    if (i18nPropertyValue != null) {
+//                        String propertyValue = simpleProperty.getValue();
+                        String propertyValue = i18nPropertyValue;
+                        if (!propertyValue.isEmpty()) {
                             propertyValue = propertyValue.replaceAll("\n", "\\n")
                                                          .replaceAll("\"", "\\\\\"");
                             propertyValue = "\"" + propertyValue + "\"";

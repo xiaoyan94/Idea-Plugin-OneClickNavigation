@@ -2,6 +2,7 @@ package com.zhiyin.plugins.oneClickNavigation.xml.domElements;
 
 import com.intellij.util.xml.*;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -10,7 +11,6 @@ import java.util.List;
  * <br/>
  * mapper 标签
  *
- * @author yan on 2024/2/25 00:18
  */
 //@NameStrategy(JavaNameStrategy.class)
 //@Namespace(Constants.MYBATIS_DTD_CLASSPATH)
@@ -23,7 +23,7 @@ public interface Mapper extends DomElement {
     @Attribute("namespace")
     @NameValue
     @Required
-    @NotNull
+    @Nullable
     GenericAttributeValue<String> getNamespace();
     @NotNull
     @SubTagsList({"select", "insert", "update", "delete"})

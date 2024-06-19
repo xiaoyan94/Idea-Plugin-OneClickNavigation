@@ -15,7 +15,6 @@ import org.jetbrains.annotations.NotNull;
 /**
  * 扩展额外引用
  *
- * @author yan on 2024/3/13 22:46
  */
 public class MyJavaReferenceContributor extends PsiReferenceContributor {
     @Override
@@ -33,7 +32,7 @@ public class MyJavaReferenceContributor extends PsiReferenceContributor {
                     return new PsiReference[0];
                 }
                 PsiReferenceExpression methodExpression = psiMethodCallExpression.getMethodExpression();
-                if (!methodExpression.textMatches(Constants.QUERY_DAO_METHOD_EXPRESSION)) {
+                if (!methodExpression.getCanonicalText().endsWith(Constants.QUERY_DAO_METHOD_EXPRESSION)) {
                     return new PsiReference[0];
                 }
 

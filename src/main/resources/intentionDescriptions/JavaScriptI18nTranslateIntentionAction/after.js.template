@@ -1,0 +1,1 @@
+$.messager.alert(zhiyin.i18n.translate(<spot>"com.zhiyin.mes.app.web.bom_prompt"</spot>), zhiyin.i18n.translate(<spot>"com.zhiyin.mes.app.web.select_base_group"</spot>));

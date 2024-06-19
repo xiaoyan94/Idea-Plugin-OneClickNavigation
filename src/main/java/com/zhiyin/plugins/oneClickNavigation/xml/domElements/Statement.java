@@ -5,7 +5,7 @@ import com.intellij.util.xml.*;
 /**
  * Mybatis xml 文件中 ["select", "insert", "update", "delete"] 标签的 DOM 元素映射
  *
- * @author yan on 2024/2/25 00:44
+ * 
  */
 public interface Statement extends DomElement {
 

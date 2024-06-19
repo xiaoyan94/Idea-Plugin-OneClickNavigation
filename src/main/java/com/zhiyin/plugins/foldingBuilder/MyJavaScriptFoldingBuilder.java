@@ -22,11 +22,6 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * JavaScript
- *
- * @author yan on 2024/3/11 00:49
- */
 public class MyJavaScriptFoldingBuilder extends FoldingBuilderEx {
     public static final FoldingGroup group = FoldingGroup.newGroup(Constants.FOLDING_GROUP);
     @Override
@@ -53,13 +48,11 @@ public class MyJavaScriptFoldingBuilder extends FoldingBuilderEx {
                 String value = String.valueOf(literalExpression.getValue());
                 if (value != null && value.startsWith(Constants.I18N_KEY_PREFIX)) {
 
-                    List<Property> simpleProperty = MyPropertiesUtil.findModuleI18nProperties(project, module, value);
+                    String i18nPropertyValue = MyPropertiesUtil.findModuleWebI18nPropertyValue(project, module, value);
 
-                    if (simpleProperty.size() > 0) {
-                        String placeholderText = simpleProperty.get(0)
-                                                      .getValue();
-                        placeholderText = placeholderText == null ? StringUtil.THREE_DOTS :
-                                "\"" + placeholderText + "\"";
+                    if (i18nPropertyValue != null) {
+                        String placeholderText = i18nPropertyValue;
+                        placeholderText = "\"" + placeholderText + "\"";
                         FoldingDescriptor foldingDescriptor = new FoldingDescriptor(literalExpression,
                                 foldingParent.getTextOffset(),
                                 foldingParent.getTextOffset() + foldingParent.getTextLength(), group,

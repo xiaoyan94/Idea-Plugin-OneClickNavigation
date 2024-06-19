@@ -1,0 +1,1 @@
+$.messager.alert(zhiyin.i18n.translate(<spot>"提示"</spot>), zhiyin.i18n.translate(<spot>"请选择一个班组"</spot>));

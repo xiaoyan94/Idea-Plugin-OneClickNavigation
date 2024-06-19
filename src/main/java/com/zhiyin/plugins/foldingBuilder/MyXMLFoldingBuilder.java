@@ -96,6 +96,9 @@ public class MyXMLFoldingBuilder extends FoldingBuilderEx {
 
             if (!simpleProperty.isEmpty()) {
                 String placeholderText = simpleProperty.get(0).getValue();
+                if(!MyPropertiesUtil.isNative2AsciiForPropertiesFiles()){
+                    placeholderText = com.zhiyin.plugins.utils.StringUtil.unicodeToString(placeholderText);
+                }
                 placeholderText = placeholderText == null ? StringUtil.THREE_DOTS :
                         "\"" + placeholderText + "\"";
                 XmlAttribute xmlAttribute = tag.getAttribute(attributeName);

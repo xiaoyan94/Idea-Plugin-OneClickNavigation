@@ -29,7 +29,6 @@ import java.util.stream.Stream;
 /**
  * 扩展额外引用
  *
- * @author yan on 2024/3/13 22:23
  */
 final class MyJavaMethodReference extends PsiReferenceBase<PsiLiteralExpression> implements PsiPolyVariantReference {
 

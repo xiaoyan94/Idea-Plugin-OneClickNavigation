@@ -11,7 +11,7 @@ import org.jetbrains.annotations.Nullable;
 /**
  * dom.fileMetaData扩展点的实现类,为了索引目标 Mybatis XML 文件
  *
- * @author yan on 2024/2/24 23:57
+ * 
  */
 public class MybatisXmlFileDescription extends DomFileDescription<Mapper> {
 

@@ -1,0 +1,3 @@
+public void test(){
+    String msgProduceCodeNull = I18nUtil.getMessage(userCode, <spot>"行号"</spot>)
+}

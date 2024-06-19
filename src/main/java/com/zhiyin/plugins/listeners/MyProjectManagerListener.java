@@ -19,7 +19,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * execute something after loading the project and after the indexing finishes
  *
- * @author yan on 2024/3/21 22:23
+ * 
  */
 public class MyProjectManagerListener implements ProjectManagerListener {
 
@@ -40,9 +40,18 @@ public class MyProjectManagerListener implements ProjectManagerListener {
         // runWhenSmart
         DumbService.getInstance(project).runWhenSmart(() -> {
             // 异步执行
-            ApplicationManager.getApplication().executeOnPooledThread (() -> {
-                ApplicationManager.getApplication().runReadAction(initXmlFileMapInstantly(project));
-            });
+//            ApplicationManager.getApplication().executeOnPooledThread (() -> {
+//                ApplicationManager.getApplication().runReadAction(initXmlFileMapInstantly(project));
+//            });
+            if (project.isDisposed() || NoAccessDuringPsiEvents.isInsideEventProcessing()) {
+                return;
+            }
+
+            MyProjectService myProjectService = project.getService(MyProjectService.class);
+            System.out.println("reInitXmlFileMap start");
+            myProjectService.reInitXmlFileMap();
+
+            System.out.println("return runWhenSmart");
         });
 
     }
@@ -58,14 +67,6 @@ public class MyProjectManagerListener implements ProjectManagerListener {
             int size = myProjectService.getXmlFileMap().size();
             LOG.info("myProjectService init xmlFileMap: " + size);
 
-            if (size > 0) {
-                Notification msg = new Notification("ZhiyinOneClickNavigation", "Loaded dao to mapper successfully.", NotificationType.INFORMATION);
-                msg.setIcon(MyIcons.pandaIconSVG16_2);
-
-                // notify() displays the notification
-                // msg.notify();
-                Notifications.Bus.notify(msg, project);
-            }
         };
     }
 

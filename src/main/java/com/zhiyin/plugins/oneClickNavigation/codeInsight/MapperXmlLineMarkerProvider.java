@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 /**
  * 从 MyBatis 的 Mapper XML 文件跳转到 Java 文件
  *
- * @author yan on 2024/03/20
+ * 
  */
 public class MapperXmlLineMarkerProvider extends RelatedItemLineMarkerProvider {
 
