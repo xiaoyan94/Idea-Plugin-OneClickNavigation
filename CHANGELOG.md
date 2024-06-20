@@ -4,6 +4,12 @@
 
 ## [Unreleased]
 
+## [1.0.8] - 2024-06-20
+
+### Added
+
+- 添加MyBatis Mapper Xml文件SQL标签到Dao接口方法的引用.
+
 ## [1.0.7] - 2024-06-19
 
 ### Fixed
@@ -61,6 +67,7 @@
 - 支持JavaScript代码中折叠显示I18n中文资源串;
 
 [Unreleased]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-Unreleased.zip
+[1.0.8]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.8.zip
 [1.0.7]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.7.zip
 [1.0.6]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.6.zip
 [1.0.5]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.5.zip

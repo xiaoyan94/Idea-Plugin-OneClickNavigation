@@ -12,6 +12,7 @@ import com.intellij.psi.xml.XmlAttribute;
 import com.intellij.psi.xml.XmlFile;
 import com.intellij.util.xml.DomFileElement;
 import com.intellij.util.xml.DomManager;
+import com.intellij.util.xml.GenericAttributeValue;
 import com.zhiyin.plugins.oneClickNavigation.xml.domElements.Mapper;
 import com.zhiyin.plugins.resources.Constants;
 import com.zhiyin.plugins.resources.MyIcons;
@@ -64,7 +65,11 @@ public class MapperXmlLineMarkerProvider extends RelatedItemLineMarkerProvider {
         }
 
         Mapper mapper = domFileElement.getRootElement();
-        String namespace = mapper.getNamespace().getValue();
+        GenericAttributeValue<String> genericAttrValNamespace = mapper.getNamespace();
+        if (genericAttrValNamespace == null) {
+            return;
+        }
+        String namespace = genericAttrValNamespace.getValue();
         if (namespace == null || namespace.isEmpty()) {
             return;
         }

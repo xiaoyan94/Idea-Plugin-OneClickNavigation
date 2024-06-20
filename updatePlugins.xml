@@ -1,9 +1,9 @@
 
 <plugins>
-    <plugin id="com.zhiyin.plugins.OneClickNavigation" url="https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.7.zip" version="1.0.7">
-        <change-notes>&lt;h3&gt;Fixed&lt;/h3&gt;&#13;
+    <plugin id="com.zhiyin.plugins.OneClickNavigation" url="https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.8.zip" version="1.0.8">
+        <change-notes>&lt;h3&gt;Added&lt;/h3&gt;&#13;
 &#13;
-&lt;ul&gt;&lt;li&gt;修复了部分问题.&lt;/li&gt;&lt;/ul&gt;&#13;
+&lt;ul&gt;&lt;li&gt;添加MyBatis Mapper Xml文件SQL标签到Dao接口方法的引用.&lt;/li&gt;&lt;/ul&gt;&#13;
 &#13;
 &#13;
 </change-notes>

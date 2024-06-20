@@ -57,6 +57,7 @@
 <!--        <annotator language="HTML" implementationClass="com.zhiyin.plugins.annotator.MyFreemarkerHTMLAnnotator"/>-->
 
         <psi.referenceContributor language="JAVA" implementation="com.zhiyin.plugins.referenceContributor.MyJavaReferenceContributor"/>
+        <psi.referenceContributor language="XML" implementation="com.zhiyin.plugins.referenceContributor.MyXMLReferenceContributor"/>
 
         <completion.confidence language="JAVA" implementationClass="com.zhiyin.plugins.referenceContributor.MyCompletionConfidence"/>
 
