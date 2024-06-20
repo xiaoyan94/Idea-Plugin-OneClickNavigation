@@ -197,7 +197,7 @@ tasks {
     // IDEA官方文档提供的第三方上传插件 https://plugins.jetbrains.com/docs/intellij/custom-plugin-repository.html
     // 会生成子文件夹；同版本号会报错不会覆盖。
     uploadPlugin {
-        dependsOn("buildPlugin")
+        dependsOn("buildPlugin", "updateLocalPluginXml")
 
         val archiveFile = project.tasks.buildPlugin.get().archiveFile
         file.set(archiveFile.get().asFile)
