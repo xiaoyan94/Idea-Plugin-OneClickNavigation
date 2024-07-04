@@ -29,7 +29,6 @@ public class InsertFreeMarkerI18nDirectiveAction extends AnAction {
 
     @Override
     public void actionPerformed(@NotNull AnActionEvent e) {
-        // TODO insert a text from String after current caret
         Editor editor = e.getRequiredData(CommonDataKeys.EDITOR);
         Caret currentCaret = editor.getCaretModel().getCurrentCaret();
         int caretOffset = currentCaret.getOffset();
@@ -47,19 +46,27 @@ public class InsertFreeMarkerI18nDirectiveAction extends AnAction {
                 String key = inputModel.getPropertyKey();
                 String toInsertText = String.format(toInsertTextFormat, key);
 
+                // 支持 jsp
+                VirtualFile virtualFile = e.getRequiredData(CommonDataKeys.VIRTUAL_FILE);
+                boolean isJsp = "jsp".equalsIgnoreCase(virtualFile.getExtension());
+                if (isJsp) {
+                    toInsertText = toInsertText.replace("@message", "mes:message");
+                }
+
                 // 写入Document
+                String finalToInsertText = toInsertText;
                 WriteCommandAction.runWriteCommandAction(project, () -> {
                     // 检查是否有选中文本
                     if (selectionStart != selectionEnd) {
                         // 有选中文本，替换选中的文本
-                        document.replaceString(selectionStart, selectionEnd, toInsertText);
+                        document.replaceString(selectionStart, selectionEnd, finalToInsertText);
                         // 设置光标到新插入文本的末尾
-                        currentCaret.moveToOffset(selectionStart + toInsertText.length());
+                        currentCaret.moveToOffset(selectionStart + finalToInsertText.length());
                     } else {
                         // 没有选中文本，在光标位置插入文本
-                        document.insertString(caretOffset, toInsertText);
+                        document.insertString(caretOffset, finalToInsertText);
                         // 移动光标到新插入文本的末尾
-                        currentCaret.moveToOffset(caretOffset + toInsertText.length());
+                        currentCaret.moveToOffset(caretOffset + finalToInsertText.length());
                     }
 
                 });
@@ -97,6 +104,8 @@ public class InsertFreeMarkerI18nDirectiveAction extends AnAction {
                 && e.getData(PlatformDataKeys.MODULE) != null && e.getData(PlatformDataKeys.PROJECT) != null) {
             VirtualFile virtualFile = e.getRequiredData(CommonDataKeys.VIRTUAL_FILE);
             isAvailable = "html".equalsIgnoreCase(virtualFile.getExtension());
+            isAvailable = isAvailable || "ftl".equalsIgnoreCase(virtualFile.getExtension());
+            isAvailable = isAvailable || "jsp".equalsIgnoreCase(virtualFile.getExtension());
         }
         e.getPresentation().setEnabled(isAvailable);
     }

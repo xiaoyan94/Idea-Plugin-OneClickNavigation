@@ -144,9 +144,9 @@
 
             <action id="com.zhiyin.plugins.actions.InsertFreeMarkerI18nDirectiveAction"
                     class="com.zhiyin.plugins.actions.InsertFreeMarkerI18nDirectiveAction"
-                    text="FreeMarker: 插入I18n指令"
+                    text="FreeMarker/JSP: 插入I18n Message指令/标签"
                     icon="com.zhiyin.plugins.resources.MyIcons.pandaIconSVG16_2"
-                    description="Insert FreeMarker i18n directive">
+                    description="FreeMarker中插入<@message指令; JSP中插入<mes:message标签">
             </action>
         </group>
 
