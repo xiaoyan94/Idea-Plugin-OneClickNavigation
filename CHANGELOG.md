@@ -4,6 +4,16 @@
 
 ## [Unreleased]
 
+### Added
+
+- Java方法中已存在资源串时复用key。
+
+## [1.0.9] - 2024-06-21
+
+### Added
+
+- 添加右键百度搜索.
+
 ## [1.0.8] - 2024-06-20
 
 ### Added
@@ -67,6 +77,7 @@
 - 支持JavaScript代码中折叠显示I18n中文资源串;
 
 [Unreleased]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-Unreleased.zip
+[1.0.9]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.9.zip
 [1.0.8]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.8.zip
 [1.0.7]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.7.zip
 [1.0.6]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.6.zip

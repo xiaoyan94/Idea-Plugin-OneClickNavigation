@@ -66,6 +66,8 @@ public class TranslateAndReplaceIntentionAction extends PsiElementBaseIntentionA
         }
         MyTranslateDialogWrapper myTranslateDialogWrapper = new MyTranslateDialogWrapper(project, module);
         MyTranslateDialogWrapper.InputModel inputModel = myTranslateDialogWrapper.getInputModel();
+        myTranslateDialogWrapper.setGetI18nPropertiesFun(value -> MyPropertiesUtil.findModuleI18nPropertiesByValue(project, module, value));
+        myTranslateDialogWrapper.setCheckI18nKeyExistsFun(key -> !MyPropertiesUtil.findModuleI18nProperties(project, module, key).isEmpty());
         // 使用invokeLater将UI更新调度到EDT线程中
         ApplicationManager.getApplication().invokeLater(() -> {
             myTranslateDialogWrapper.setSourceCHSText(i18Key);
