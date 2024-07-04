@@ -4,9 +4,13 @@
 
 ## [Unreleased]
 
+## [1.0.10] - 2024-07-04
+
 ### Added
 
-- Java方法中已存在资源串时复用key。
+- Java方法中已存在资源串时复用key.
+- 支持JSP中折叠显示I18n中文资源串.
+- 支持JSP中自动翻译和插入I18n标签.
 
 ## [1.0.9] - 2024-06-21
 
@@ -77,6 +81,7 @@
 - 支持JavaScript代码中折叠显示I18n中文资源串;
 
 [Unreleased]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-Unreleased.zip
+[1.0.10]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.10.zip
 [1.0.9]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.9.zip
 [1.0.8]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.8.zip
 [1.0.7]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.7.zip

@@ -29,6 +29,7 @@
     <depends>com.intellij.modules.java</depends>
     <depends>com.intellij.properties</depends>
     <depends>JavaScript</depends>
+    <depends>com.intellij.modules.jsp.base</depends>
 
     <!-- Extension points defined by the plugin.
          Read more: https://plugins.jetbrains.com/docs/intellij/plugin-extension-points.html -->
@@ -45,6 +46,9 @@
         <lang.foldingBuilder language="HTML" implementationClass="com.zhiyin.plugins.foldingBuilder.MyHTMLFoldingBuilder"/>
 
         <lang.foldingBuilder language="XML" implementationClass="com.zhiyin.plugins.foldingBuilder.MyXMLFoldingBuilder"/>
+
+        <lang.foldingBuilder implementationClass="com.zhiyin.plugins.foldingBuilder.MyJspI18nFoldingBuilder"
+                             language="JSP"/>
 
         <annotator language="JAVA" implementationClass="com.zhiyin.plugins.annotator.MyJavaAnnotator"/>
 
@@ -115,6 +119,10 @@
             <action id="com.zhiyin.plugins.actions.TestCredentialAction" class="com.zhiyin.plugins.actions.TestCredentialAction"
                     text="测试保存密码凭证">
             </action>
+
+            <action id="com.zhiyin.plugins.actions.ShowLanguageAction" class="com.zhiyin.plugins.actions.ShowLanguageAction"
+                    text="查看当前文件Language信息">
+            </action>
         </group>
 
         <action id="com.zhiyin.plugins.actions.testAction"
@@ -146,7 +154,7 @@
                     class="com.zhiyin.plugins.actions.InsertFreeMarkerI18nDirectiveAction"
                     text="FreeMarker/JSP: 插入I18n Message指令/标签"
                     icon="com.zhiyin.plugins.resources.MyIcons.pandaIconSVG16_2"
-                    description="FreeMarker中插入<@message指令; JSP中插入<mes:message标签">
+                    description="FreeMarker中插入&lt;@message指令; JSP中插入&lt;mes:message标签">
             </action>
         </group>
 

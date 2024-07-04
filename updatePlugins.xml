@@ -1,9 +1,9 @@
 
 <plugins>
-    <plugin id="com.zhiyin.plugins.OneClickNavigation" url="https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.8.zip" version="1.0.8">
+    <plugin id="com.zhiyin.plugins.OneClickNavigation" url="https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.10.zip" version="1.0.10">
         <change-notes>&lt;h3&gt;Added&lt;/h3&gt;&#13;
 &#13;
-&lt;ul&gt;&lt;li&gt;添加MyBatis Mapper Xml文件SQL标签到Dao接口方法的引用.&lt;/li&gt;&lt;/ul&gt;&#13;
+&lt;ul&gt;&lt;li&gt;Java方法中已存在资源串时复用key.&lt;/li&gt;&lt;li&gt;支持JSP中折叠显示I18n中文资源串.&lt;/li&gt;&lt;li&gt;支持JSP中自动翻译和插入I18n标签.&lt;/li&gt;&lt;/ul&gt;&#13;
 &#13;
 &#13;
 </change-notes>
