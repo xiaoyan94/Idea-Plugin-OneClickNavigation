@@ -9,6 +9,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
+import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
 public class OpenClassFileAction extends AnAction {
@@ -28,7 +29,7 @@ public class OpenClassFileAction extends AnAction {
         // Determine the path to the compiled class file
         String classFilePath = deriveClassFilePath(project, sourceFile);
 
-        if (classFilePath == null) {
+        if (StringUtils.isBlank(classFilePath)) {
             Messages.showErrorDialog(project, "Failed to locate the corresponding class file.", "Error");
             return;
         }
@@ -43,6 +44,9 @@ public class OpenClassFileAction extends AnAction {
         }
     }
 
+    /**
+     * TODO 待完善：利用 Idea 提供的 PSI 相关 API，以更通用地方法获取编译输出目录对应文件
+     */
     private String deriveClassFilePath(Project project, VirtualFile sourceFile) {
         // 简单实现：直接替换src/main/java为target/classes
         String sourceDirPath = sourceFile.getParent().getPath();
