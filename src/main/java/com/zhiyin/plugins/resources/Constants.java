@@ -21,12 +21,15 @@ public class Constants {
     public static final String I18N_WEB_ZH_CN = "web_zh_CN.properties";
     public static final String I18N_WEB_ZH_TW = "web_zh_TW.properties";
     public static final String I18N_WEB_EN_US = "web_en_US.properties";
+    public static final String I18N_WEB_VI_VN = "web_vi_VN.properties";
     public static final String I18N_ZH_CN_SUFFIX = "_zh_CN.properties";
     public static final String I18N_ZH_TW_SUFFIX = "_zh_TW.properties";
     public static final String I18N_EN_US_SUFFIX = "_en_US.properties";
+    public static final String I18N_VI_VN_SUFFIX = "_vi_VN.properties";
     public static final String I18N_DATAGRID_ZH_CN_SUFFIX = ".datagrid_zh_CN.properties";
     public static final String I18N_DATAGRID_ZH_TW_SUFFIX = ".datagrid_zh_TW.properties";
     public static final String I18N_DATAGRID_EN_US_SUFFIX = ".datagrid_en_US.properties";
+    public static final String I18N_DATAGRID_VI_VN_SUFFIX = ".datagrid_vi_VN.properties";
 
 //    public static final String NO_SUCH_METHOD_IN_MAPPER = "Mapper XML中没有该方法";
     public static final String INVALID_I18N_KEY = "无效的i18n key";

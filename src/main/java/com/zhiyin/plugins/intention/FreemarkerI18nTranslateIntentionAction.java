@@ -53,18 +53,22 @@ public class FreemarkerI18nTranslateIntentionAction extends PsiElementBaseIntent
                     String chsValue = inputModel.getChinese();
                     String chtValue = inputModel.getChineseTW();
                     String enValue = inputModel.getEnglish();
+                    String viValue = inputModel.getVietnamese();
                     if (!isNative2AsciiForPropertiesFiles) {
                         chsValue = inputModel.getChineseUnicode();
                         chtValue = inputModel.getChineseTWUnicode();
 //                        enValue = inputModel.getEnglishUnicode();
+                        viValue = inputModel.getVietnameseUnicode();
                     }
 
                     String finalChsValue = chsValue;
                     String finalChtValue = chtValue;
+                    String finalViValue = viValue;
                     WriteCommandAction.runWriteCommandAction(project, () -> {
                         MyPropertiesUtil.addPropertyToI18nFile(project, module, Constants.I18N_WEB_ZH_CN, key, finalChsValue);
                         MyPropertiesUtil.addPropertyToI18nFile(project, module, Constants.I18N_WEB_ZH_TW, key, finalChtValue);
                         MyPropertiesUtil.addPropertyToI18nFile(project, module, Constants.I18N_WEB_EN_US, key, enValue);
+                        MyPropertiesUtil.addPropertyToI18nFile(project, module, Constants.I18N_WEB_VI_VN, key, finalViValue);
                     });
                 }
             }

@@ -24,7 +24,9 @@ public class MyPluginMessages {
     }
 
     public static void showError(String title, String message, @Nullable Project project) {
-        Notifications.Bus.notify(new Notification(Constants.NOTIFICATION_GROUP_ID, title, message, NotificationType.ERROR), project);
+        Notification notification = new Notification(Constants.NOTIFICATION_GROUP_ID, title, message, NotificationType.ERROR);
+        notification.setIcon(MyIcons.pandaIconSVG16_2);
+        Notifications.Bus.notify(notification, project);
     }
 
     public static void showWarning(String title, String message, @Nullable Project project) {

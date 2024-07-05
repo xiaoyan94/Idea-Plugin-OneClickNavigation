@@ -1,6 +1,8 @@
 package com.zhiyin.plugins.utils;
 
 import com.intellij.openapi.application.ApplicationManager;
+import com.zhiyin.plugins.notification.MyPluginMessages;
+import com.zhiyin.plugins.translator.TranslateException;
 import com.zhiyin.plugins.translator.microsoft.MicrosoftTranslator;
 import com.zhiyin.plugins.translator.youdao.YouDaoTranslate;
 import com.zhiyin.plugins.settings.TranslateSettingsComponent;
@@ -12,6 +14,7 @@ public class TranslateUtil {
 
     private static final LRUCache<String, String> TRANSLATION_CACHE_EN = new LRUCache<>(128);
     private static final LRUCache<String, String> TRANSLATION_CACHE_CHT = new LRUCache<>(128);
+    private static final LRUCache<String, String> TRANSLATION_CACHE_VIET = new LRUCache<>(128);
 
     /**
      * 清空缓存的翻译结果
@@ -19,13 +22,14 @@ public class TranslateUtil {
     public static void clearTranslationCache() {
         TRANSLATION_CACHE_EN.clear();
         TRANSLATION_CACHE_CHT.clear();
+        TRANSLATION_CACHE_VIET.clear();
     }
 
     /**
      * 中文转英文
      */
     public static String translateToEN(String text) {
-        if(TRANSLATION_CACHE_EN.containsKey(text)){
+        if(TRANSLATION_CACHE_EN.containsKey(text) && TRANSLATION_CACHE_EN.get(text) != null && !TRANSLATION_CACHE_EN.get(text).isEmpty()){
             return TRANSLATION_CACHE_EN.get(text);
         } else{
             String result = translate(text, YouDaoTranslate.LANG_ZH_CHS, YouDaoTranslate.LANG_EN);
@@ -39,11 +43,25 @@ public class TranslateUtil {
      */
     public static String translateToCHT(String text)
     {
-        if(TRANSLATION_CACHE_CHT.containsKey(text)){
+        if(TRANSLATION_CACHE_CHT.containsKey(text) && TRANSLATION_CACHE_CHT.get(text) != null && !TRANSLATION_CACHE_CHT.get(text).isEmpty()){
             return TRANSLATION_CACHE_CHT.get(text);
         } else{
             String result = translate(text, YouDaoTranslate.LANG_ZH_CHS, YouDaoTranslate.LANG_ZH_CHT);
             TRANSLATION_CACHE_CHT.put(text, result);
+            return result;
+        }
+    }
+
+    /**
+     * 中文转越南文
+     */
+    public static String translateToVIET(String text)
+    {
+        if(TRANSLATION_CACHE_VIET.containsKey(text) && TRANSLATION_CACHE_VIET.get(text) != null && !TRANSLATION_CACHE_VIET.get(text).isEmpty()){
+            return TRANSLATION_CACHE_VIET.get(text);
+        } else{
+            String result = translate(text, YouDaoTranslate.LANG_ZH_CHS, YouDaoTranslate.LANG_VI);
+            TRANSLATION_CACHE_VIET.put(text, result);
             return result;
         }
     }
@@ -53,16 +71,26 @@ public class TranslateUtil {
         String apiProvider = translateSettingsState.getApiProvider();
         switch (apiProvider){
             case "YouDao":
-                return doYouDaoTranslate(text, from, to, translateSettingsState);
+                try {
+                    return doYouDaoTranslate(text, from, to, translateSettingsState);
+                } catch (TranslateException e) {
+                    MyPluginMessages.showError("翻译错误", e.getMessage(), null);
+                }
+                break;
             case "Microsoft":
-                return doMicrosoftTranslate(text, to, translateSettingsState);
+                try {
+                    return doMicrosoftTranslate(text, to, translateSettingsState);
+                } catch (TranslateException e) {
+                    MyPluginMessages.showError("翻译错误", e.getMessage(), null);
+                }
+                break;
             default:
-                return "";
+                break;
         }
-
+        return "";
     }
 
-    private static String doYouDaoTranslate(String text, String from, String to, TranslateSettingsState translateSettingsState) {
+    private static String doYouDaoTranslate(String text, String from, String to, TranslateSettingsState translateSettingsState) throws TranslateException {
         YouDaoTranslate youDaoTranslate = ApplicationManager.getApplication().getService(YouDaoTranslate.class);
         String apiUrlYouDao = translateSettingsState.getApiUrlYouDao();
         String apiKeyYouDao = translateSettingsState.getApiKeyYouDao();
@@ -75,7 +103,7 @@ public class TranslateUtil {
         return youDaoTranslate.translate(text, from, to, apiUrlYouDao, apiKeyYouDao, apiSecretYouDao, apiVocabIdYouDao);
     }
 
-    private static String doMicrosoftTranslate(String text, String to, TranslateSettingsState translateSettingsState) {
+    private static String doMicrosoftTranslate(String text, String to, TranslateSettingsState translateSettingsState) throws TranslateException {
         MicrosoftTranslator microsoftTranslator = ApplicationManager.getApplication().getService(MicrosoftTranslator.class);
         Map<String, String> targetTranslations;
         if(translateSettingsState.getApiSecretMicrosoft().isEmpty()){
@@ -83,8 +111,12 @@ public class TranslateUtil {
         } else{
             targetTranslations = microsoftTranslator.translateToMultiLang(text, null, translateSettingsState.getApiUrlMicrosoft(), translateSettingsState.getApiSecretMicrosoft(), translateSettingsState.getApiRegionMicrosoft());
         }
+        if(targetTranslations.get("error") != null && !targetTranslations.get("error").isEmpty()){
+            throw new TranslateException(targetTranslations.get("error"));
+        }
         TRANSLATION_CACHE_EN.put(text, targetTranslations.get("en"));
         TRANSLATION_CACHE_CHT.put(text, targetTranslations.get("zh-Hant"));
+        TRANSLATION_CACHE_VIET.put(text, targetTranslations.get("vi"));
         return targetTranslations.get(to);
     }
 }

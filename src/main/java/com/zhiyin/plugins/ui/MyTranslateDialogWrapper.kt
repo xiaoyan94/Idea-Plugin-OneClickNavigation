@@ -1,18 +1,24 @@
 package com.zhiyin.plugins.ui
 
+import com.intellij.icons.AllIcons
 import com.intellij.lang.properties.psi.Property
+import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.application.invokeLater
 import com.intellij.openapi.application.runReadAction
 import com.intellij.openapi.application.runWriteAction
 import com.intellij.openapi.ide.CopyPasteManager
 import com.intellij.openapi.module.Module
+import com.intellij.openapi.project.DumbAwareAction
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.DialogPanel
 import com.intellij.openapi.ui.DialogWrapper
 import com.intellij.ui.components.JBTextField
 import com.intellij.ui.dsl.builder.*
 import com.intellij.ui.layout.ComponentPredicate
+import com.zhiyin.plugins.actions.ClearTranslationCacheAction
+import com.zhiyin.plugins.notification.MyPluginMessages
 import com.zhiyin.plugins.settings.TranslateSettingsComponent
+import com.zhiyin.plugins.settings.TranslateSettingsState
 import com.zhiyin.plugins.utils.MyPropertiesUtil
 import com.zhiyin.plugins.utils.TranslateUtil
 import java.awt.datatransfer.StringSelection
@@ -55,6 +61,8 @@ class MyTranslateDialogWrapper(private val project: Project?, private val module
     private lateinit var englishUnicodeTextField: Cell<JBTextField>;
     private lateinit var chineseTWTextField: Cell<JBTextField>;
     private lateinit var chineseTWUnicodeTextField: Cell<JBTextField>;
+    private lateinit var vietnameseTextField: Cell<JBTextField>;
+    private lateinit var vietnameseUnicodeTextField: Cell<JBTextField>;
     private lateinit var translateButton: Cell<JButton>;
 
     /**
@@ -78,7 +86,28 @@ class MyTranslateDialogWrapper(private val project: Project?, private val module
                         null
                     }.bindText(inputModel::chinese).comment("")
 
-                    translateButton = button("翻译", doTranslate())
+                    translateButton = button(getTranslateButtonText(), doTranslate())
+
+                    actionsButton(object : DumbAwareAction("有道翻译") {
+                        override fun actionPerformed(e: AnActionEvent) {
+                            updateApiProviderAndButtonText("YouDao")
+                        }
+                    }, object : DumbAwareAction("微软翻译") {
+                        override fun actionPerformed(e: AnActionEvent) {
+                            updateApiProviderAndButtonText("Microsoft")
+                        }
+                    }, object : DumbAwareAction("百度翻译") {
+                        override fun actionPerformed(e: AnActionEvent) {
+                            updateApiProviderAndButtonText("Baidu")
+                        }
+                    })
+
+                    val action = object : DumbAwareAction("清空缓存", "清空翻译缓存", AllIcons.Actions.GC) {
+                        override fun actionPerformed(e: AnActionEvent) {
+                            ClearTranslationCacheAction.doAction()
+                        }
+                    }
+                    actionButton(action)
                 }
             }
             group("翻译结果:") {
@@ -150,6 +179,26 @@ class MyTranslateDialogWrapper(private val project: Project?, private val module
                     }.bindText(inputModel::chineseTWUnicode)
                 }
 
+                row("越南语:") {
+                    vietnameseTextField = textField().columns(COLUMNS_LARGE).enabled(true).validation {
+                        if (it.text.isEmpty() && it.isEnabled && !inputModel.propertyKeyExists) {
+                            error("请输入越南语")
+                        } else {
+                            vietnameseUnicodeTextField.component.text = it.text.toUnicode()
+                            null
+                        }
+                    }.bindText(inputModel::vietnamese)
+                }
+                row("越南语Unicode") {
+                    vietnameseUnicodeTextField = textField().columns(COLUMNS_LARGE).enabled(false).validation {
+                        if (it.text.isEmpty() && it.isEnabled && !inputModel.propertyKeyExists) {
+                            error("越南语 Unicode 必填")
+                        } else {
+                            null
+                        }
+                    }.bindText(inputModel::vietnameseUnicode)
+                }
+
                 row("I18n key:") {
                     i18nKeyTextField =
                         textField().text("$moduleName").columns(COLUMNS_LARGE)
@@ -175,6 +224,26 @@ class MyTranslateDialogWrapper(private val project: Project?, private val module
             }
 
         }
+    }
+
+    private fun getTranslateButtonText(): String {
+        return when (TranslateSettingsComponent.getInstance().state.apiProvider ){
+            "Baidu" -> "百度翻译"
+            "YouDao" -> "有道翻译"
+            "Microsoft" -> "微软翻译"
+            else -> "翻译"
+        }
+    }
+
+    private fun updateApiProviderAndButtonText(apiProvider: String) {
+        if ("Baidu" == apiProvider) {
+            MyPluginMessages.showError("暂不支持百度翻译", "待开发", project)
+            return
+        }
+        val state = TranslateSettingsComponent.getInstance().state
+        state.apiProvider = apiProvider
+        TranslateSettingsComponent.getInstance().loadState(state)
+        translateButton.component.text = getTranslateButtonText()
     }
 
     /**
@@ -237,7 +306,7 @@ class MyTranslateDialogWrapper(private val project: Project?, private val module
                     if (foundProperties.size >= 3) {
                         chineseTWTextField.text(foundProperties[1].value?.let { if (!isNative2Ascii) it.unicodeToString() else it } ?: "")
                         englishTextField.text(foundProperties[2].value?.let { if (!isNative2Ascii) it.unicodeToString() else it } ?: "")
-
+                        vietnameseTextField.text(foundProperties[3].value?.let { if (!isNative2Ascii) it.unicodeToString() else it } ?: "")
                     }
 
                     translateButton.component.isEnabled = true;
@@ -274,6 +343,7 @@ class MyTranslateDialogWrapper(private val project: Project?, private val module
         val chinese = sourceCHSTextField.component.text;
         val english = TranslateUtil.translateToEN(chinese).toCamelCase()
         val cht = TranslateUtil.translateToCHT(chinese)
+        val vi = TranslateUtil.translateToVIET(chinese)
 
         SwingUtilities.invokeLater {
             if (chinese.isNotEmpty()) {
@@ -292,7 +362,12 @@ class MyTranslateDialogWrapper(private val project: Project?, private val module
                 chineseTWUnicodeTextField.text(cht.toUnicode());
             }
 
-            translateButton.component.text = "翻译"
+            vietnameseTextField.text(vi);
+            if (vi.isNotEmpty()) {
+                vietnameseUnicodeTextField.text(vi.toUnicode());
+            }
+
+            translateButton.component.text = getTranslateButtonText()
             translateButton.component.isEnabled = true;
             sourceCHSTextField.component.isEditable = true;
 
@@ -323,7 +398,9 @@ class MyTranslateDialogWrapper(private val project: Project?, private val module
         var english: String = "",
         var englishUnicode: String = "",
         var chineseTW: String = "",
-        var chineseTWUnicode: String = ""
+        var chineseTWUnicode: String = "",
+        var vietnamese: String = "",
+        var vietnameseUnicode: String = ""
     )
 
     fun setSourceCHSText(sourceCHSText: String) {

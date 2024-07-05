@@ -68,7 +68,7 @@ public final class MicrosoftTranslator {
         JSONArray jsonArray = null;
         String responseJsonStr = "";
         try {
-            responseJsonStr = translate(text,  to == null || to.isEmpty() ? "en,zh-Hant" : to, endpoint, resourceKey, region);
+            responseJsonStr = translate(text,  to == null || to.isEmpty() ? "en,zh-Hant,vi" : to, endpoint, resourceKey, region);
             jsonArray = JSONArray.parseArray(responseJsonStr);
         } catch (IOException | JSONException e) {
             System.out.println(responseJsonStr);

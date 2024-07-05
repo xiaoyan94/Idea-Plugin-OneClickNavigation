@@ -100,6 +100,8 @@ public class MyPropertiesUtil {
                 GlobalSearchScope.moduleScope(module)));
         virtualFiles.addAll(FilenameIndex.getVirtualFilesByName(moduleName + Constants.I18N_EN_US_SUFFIX,
                 GlobalSearchScope.moduleScope(module)));
+        virtualFiles.addAll(FilenameIndex.getVirtualFilesByName(moduleName + Constants.I18N_VI_VN_SUFFIX,
+                GlobalSearchScope.moduleScope(module)));
         return getProperties(project, virtualFiles, key, result);
     }
 
@@ -119,6 +121,8 @@ public class MyPropertiesUtil {
         virtualFiles.addAll(FilenameIndex.getVirtualFilesByName(moduleName + Constants.I18N_DATAGRID_ZH_TW_SUFFIX,
                 GlobalSearchScope.moduleScope(module)));
         virtualFiles.addAll(FilenameIndex.getVirtualFilesByName(moduleName + Constants.I18N_DATAGRID_EN_US_SUFFIX,
+                GlobalSearchScope.moduleScope(module)));
+        virtualFiles.addAll(FilenameIndex.getVirtualFilesByName(moduleName + Constants.I18N_DATAGRID_VI_VN_SUFFIX,
                 GlobalSearchScope.moduleScope(module)));
         return getProperties(project, virtualFiles, key, result);
     }
@@ -140,6 +144,8 @@ public class MyPropertiesUtil {
         virtualFiles.addAll(FilenameIndex.getVirtualFilesByName(Constants.I18N_WEB_ZH_TW,
                 GlobalSearchScope.moduleScope(module)));
         virtualFiles.addAll(FilenameIndex.getVirtualFilesByName(Constants.I18N_WEB_EN_US,
+                GlobalSearchScope.moduleScope(module)));
+        virtualFiles.addAll(FilenameIndex.getVirtualFilesByName(Constants.I18N_WEB_VI_VN,
                 GlobalSearchScope.moduleScope(module)));
         return getProperties(project, virtualFiles, key, result);
     }
@@ -382,6 +388,9 @@ public class MyPropertiesUtil {
      * @return 名称
      */
     public static String getSimpleModuleName(Module module) {
+        if (module == null) {
+            return "";
+        }
         String moduleName = module.getName();
         return moduleName.substring(moduleName.lastIndexOf('.') + 1);
     }
@@ -389,7 +398,7 @@ public class MyPropertiesUtil {
     public static String getTop3PropertiesValueString(List<Property> properties) {
         boolean native2AsciiForPropertiesFiles = isNative2AsciiForPropertiesFiles();
         return properties.stream()
-                .limit(3)
+                .limit(4)
                 .map(IProperty::getValue)
                 .map(value -> {
                     if (native2AsciiForPropertiesFiles) {

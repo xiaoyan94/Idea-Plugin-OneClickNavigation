@@ -79,18 +79,22 @@ public class InsertFreeMarkerI18nDirectiveAction extends AnAction {
                     String chsValue = inputModel.getChinese();
                     String chtValue = inputModel.getChineseTW();
                     String enValue = inputModel.getEnglish();
+                    String viValue = inputModel.getVietnamese();
                     if (!isNative2AsciiForPropertiesFiles) {
                         chsValue = inputModel.getChineseUnicode();
                         chtValue = inputModel.getChineseTWUnicode();
 //                        enValue = inputModel.getEnglishUnicode();
+                        viValue = inputModel.getVietnameseUnicode();
                     }
 
                     String finalChsValue = chsValue;
                     String finalChtValue = chtValue;
+                    String finalViValue = viValue;
                     WriteCommandAction.runWriteCommandAction(project, () -> {
                         MyPropertiesUtil.addPropertyToI18nFile(project, module, Constants.I18N_ZH_CN_SUFFIX, key, finalChsValue);
                         MyPropertiesUtil.addPropertyToI18nFile(project, module, Constants.I18N_ZH_TW_SUFFIX, key, finalChtValue);
                         MyPropertiesUtil.addPropertyToI18nFile(project, module, Constants.I18N_EN_US_SUFFIX, key, enValue);
+                        MyPropertiesUtil.addPropertyToI18nFile(project, module, Constants.I18N_VI_VN_SUFFIX, key, finalViValue);
                     });
                 }
             }

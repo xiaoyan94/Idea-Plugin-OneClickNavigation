@@ -114,14 +114,14 @@
                     text="清空翻译缓存" description="Clear translation cache" icon="AllIcons.Actions.Refresh"/>
 
             <action id="ZYPlugin.TestTranslate" class="com.zhiyin.plugins.actions.TranslateTestAction" text="测试翻译"
-                    description="Test translate"/>
+                    description="Test translate" icon="com.zhiyin.plugins.resources.MyIcons.pandaIconSVG16"/>
 
             <action id="com.zhiyin.plugins.actions.TestCredentialAction" class="com.zhiyin.plugins.actions.TestCredentialAction"
                     text="测试保存密码凭证">
             </action>
 
             <action id="com.zhiyin.plugins.actions.ShowLanguageAction" class="com.zhiyin.plugins.actions.ShowLanguageAction"
-                    text="查看当前文件Language信息">
+                    text="查看当前文件Language信息" icon="AllIcons.General.Information">
             </action>
         </group>
 

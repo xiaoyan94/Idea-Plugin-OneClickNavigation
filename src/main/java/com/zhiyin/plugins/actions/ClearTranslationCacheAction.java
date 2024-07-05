@@ -17,6 +17,10 @@ public class ClearTranslationCacheAction extends AnAction {
      */
     @Override
     public void actionPerformed(@NotNull AnActionEvent e) {
+        doAction();
+    }
+
+    public static void doAction() {
         TranslateUtil.clearTranslationCache();
         MyPluginMessages.showInfo("提示", "翻译缓存已清空");
     }

@@ -90,11 +90,13 @@ public class TranslateAndReplaceIntentionAction extends PsiElementBaseIntentionA
                             String chtValue = native2AsciiForPropertiesFiles ? inputModel.getChineseTW() : inputModel.getChineseTWUnicode();
 //                            String enValue = native2AsciiForPropertiesFiles ? inputModel.getEnglish() : inputModel.getEnglishUnicode();
                             String enValue = inputModel.getEnglish();
+                            String viValue = inputModel.getVietnamese();
 
-                            logger.info("native2AsciiForPropertiesFiles = " + native2AsciiForPropertiesFiles + " chsValue = " + chsValue + " chtValue = " + chtValue + " enValue = " + enValue);
+                            logger.info("native2AsciiForPropertiesFiles = " + native2AsciiForPropertiesFiles + " chsValue = " + chsValue + " chtValue = " + chtValue + " enValue = " + enValue + " viValue = " + viValue);
                             MyPropertiesUtil.addPropertyToI18nFile(project, module, Constants.I18N_ZH_CN_SUFFIX, inputModel.getPropertyKey(), chsValue);
                             MyPropertiesUtil.addPropertyToI18nFile(project, module, Constants.I18N_ZH_TW_SUFFIX, inputModel.getPropertyKey(), chtValue);
                             MyPropertiesUtil.addPropertyToI18nFile(project, module, Constants.I18N_EN_US_SUFFIX, inputModel.getPropertyKey(), enValue);
+                            MyPropertiesUtil.addPropertyToI18nFile(project, module, Constants.I18N_VI_VN_SUFFIX, inputModel.getPropertyKey(), viValue);
                         }
 
 

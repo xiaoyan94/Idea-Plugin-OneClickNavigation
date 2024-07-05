@@ -76,9 +76,11 @@ public class XMLTranslateIntentionAction extends PsiElementBaseIntentionAction i
                             logger.debug("XMLTranslateIntentionAction.invoke on XmlTag<Title>: native2AsciiForPropertiesFiles:" + native2AsciiForPropertiesFiles);
                             String chsValue = native2AsciiForPropertiesFiles ? inputModel.getChinese() : inputModel.getChineseUnicode();
                             String chtValue = native2AsciiForPropertiesFiles ? inputModel.getChineseTW() : inputModel.getChineseTWUnicode();
+                            String viValue = native2AsciiForPropertiesFiles ? inputModel.getVietnamese() : inputModel.getVietnameseUnicode();
                             MyPropertiesUtil.addPropertyToI18nFile(project, module, Constants.I18N_DATAGRID_ZH_CN_SUFFIX, inputModel.getPropertyKey(), chsValue, true);
                             MyPropertiesUtil.addPropertyToI18nFile(project, module, Constants.I18N_DATAGRID_ZH_TW_SUFFIX, inputModel.getPropertyKey(), chtValue, true);
                             MyPropertiesUtil.addPropertyToI18nFile(project, module, Constants.I18N_DATAGRID_EN_US_SUFFIX, inputModel.getPropertyKey(), enValue, true);
+                            MyPropertiesUtil.addPropertyToI18nFile(project, module, Constants.I18N_DATAGRID_VI_VN_SUFFIX, inputModel.getPropertyKey(), viValue, true);
                         }
                     });
                 }
@@ -114,9 +116,11 @@ public class XMLTranslateIntentionAction extends PsiElementBaseIntentionAction i
                             logger.debug("XMLTranslateIntentionAction.invoke on XmlTag<Field>: native2AsciiForPropertiesFiles:" + native2AsciiForPropertiesFiles);
                             String chsValue = native2AsciiForPropertiesFiles ? inputModel.getChinese() : inputModel.getChineseUnicode();
                             String chtValue = native2AsciiForPropertiesFiles ? inputModel.getChineseTW() : inputModel.getChineseTWUnicode();
+                            String viValue = native2AsciiForPropertiesFiles ? inputModel.getVietnamese() : inputModel.getVietnameseUnicode();
                             MyPropertiesUtil.addPropertyToI18nFile(project, module, Constants.I18N_DATAGRID_ZH_CN_SUFFIX, inputModel.getPropertyKey(), chsValue);
                             MyPropertiesUtil.addPropertyToI18nFile(project, module, Constants.I18N_DATAGRID_ZH_TW_SUFFIX, inputModel.getPropertyKey(), chtValue);
                             MyPropertiesUtil.addPropertyToI18nFile(project, module, Constants.I18N_DATAGRID_EN_US_SUFFIX, inputModel.getPropertyKey(), enValue);
+                            MyPropertiesUtil.addPropertyToI18nFile(project, module, Constants.I18N_DATAGRID_VI_VN_SUFFIX, inputModel.getPropertyKey(), viValue);
                         }
                     });
                 }
@@ -156,9 +160,11 @@ public class XMLTranslateIntentionAction extends PsiElementBaseIntentionAction i
                             logger.debug("XMLTranslateIntentionAction.invoke on XmlTag<column>: native2AsciiForPropertiesFiles:" + native2AsciiForPropertiesFiles);
                             String chsValue = native2AsciiForPropertiesFiles ? inputModel.getChinese() : inputModel.getChineseUnicode();
                             String chtValue = native2AsciiForPropertiesFiles ? inputModel.getChineseTW() : inputModel.getChineseTWUnicode();
+                            String viValue = native2AsciiForPropertiesFiles ? inputModel.getVietnamese() : inputModel.getVietnameseUnicode();
                             MyPropertiesUtil.addPropertyToI18nFile(project, module, Constants.I18N_ZH_CN_SUFFIX, inputModel.getPropertyKey(), chsValue);
                             MyPropertiesUtil.addPropertyToI18nFile(project, module, Constants.I18N_ZH_TW_SUFFIX, inputModel.getPropertyKey(), chtValue);
                             MyPropertiesUtil.addPropertyToI18nFile(project, module, Constants.I18N_EN_US_SUFFIX, inputModel.getPropertyKey(), enValue);
+                            MyPropertiesUtil.addPropertyToI18nFile(project, module, Constants.I18N_VI_VN_SUFFIX, inputModel.getPropertyKey(), viValue);
                         }
                     });
                 }

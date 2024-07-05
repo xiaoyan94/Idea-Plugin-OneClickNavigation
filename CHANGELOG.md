@@ -4,6 +4,20 @@
 
 ## [Unreleased]
 
+## [1.0.11] - 2024-07-05
+
+### Added
+
+- 添加了越南语支持.
+- 翻译弹窗：增加翻译引擎选择按钮和清空缓存按钮.
+- 支持JSP中折叠显示I18n中文资源串.
+- 支持JSP中自动翻译和插入I18n标签.
+
+### Fixed
+
+- 优化翻译弹窗
+- 优化翻译结果缓存逻辑
+
 ## [1.0.10] - 2024-07-04
 
 ### Added
@@ -81,6 +95,7 @@
 - 支持JavaScript代码中折叠显示I18n中文资源串;
 
 [Unreleased]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-Unreleased.zip
+[1.0.11]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.11.zip
 [1.0.10]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.10.zip
 [1.0.9]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.9.zip
 [1.0.8]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.8.zip
