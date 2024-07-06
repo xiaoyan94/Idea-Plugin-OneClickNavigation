@@ -5,21 +5,22 @@
 > 仅适用于 IntelliJ IDEA 中的 CloudMes 项目。
 
 <!-- Plugin description -->
-**OneClickNavigation** 是针对智引 Mes 项目开发的一个插件，用于提升日常开发效率。
+**[OneClickNavigation][Github]** 是针对智引 Mes 项目开发的一个插件，用于提升日常开发效率。
 
 此插件主要实现了以下功能：
 
-- Dao接口方法声明和Service中的Dao方法调用，一键跳转到Mapper SQL
-- queryDaoDataT方法参数和对应dao方法互相跳转，自动补全提示。
+- Dao接口方法声明和Service中的Dao方法调用，**一键跳转**到Mapper SQL
+- **queryDaoDataT**方法参数和对应dao方法、xml**互相跳转**，**自动补全提示**（`Ctrl+空格`）。
 - Moc 相关方法，一键跳转到 Moc xml文件。
-- 大部分场景下的I18n中文资源串错误提示，中文折叠显示。已支持：
-  - Java 中的 I18nUtils.getMessage 方法
-  - HTML 中嵌入 FreeMarker 模板中的 message 指令
+- 大部分场景下的**I18n中文资源串错误提示，中文折叠显示**。已支持：
+  - Java 中的 I18nUtils.getMessage 等方法
+  - HTML 中嵌入 FreeMarker 模板 message 指令
+  - JSP 中的 message 标签
   - JavaScript 中的 i18n 方法
   - Layout 文件中 DataGrid 的 Title->value 和 Field->label
   - Imp*Mapper 文件中的 i18n
-- 大部分场景下的I18n资源串自动翻译和替换key。支持场景同上。
-- Imp*Mapper 文件中的 col 列字段一键排序。
+- 大部分场景下的I18n资源串自动翻译（**简繁英越**）和替换key（`Alt+Enter` 手动触发或💡自动修复提示）。支持场景同上。
+- Imp*Mapper 文件中的 col 列字段**一键排序**。
 - 一键打开当前 java 源文件编译后的 class 文件目录。
 
 
@@ -57,6 +58,8 @@
 - [IntelliJ IDEA Open API and Plugin Development Forum][jb:forum]
 - [Keep a Changelog][keep-a-changelog]
 - [GitHub Actions][gh:actions]
+
+[Github]: https://github.com/xiaoyan94/Idea-Plugin-OneClickNavigation
 
 [docs]: https://plugins.jetbrains.com/docs/intellij?from=IJPluginTemplate
 [docs:intellij-platform-kotlin-oom]: https://plugins.jetbrains.com/docs/intellij/using-kotlin.html#incremental-compilation

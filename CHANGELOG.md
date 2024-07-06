@@ -4,6 +4,17 @@
 
 ## [Unreleased]
 
+## [1.0.12] - 2024-07-06
+
+### Added
+
+- 增加百度翻译接口
+
+### Fixed
+
+- 优化微软必应翻译接口，在没有指定源语言时，会将某些中文识别为日文的问题
+- 优化老项目资源串只有简中英，没有繁体、越南语导致的UI问题：翻译弹窗获取不到复用值
+
 ## [1.0.11] - 2024-07-05
 
 ### Added
@@ -95,6 +106,7 @@
 - 支持JavaScript代码中折叠显示I18n中文资源串;
 
 [Unreleased]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-Unreleased.zip
+[1.0.12]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.12.zip
 [1.0.11]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.11.zip
 [1.0.10]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.10.zip
 [1.0.9]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.9.zip

@@ -1,6 +1,5 @@
 package com.zhiyin.plugins.translator.microsoft;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
@@ -109,6 +108,7 @@ public final class MicrosoftTranslator {
      * @return 翻译结果
      * @throws IOException e
      */
+    @SuppressWarnings({"UastIncorrectHttpHeaderInspection", "SpellCheckingInspection"})
     public String translate(String text, String to, String apiEndpoint, String apiSecretMicrosoft, String apiRegionMicrosoft) throws IOException {
         if (to == null) {
             to = "en";

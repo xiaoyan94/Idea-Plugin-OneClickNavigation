@@ -1,21 +1,21 @@
 
 <plugins>
-    <plugin id="com.zhiyin.plugins.OneClickNavigation" url="https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.11.zip" version="1.0.11">
+    <plugin id="com.zhiyin.plugins.OneClickNavigation" url="https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.12.zip" version="1.0.12">
         <change-notes>&lt;h3&gt;Added&lt;/h3&gt;&#13;
 &#13;
-&lt;ul&gt;&lt;li&gt;添加了越南语支持.&lt;/li&gt;&lt;li&gt;翻译弹窗：增加翻译引擎选择按钮和清空缓存按钮.&lt;/li&gt;&lt;li&gt;支持JSP中折叠显示I18n中文资源串.&lt;/li&gt;&lt;li&gt;支持JSP中自动翻译和插入I18n标签.&lt;/li&gt;&lt;/ul&gt;&#13;
+&lt;ul&gt;&lt;li&gt;增加百度翻译接口&lt;/li&gt;&lt;/ul&gt;&#13;
 &#13;
 &lt;h3&gt;Fixed&lt;/h3&gt;&#13;
 &#13;
-&lt;ul&gt;&lt;li&gt;优化翻译弹窗&lt;/li&gt;&lt;li&gt;优化翻译结果缓存逻辑&lt;/li&gt;&lt;/ul&gt;&#13;
+&lt;ul&gt;&lt;li&gt;优化微软必应翻译接口，在没有指定源语言时，会将某些中文识别为日文的问题&lt;/li&gt;&lt;li&gt;优化老项目资源串只有简中英，没有繁体、越南语导致的UI问题：翻译弹窗获取不到复用值&lt;/li&gt;&lt;/ul&gt;&#13;
 &#13;
 &#13;
 </change-notes>
-        <description>&lt;p&gt;&lt;strong&gt;OneClickNavigation&lt;/strong&gt; 是针对智引 Mes 项目开发的一个插件，用于提升日常开发效率。&lt;/p&gt;
+        <description>&lt;p&gt;&lt;strong&gt;[OneClickNavigation][Github]&lt;/strong&gt; 是针对智引 Mes 项目开发的一个插件，用于提升日常开发效率。&lt;/p&gt;
 
 &lt;p&gt;此插件主要实现了以下功能：&lt;/p&gt;
 
-&lt;ul&gt;&lt;li&gt;Dao接口方法声明和Service中的Dao方法调用，一键跳转到Mapper SQL&lt;/li&gt;&lt;li&gt;queryDaoDataT方法参数和对应dao方法互相跳转，自动补全提示。&lt;/li&gt;&lt;li&gt;Moc 相关方法，一键跳转到 Moc xml文件。&lt;/li&gt;&lt;li&gt;大部分场景下的I18n中文资源串错误提示，中文折叠显示。已支持：&lt;ul&gt;&lt;li&gt;Java 中的 I18nUtils.getMessage 方法&lt;/li&gt;&lt;li&gt;HTML 中嵌入 FreeMarker 模板中的 message 指令&lt;/li&gt;&lt;li&gt;JavaScript 中的 i18n 方法&lt;/li&gt;&lt;li&gt;Layout 文件中 DataGrid 的 Title-&amp;gt;value 和 Field-&amp;gt;label&lt;/li&gt;&lt;li&gt;Imp*Mapper 文件中的 i18n&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;&lt;li&gt;大部分场景下的I18n资源串自动翻译和替换key。支持场景同上。&lt;/li&gt;&lt;li&gt;Imp*Mapper 文件中的 col 列字段一键排序。&lt;/li&gt;&lt;li&gt;一键打开当前 java 源文件编译后的 class 文件目录。&lt;/li&gt;&lt;/ul&gt;
+&lt;ul&gt;&lt;li&gt;Dao接口方法声明和Service中的Dao方法调用，&lt;strong&gt;一键跳转&lt;/strong&gt;到Mapper SQL&lt;/li&gt;&lt;li&gt;&lt;strong&gt;queryDaoDataT&lt;/strong&gt;方法参数和对应dao方法、xml&lt;strong&gt;互相跳转&lt;/strong&gt;，&lt;strong&gt;自动补全提示&lt;/strong&gt;（&lt;code&gt;Ctrl+空格&lt;/code&gt;）。&lt;/li&gt;&lt;li&gt;Moc 相关方法，一键跳转到 Moc xml文件。&lt;/li&gt;&lt;li&gt;大部分场景下的&lt;strong&gt;I18n中文资源串错误提示，中文折叠显示&lt;/strong&gt;。已支持：&lt;ul&gt;&lt;li&gt;Java 中的 I18nUtils.getMessage 等方法&lt;/li&gt;&lt;li&gt;HTML 中嵌入 FreeMarker 模板 message 指令&lt;/li&gt;&lt;li&gt;JSP 中的 message 标签&lt;/li&gt;&lt;li&gt;JavaScript 中的 i18n 方法&lt;/li&gt;&lt;li&gt;Layout 文件中 DataGrid 的 Title-&amp;gt;value 和 Field-&amp;gt;label&lt;/li&gt;&lt;li&gt;Imp*Mapper 文件中的 i18n&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;&lt;li&gt;大部分场景下的I18n资源串自动翻译（&lt;strong&gt;简繁英越&lt;/strong&gt;）和替换key（&lt;code&gt;Alt+Enter&lt;/code&gt; 手动触发或💡自动修复提示）。支持场景同上。&lt;/li&gt;&lt;li&gt;Imp*Mapper 文件中的 col 列字段&lt;strong&gt;一键排序&lt;/strong&gt;。&lt;/li&gt;&lt;li&gt;一键打开当前 java 源文件编译后的 class 文件目录。&lt;/li&gt;&lt;/ul&gt;
 
 </description>
         <name>OneClickNavigation</name>

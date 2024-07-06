@@ -23,7 +23,8 @@ class TranslateSettingsConfigurable :
                         .bindSelected(
                             { settings.state.doOKActionWhenI18nKeyExists},
                             { settings.state.doOKActionWhenI18nKeyExists = it})
-                        .comment("当资源串已经存在时，是否不用点确认按钮，直接执行替换")
+
+                    contextHelp("当资源串已经存在时，不用点确认按钮，直接执行复用。若需确认，请取消勾选。", "直接复用已经存在的资源串")
                 }
             }
             group("翻译提供方") {
@@ -38,7 +39,7 @@ class TranslateSettingsConfigurable :
                             .bindSelected(
                                 { settings.state.apiProvider == "Baidu" },
                                 { settings.state.apiProvider = "Baidu" })
-                            .validation { if(it.isSelected) error("百度翻译暂未支持") else null }
+//                            .validation { if(it.isSelected) error("百度翻译暂未支持") else null }
 
                         radioButton("微软必应翻译", "Microsoft")
                             .bindSelected(
@@ -46,6 +47,7 @@ class TranslateSettingsConfigurable :
                                 { settings.state.apiProvider = "Microsoft" })
                             .selected
 
+                        contextHelp("插件内置了翻译接口的密钥，请不要泄露。另外，也可以在下方填写自己的密钥。", "可选自定义密钥")
                     }
 
                 }.bind(settings.state::apiProvider)
@@ -77,7 +79,28 @@ class TranslateSettingsConfigurable :
                     textField()
                         .bindText(settings.state::apiVocabIdYouDao)
                         .columns(COLUMNS_LARGE)
-                        .comment("自定义术语表ID，非必填")
+
+                    contextHelp("自定义术语表ID，非必填。", "自定义术语表ID")
+                }
+            }
+
+            group("百度翻译"){
+                row("API URL"){
+                    textField()
+                        .bindText(settings.state::apiUrlBaidu)
+                        .columns(COLUMNS_LARGE)
+                }
+
+                row("API AppID"){
+                    textField()
+                        .bindText(settings.state::apiAppIdBaidu)
+                        .columns(COLUMNS_LARGE)
+                }
+
+                row("API AppSecret"){
+                    textField()
+                        .bindText(settings.state::apiAppSecretBaidu)
+                        .columns(COLUMNS_LARGE)
                 }
             }
 
@@ -98,7 +121,8 @@ class TranslateSettingsConfigurable :
                     textField()
                         .bindText(settings.state::apiRegionMicrosoft)
                         .columns(COLUMNS_LARGE)
-                        .comment("不填则默认为eastasia")
+
+                    contextHelp("不填则默认为 astasia")
                 }
             }
 

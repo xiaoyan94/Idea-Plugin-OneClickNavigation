@@ -14,34 +14,31 @@ import com.intellij.openapi.ui.DialogPanel
 import com.intellij.openapi.ui.DialogWrapper
 import com.intellij.ui.components.JBTextField
 import com.intellij.ui.dsl.builder.*
-import com.intellij.ui.layout.ComponentPredicate
 import com.zhiyin.plugins.actions.ClearTranslationCacheAction
 import com.zhiyin.plugins.notification.MyPluginMessages
 import com.zhiyin.plugins.settings.TranslateSettingsComponent
-import com.zhiyin.plugins.settings.TranslateSettingsState
 import com.zhiyin.plugins.utils.MyPropertiesUtil
+import com.zhiyin.plugins.utils.StringUtil.Companion.toCamelCase
+import com.zhiyin.plugins.utils.StringUtil.Companion.toSnakeCase
+import com.zhiyin.plugins.utils.StringUtil.Companion.toUnicode
+import com.zhiyin.plugins.utils.StringUtil.Companion.unicodeToString
 import com.zhiyin.plugins.utils.TranslateUtil
 import java.awt.datatransfer.StringSelection
 import java.awt.event.ActionEvent
+import java.util.function.Predicate
 import javax.swing.JButton
 import javax.swing.SwingUtilities
 
-import com.zhiyin.plugins.utils.StringUtil.Companion.toCamelCase
-import com.zhiyin.plugins.utils.StringUtil.Companion.toUnicode
-import com.zhiyin.plugins.utils.StringUtil.Companion.toSnakeCase
-import com.zhiyin.plugins.utils.StringUtil.Companion.unicodeToString
-import java.util.function.Predicate
-
 class MyTranslateDialogWrapper(private val project: Project?, private val module: Module?) : DialogWrapper(project) {
 
-    private val moduleName = module?.name;
+    private val moduleName = module?.name
     private val simpleModuleName = module?.let { MyPropertiesUtil.getSimpleModuleName(module); }
-    private val projectName = project?.name;
+    private val projectName = project?.name
 
-    val inputModel = InputModel();
+    val inputModel = InputModel()
 
     init {
-        title = "创建资源串 ${moduleName ?: projectName}"
+        title = "创建资源串 ${moduleName ?: projectName} - $simpleModuleName"
 //        isResizable = true
 //        isModal = false
         init()
@@ -51,19 +48,19 @@ class MyTranslateDialogWrapper(private val project: Project?, private val module
      * 创建对话框
      */
     override fun createCenterPanel(): DialogPanel {
-        return createPanel();
+        return createPanel()
     }
 
-    private lateinit var i18nKeyTextField: Cell<JBTextField>;
-    private lateinit var sourceCHSTextField: Cell<JBTextField>;
-    private lateinit var chineseUnicodeTextField: Cell<JBTextField>;
-    private lateinit var englishTextField: Cell<JBTextField>;
-    private lateinit var englishUnicodeTextField: Cell<JBTextField>;
-    private lateinit var chineseTWTextField: Cell<JBTextField>;
-    private lateinit var chineseTWUnicodeTextField: Cell<JBTextField>;
-    private lateinit var vietnameseTextField: Cell<JBTextField>;
-    private lateinit var vietnameseUnicodeTextField: Cell<JBTextField>;
-    private lateinit var translateButton: Cell<JButton>;
+    private lateinit var i18nKeyTextField: Cell<JBTextField>
+    private lateinit var sourceCHSTextField: Cell<JBTextField>
+    private lateinit var chineseUnicodeTextField: Cell<JBTextField>
+    private lateinit var englishTextField: Cell<JBTextField>
+    private lateinit var englishUnicodeTextField: Cell<JBTextField>
+    private lateinit var chineseTWTextField: Cell<JBTextField>
+    private lateinit var chineseTWUnicodeTextField: Cell<JBTextField>
+    private lateinit var vietnameseTextField: Cell<JBTextField>
+    private lateinit var vietnameseUnicodeTextField: Cell<JBTextField>
+    private lateinit var translateButton: Cell<JButton>
 
     /**
      * 创建对话框
@@ -236,14 +233,16 @@ class MyTranslateDialogWrapper(private val project: Project?, private val module
     }
 
     private fun updateApiProviderAndButtonText(apiProvider: String) {
-        if ("Baidu" == apiProvider) {
-            MyPluginMessages.showError("暂不支持百度翻译", "待开发", project)
-            return
-        }
+//        if ("Baidu" == apiProvider) {
+//            MyPluginMessages.showError("暂不支持百度翻译", "待开发", project)
+//            return
+//        }
         val state = TranslateSettingsComponent.getInstance().state
         state.apiProvider = apiProvider
         TranslateSettingsComponent.getInstance().loadState(state)
         translateButton.component.text = getTranslateButtonText()
+
+        translateButton.component.doClick()
     }
 
     /**
@@ -294,22 +293,30 @@ class MyTranslateDialogWrapper(private val project: Project?, private val module
         runReadAction {
 //            val foundProperties = getPropertiesByValueFun.apply(inputModel.chinese)
             val foundProperties = getPropertiesByValueFun.apply(sourceCHSTextField.component.text)
-            // 如果key已存在，则使用该key值
-            if (foundProperties.isNotEmpty()) {
+            // 如果 key 已存在（并且中繁英 3 个 key 都存在），则使用该 key 值
+            if (foundProperties.isNotEmpty() && foundProperties.size >= 2) {
                 val key = foundProperties.first().key ?: ""
                 val isNative2Ascii = MyPropertiesUtil.isNative2AsciiForPropertiesFiles()
                 SwingUtilities.invokeLater {
-                    // 正好存在可用key
+                    // 正好存在可用 key
                     inputModel.propertyKeyExists = true
                     i18nKeyTextField.text(key)
 
+                    if (foundProperties.size == 2) {
+                        // 老项目只有中英翻译
+                        englishTextField.text(foundProperties[1].value?.let { if (!isNative2Ascii) it.unicodeToString() else it } ?: "")
+                    }
                     if (foundProperties.size >= 3) {
+                        // 中繁英
                         chineseTWTextField.text(foundProperties[1].value?.let { if (!isNative2Ascii) it.unicodeToString() else it } ?: "")
                         englishTextField.text(foundProperties[2].value?.let { if (!isNative2Ascii) it.unicodeToString() else it } ?: "")
+                    }
+                    if (foundProperties.size >= 4) {
+                        // 越南语
                         vietnameseTextField.text(foundProperties[3].value?.let { if (!isNative2Ascii) it.unicodeToString() else it } ?: "")
                     }
 
-                    translateButton.component.isEnabled = true;
+                    translateButton.component.isEnabled = true
                     sourceCHSTextField.comment?.text = "值已存在，已复制key到剪切板，key=${key}"
                     // 根据设置，直接复用Key
                     if (TranslateSettingsComponent.getInstance().state.doOKActionWhenI18nKeyExists){
@@ -323,8 +330,8 @@ class MyTranslateDialogWrapper(private val project: Project?, private val module
                 // 如果key不存在，则翻译
                 SwingUtilities.invokeLater{
                     translateButton.component.text = "翻译中..."
-                    translateButton.component.isEnabled = false;
-                    sourceCHSTextField.component.isEditable = false;
+                    translateButton.component.isEnabled = false
+                    sourceCHSTextField.component.isEditable = false
                     sourceCHSTextField.comment?.text = ""
                 }
 
@@ -340,7 +347,7 @@ class MyTranslateDialogWrapper(private val project: Project?, private val module
      * 翻译和更新UI逻辑
      */
     private fun translateAndUpdateUI() {
-        val chinese = sourceCHSTextField.component.text;
+        val chinese = sourceCHSTextField.component.text
         val english = TranslateUtil.translateToEN(chinese).toCamelCase()
         val cht = TranslateUtil.translateToCHT(chinese)
         val vi = TranslateUtil.translateToVIET(chinese)
@@ -348,28 +355,28 @@ class MyTranslateDialogWrapper(private val project: Project?, private val module
         SwingUtilities.invokeLater {
             if (chinese.isNotEmpty()) {
 //                val chineseUnicode = stringToUnicode(chinese);
-                chineseUnicodeTextField.text(chinese.toUnicode());
+                chineseUnicodeTextField.text(chinese.toUnicode())
             }
 
-            englishTextField.text(english);
+            englishTextField.text(english)
             if (english.isNotEmpty()) {
-                englishUnicodeTextField.text(english.toUnicode());
-                i18nKeyTextField.text("${moduleName}.${english.toSnakeCase()}");
+                englishUnicodeTextField.text(english.toUnicode())
+                i18nKeyTextField.text("${moduleName}.${english.toSnakeCase()}")
             }
 
-            chineseTWTextField.text(cht);
+            chineseTWTextField.text(cht)
             if (cht.isNotEmpty()) {
-                chineseTWUnicodeTextField.text(cht.toUnicode());
+                chineseTWUnicodeTextField.text(cht.toUnicode())
             }
 
-            vietnameseTextField.text(vi);
+            vietnameseTextField.text(vi)
             if (vi.isNotEmpty()) {
-                vietnameseUnicodeTextField.text(vi.toUnicode());
+                vietnameseUnicodeTextField.text(vi.toUnicode())
             }
 
             translateButton.component.text = getTranslateButtonText()
-            translateButton.component.isEnabled = true;
-            sourceCHSTextField.component.isEditable = true;
+            translateButton.component.isEnabled = true
+            sourceCHSTextField.component.isEditable = true
 
             invokeLater {
                 getButton(okAction)?.requestFocus()
@@ -384,7 +391,12 @@ class MyTranslateDialogWrapper(private val project: Project?, private val module
     override fun doOKAction() {
         // 不需要重写
         super.doOKAction()
-//        Messages.showInfoMessage(inputModel.chineseTW, "After")
+
+        if (inputModel.propertyKeyExists) {
+            MyPluginMessages.showInfo("已复用key", "${i18nKeyTextField.component.text}=${sourceCHSTextField.component.text}", project)
+        } else {
+            MyPluginMessages.showInfo("已翻译", "value=${sourceCHSTextField.component.text}, key=${i18nKeyTextField.component.text}", project)
+        }
     }
 
     /**
@@ -411,7 +423,7 @@ class MyTranslateDialogWrapper(private val project: Project?, private val module
      * Returns the object corresponding to the specified data identifier. Some of the supported
      * data identifiers are defined in the [com.intellij.openapi.actionSystem.PlatformDataKeys] class.
      *
-     * @param dataId the data identifier for which the value is requested.
+     * @-param dataId the data identifier for which the value is requested.
      * @return the value, or null if no value is available in the current context for this identifier.
      */
 //    override fun getData(dataId: String): Any? {

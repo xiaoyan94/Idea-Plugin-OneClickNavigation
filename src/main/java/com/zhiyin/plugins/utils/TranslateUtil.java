@@ -3,6 +3,7 @@ package com.zhiyin.plugins.utils;
 import com.intellij.openapi.application.ApplicationManager;
 import com.zhiyin.plugins.notification.MyPluginMessages;
 import com.zhiyin.plugins.translator.TranslateException;
+import com.zhiyin.plugins.translator.baidu.BaiduTranslator;
 import com.zhiyin.plugins.translator.microsoft.MicrosoftTranslator;
 import com.zhiyin.plugins.translator.youdao.YouDaoTranslate;
 import com.zhiyin.plugins.settings.TranslateSettingsComponent;
@@ -84,10 +85,44 @@ public class TranslateUtil {
                     MyPluginMessages.showError("翻译错误", e.getMessage(), null);
                 }
                 break;
+            case "Baidu":
+                    try {
+                        switch(to) {
+                            case YouDaoTranslate.LANG_ZH_CHT:
+                                to = "cht";
+                                break;
+                            case YouDaoTranslate.LANG_EN:
+                                to = "en";
+                                break;
+                            case YouDaoTranslate.LANG_VI:
+                                to = "vie";
+                                break;
+                            default:
+                                to = "zh";
+                                break;
+                        }
+                        if(from.equals(YouDaoTranslate.LANG_ZH_CHS)){
+                            from = "zh";
+                        } else {
+                            from = "auto";
+                        }
+                        return doBaiduTranslate(text, from, to, translateSettingsState);
+                    } catch (TranslateException e) {
+                        MyPluginMessages.showError("翻译错误", e.getMessage(), null);
+                    }
+                    break;
             default:
                 break;
         }
         return "";
+    }
+
+    private static String doBaiduTranslate(String text, String from, String to, TranslateSettingsState translateSettingsState) throws TranslateException {
+        BaiduTranslator baiduTranslator = ApplicationManager.getApplication().getService(BaiduTranslator.class);
+        if(translateSettingsState.getApiAppIdBaidu().isEmpty() || translateSettingsState.getApiAppSecretBaidu().isEmpty()){
+            return baiduTranslator.translate(text, from, to);
+        }
+        return baiduTranslator.translate(text, from, to, translateSettingsState.getApiAppIdBaidu(), translateSettingsState.getApiAppSecretBaidu());
     }
 
     private static String doYouDaoTranslate(String text, String from, String to, TranslateSettingsState translateSettingsState) throws TranslateException {
