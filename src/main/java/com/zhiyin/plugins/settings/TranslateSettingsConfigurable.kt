@@ -122,7 +122,7 @@ class TranslateSettingsConfigurable :
                         .bindText(settings.state::apiRegionMicrosoft)
                         .columns(COLUMNS_LARGE)
 
-                    contextHelp("不填则默认为 astasia")
+                    contextHelp("不填则默认为 eastasia")
                 }
             }
 
