@@ -134,7 +134,7 @@ public final class MicrosoftTranslator {
             resourceKey = DEFAULT_RESOURCE_KEY;
             region = DEFAULT_REGION;
         }
-
+        url = url + "&from=zh-Hans"; // 默认源语言中文简体，否则微软翻译会出现将待翻译内容“顺序”的源语言错误识别成日语的情况
         RequestBody body = RequestBody.create(contentJsonString, MediaType.get("application/json; charset=utf-8"));
         Request request = new Request.Builder()
                 .url(url)
@@ -154,7 +154,7 @@ public final class MicrosoftTranslator {
 
     public static void main(String[] args) {
         MicrosoftTranslator translator = new MicrosoftTranslator();
-        Map<String, String> response = translator.translateToMultiLang("生产车间");
+        Map<String, String> response = translator.translateToMultiLang("顺序");
         System.out.println(response);
     }
 
