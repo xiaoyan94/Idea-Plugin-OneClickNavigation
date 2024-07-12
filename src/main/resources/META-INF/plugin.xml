@@ -48,6 +48,7 @@
 
         <lang.foldingBuilder language="XML" implementationClass="com.zhiyin.plugins.foldingBuilder.MyXMLFoldingBuilder"/>
 
+        <!--suppress PluginXmlValidity 提示无法解析 JSP，但是能正常编译运行 -->
         <lang.foldingBuilder implementationClass="com.zhiyin.plugins.foldingBuilder.MyJspI18nFoldingBuilder"
                              language="JSP"/>
 
