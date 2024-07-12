@@ -30,6 +30,7 @@
     <depends>com.intellij.properties</depends>
     <depends>JavaScript</depends>
     <depends>com.intellij.modules.jsp.base</depends>
+    <depends>com.intellij.jsp</depends>
 
     <!-- Extension points defined by the plugin.
          Read more: https://plugins.jetbrains.com/docs/intellij/plugin-extension-points.html -->
@@ -62,6 +63,7 @@
 
         <psi.referenceContributor language="JAVA" implementation="com.zhiyin.plugins.referenceContributor.MyJavaReferenceContributor"/>
         <psi.referenceContributor language="XML" implementation="com.zhiyin.plugins.referenceContributor.MyXMLReferenceContributor"/>
+        <psi.referenceContributor language="JavaScript" implementation="com.zhiyin.plugins.referenceContributor.MyJSReferenceContributor"/>
 
         <completion.confidence language="JAVA" implementationClass="com.zhiyin.plugins.referenceContributor.MyCompletionConfidence"/>
 
@@ -163,6 +165,11 @@
                 icon="com.zhiyin.plugins.resources.MyIcons.baiduIcon"
                 text="百度搜索" description="Baidu:百度一下">
             <add-to-group group-id="com.zhiyin.plugins.EditorPopupMenu" anchor="first"/>
+        </action>
+        <action id="com.zhiyin.plugins.actions.ProjectTypeCheckAction"
+                class="com.zhiyin.plugins.actions.ProjectTypeCheckAction" text="当前项目类型"
+                description="Print：测试当前项目类型">
+            <add-to-group group-id="com.zhiyin.plugins.ToolsMenuGroup" anchor="last"/>
         </action>
     </actions>
 

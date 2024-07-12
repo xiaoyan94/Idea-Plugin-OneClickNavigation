@@ -4,6 +4,13 @@
 
 ## [Unreleased]
 
+## [1.0.13] - 2024-07-09
+
+### Fixed
+
+- 解决找不到framework system里的资源串的问题；
+- 解决老的JavaWeb项目找不到web依赖的其他模块下的资源串的问题；
+
 ## [1.0.12] - 2024-07-06
 
 ### Added
@@ -106,6 +113,7 @@
 - 支持JavaScript代码中折叠显示I18n中文资源串;
 
 [Unreleased]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-Unreleased.zip
+[1.0.13]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.13.zip
 [1.0.12]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.12.zip
 [1.0.11]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.11.zip
 [1.0.10]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.10.zip

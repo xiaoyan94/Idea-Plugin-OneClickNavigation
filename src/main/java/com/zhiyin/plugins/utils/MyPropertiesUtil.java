@@ -5,11 +5,13 @@ import com.intellij.lang.properties.psi.PropertiesFile;
 import com.intellij.lang.properties.psi.Property;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.command.WriteCommandAction;
+import com.intellij.openapi.fileTypes.FileTypeManager;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.encoding.EncodingManager;
 import com.intellij.psi.PsiManager;
+import com.intellij.psi.search.FileTypeIndex;
 import com.intellij.psi.search.FilenameIndex;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.util.containers.ContainerUtil;
@@ -94,14 +96,25 @@ public class MyPropertiesUtil {
         List<Property> result = new ArrayList<>();
         List<VirtualFile> virtualFiles = new ArrayList<>();
         String moduleName = getSimpleModuleName(module);
+        GlobalSearchScope scope = GlobalSearchScope.moduleScope(module);
+        if (ProjectTypeChecker.isTraditionalJavaWebProject(project, module)){
+            scope = GlobalSearchScope.projectScope(project);
+            virtualFiles.addAll(FilenameIndex.getVirtualFilesByName(Constants.I18N_ZH_CN_SUFFIX,
+                    scope));
+            // 查找项目下所有.properties文件
+            Collection<VirtualFile> properties = FileTypeIndex.getFiles(FileTypeManager.getInstance().getFileTypeByExtension("properties"), scope);
+            // 根据文件名进行过滤
+            properties = properties.stream().filter(virtualFile -> virtualFile.getName().contains(Constants.I18N_ZH_CN_SUFFIX)).collect(Collectors.toList());
+            virtualFiles.addAll(properties);
+        }
         virtualFiles.addAll(FilenameIndex.getVirtualFilesByName(moduleName + Constants.I18N_ZH_CN_SUFFIX,
-                GlobalSearchScope.moduleScope(module)));
+                scope));
         virtualFiles.addAll(FilenameIndex.getVirtualFilesByName(moduleName + Constants.I18N_ZH_TW_SUFFIX,
-                GlobalSearchScope.moduleScope(module)));
+                scope));
         virtualFiles.addAll(FilenameIndex.getVirtualFilesByName(moduleName + Constants.I18N_EN_US_SUFFIX,
-                GlobalSearchScope.moduleScope(module)));
+                scope));
         virtualFiles.addAll(FilenameIndex.getVirtualFilesByName(moduleName + Constants.I18N_VI_VN_SUFFIX,
-                GlobalSearchScope.moduleScope(module)));
+                scope));
         return getProperties(project, virtualFiles, key, result);
     }
 
@@ -116,14 +129,28 @@ public class MyPropertiesUtil {
         List<Property> result = new ArrayList<>();
         List<VirtualFile> virtualFiles = new ArrayList<>();
         String moduleName = getSimpleModuleName(module);
+        GlobalSearchScope scope;
+        if (ProjectTypeChecker.isTraditionalJavaWebProject(project, module)){
+            scope = GlobalSearchScope.projectScope(project);
+            virtualFiles.addAll(FilenameIndex.getVirtualFilesByName(Constants.I18N_DATAGRID_ZH_CN_SUFFIX,
+                    scope));
+
+            // FilenameIndex.getVirtualFilesByName 方法是根据文件全名来查找，不支持模糊查找。所以需要使用下面的方法根据文件名进行过滤
+            // 查找项目下所有.properties文件
+            Collection<VirtualFile> properties = FileTypeIndex.getFiles(FileTypeManager.getInstance().getFileTypeByExtension("properties"), scope);
+            // 根据文件名进行过滤
+            properties = properties.stream().filter(virtualFile -> virtualFile.getName().contains(Constants.I18N_DATAGRID_ZH_CN_SUFFIX)).collect(Collectors.toList());
+            virtualFiles.addAll(properties);
+        }
+        scope = GlobalSearchScope.moduleScope(module);
         virtualFiles.addAll(FilenameIndex.getVirtualFilesByName(moduleName + Constants.I18N_DATAGRID_ZH_CN_SUFFIX,
-                GlobalSearchScope.moduleScope(module)));
+                scope));
         virtualFiles.addAll(FilenameIndex.getVirtualFilesByName(moduleName + Constants.I18N_DATAGRID_ZH_TW_SUFFIX,
-                GlobalSearchScope.moduleScope(module)));
+                scope));
         virtualFiles.addAll(FilenameIndex.getVirtualFilesByName(moduleName + Constants.I18N_DATAGRID_EN_US_SUFFIX,
-                GlobalSearchScope.moduleScope(module)));
+                scope));
         virtualFiles.addAll(FilenameIndex.getVirtualFilesByName(moduleName + Constants.I18N_DATAGRID_VI_VN_SUFFIX,
-                GlobalSearchScope.moduleScope(module)));
+                scope));
         return getProperties(project, virtualFiles, key, result);
     }
 
@@ -392,7 +419,11 @@ public class MyPropertiesUtil {
             return "";
         }
         String moduleName = module.getName();
-        return moduleName.substring(moduleName.lastIndexOf('.') + 1);
+        String simpleModuleName = moduleName.substring(moduleName.lastIndexOf('.') + 1);
+        if ("system".equalsIgnoreCase(simpleModuleName)){
+            return "sysadm";
+        }
+        return simpleModuleName;
     }
 
     public static String getTop3PropertiesValueString(List<Property> properties) {

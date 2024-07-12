@@ -59,7 +59,7 @@ intellij {
     version.set(properties("platformVersion"))
     type.set(properties("platformType")) // Target IDE Platform
 
-    plugins.set(listOf("com.intellij.java", "properties", "JavaScript"))
+    plugins.set(listOf("com.intellij.java", "properties", "JavaScript", "com.intellij.jsp"))
 
     updateSinceUntilBuild.set(false)
 }

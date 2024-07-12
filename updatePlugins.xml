@@ -1,13 +1,9 @@
 
 <plugins>
-    <plugin id="com.zhiyin.plugins.OneClickNavigation" url="https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.12.zip" version="1.0.12">
-        <change-notes>&lt;h3&gt;Added&lt;/h3&gt;&#13;
+    <plugin id="com.zhiyin.plugins.OneClickNavigation" url="https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.13.zip" version="1.0.13">
+        <change-notes>&lt;h3&gt;Fixed&lt;/h3&gt;&#13;
 &#13;
-&lt;ul&gt;&lt;li&gt;增加百度翻译接口&lt;/li&gt;&lt;/ul&gt;&#13;
-&#13;
-&lt;h3&gt;Fixed&lt;/h3&gt;&#13;
-&#13;
-&lt;ul&gt;&lt;li&gt;优化微软必应翻译接口，在没有指定源语言时，会将某些中文识别为日文的问题&lt;/li&gt;&lt;li&gt;优化老项目资源串只有简中英，没有繁体、越南语导致的UI问题：翻译弹窗获取不到复用值&lt;/li&gt;&lt;/ul&gt;&#13;
+&lt;ul&gt;&lt;li&gt;解决找不到framework system里的资源串的问题；&lt;/li&gt;&lt;li&gt;解决老的JavaWeb项目找不到web依赖的其他模块下的资源串的问题；&lt;/li&gt;&lt;/ul&gt;&#13;
 &#13;
 &#13;
 </change-notes>
