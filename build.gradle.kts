@@ -274,10 +274,6 @@ task<dev.bmac.gradle.intellij.UpdateXmlTask>("updateLocalPluginXml"){
     })
 }
 
-fun getIDEAPath(): String {
-    return properties("localIdeaPath");
-}
-
 // 上传到 R2 根目录：同版本号直接覆盖。
 tasks.register("uploadPluginToR2ByAmazonS3") {
     dependsOn("buildPlugin", "updateLocalPluginXml")
@@ -307,7 +303,7 @@ tasks.register("uploadPluginToR2ByAmazonS3") {
             .build()
 
         s3Client.putObject(putObjectRequest, RequestBody.fromFile(file))
-        println("File uploaded successfully to bucket: $bucketName, key: $key");
+        println("File uploaded successfully to bucket: $bucketName, key: $key")
 
         val updateXmlFile = File("${project.rootDir}/${properties("updatePluginXmlFileName")}")
         val putUpdateXmlFileRequest = PutObjectRequest.builder()
@@ -315,9 +311,9 @@ tasks.register("uploadPluginToR2ByAmazonS3") {
             .key(updateXmlFile.name)
             .build()
         s3Client.putObject(putUpdateXmlFileRequest, RequestBody.fromFile(updateXmlFile))
-        println("File uploaded successfully to bucket: $bucketName, key: ${updateXmlFile.name}");
+        println("File uploaded successfully to bucket: $bucketName, key: ${updateXmlFile.name}")
 
-        println("File uploaded successfully to S3.");
+        println("File uploaded successfully to S3.")
     }
 }
 
@@ -358,7 +354,7 @@ tasks.register<proguard.gradle.ProGuardTask>("proguard") {
     }
 
 //    libraryjars(configurations.runtimeClasspath.get().files)
-    val ideaPath = getIDEAPath()
+    val ideaPath = properties("localIdeaPath")
 
     // Add all java plugins to classpath
 //    File("$ideaPath/plugins/java/lib").listFiles()!!.forEach { libraryjars(it.absolutePath) }
