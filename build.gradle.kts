@@ -50,6 +50,10 @@ dependencies {
     implementation("com.squareup.okhttp3:okhttp:4.12.0") // 添加OkHttp依赖项
     implementation("com.alibaba:fastjson:2.0.28")
 
+    implementation("org.freemarker:freemarker:2.3.33")
+    // https://mvnrepository.com/artifact/mysql/mysql-connector-java
+    implementation("mysql:mysql-connector-java:8.0.33")
+
 }
 
 // Configure Gradle IntelliJ Plugin

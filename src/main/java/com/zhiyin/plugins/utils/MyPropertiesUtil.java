@@ -177,7 +177,7 @@ public class MyPropertiesUtil {
         return getProperties(project, virtualFiles, key, result);
     }
 
-    private static List<Property> getProperties(Project project, Collection<VirtualFile> virtualFiles, String key,
+    public static List<Property> getProperties(Project project, Collection<VirtualFile> virtualFiles, String key,
                                                 List<Property> result) {
         for (VirtualFile virtualFile : virtualFiles) {
             PropertiesFile propertiesFile = (PropertiesFile) PsiManager.getInstance(project)
@@ -208,27 +208,25 @@ public class MyPropertiesUtil {
                     GlobalSearchScope.moduleScope(module)));
         }
 
-        ApplicationManager.getApplication().invokeLater(() -> {
-            WriteCommandAction.runWriteCommandAction(project, () -> {
-                for (VirtualFile virtualFile : virtualFiles) {
-                    PropertiesFile propertiesFile = (PropertiesFile) PsiManager.getInstance(project)
-                            .findFile(virtualFile);
+        ApplicationManager.getApplication().invokeLater(() -> WriteCommandAction.runWriteCommandAction(project, () -> {
+            for (VirtualFile virtualFile : virtualFiles) {
+                PropertiesFile propertiesFile = (PropertiesFile) PsiManager.getInstance(project)
+                        .findFile(virtualFile);
 
-                    if (propertiesFile != null) {
-                        // 添加键值对
-                        if (propertiesFile.findPropertyByKey(key) == null) {
-                            propertiesFile.addProperty(key, value);
-                        } else if (updateIfExist) {
-                            // 更新键值对
-                            IProperty iProperty = propertiesFile.findPropertyByKey(key);
-                            if (iProperty instanceof Property) {
-                                iProperty.setValue(value);
-                            }
+                if (propertiesFile != null) {
+                    // 添加键值对
+                    if (propertiesFile.findPropertyByKey(key) == null) {
+                        propertiesFile.addProperty(key, value);
+                    } else if (updateIfExist) {
+                        // 更新键值对
+                        IProperty iProperty = propertiesFile.findPropertyByKey(key);
+                        if (iProperty instanceof Property) {
+                            iProperty.setValue(value);
                         }
                     }
                 }
-            });
-        });
+            }
+        }));
     }
 
     /**
@@ -439,6 +437,49 @@ public class MyPropertiesUtil {
                     }
                 })
                 .collect(Collectors.joining("<br/>"));
+    }
+
+    public static List<IProperty> getModuleI18nPropertiesCN(Project project, Module module) {
+        String moduleName = getSimpleModuleName(module);
+        List<VirtualFile> virtualFiles = new ArrayList<>();
+
+        GlobalSearchScope scope = GlobalSearchScope.moduleScope(module);
+        if (ProjectTypeChecker.isTraditionalJavaWebProject(project, module)){
+            scope = GlobalSearchScope.projectScope(project);
+            virtualFiles.addAll(FilenameIndex.getVirtualFilesByName(Constants.I18N_ZH_CN_SUFFIX,
+                    scope));
+            // 查找项目下所有.properties文件
+            Collection<VirtualFile> properties = FileTypeIndex.getFiles(FileTypeManager.getInstance().getFileTypeByExtension("properties"), scope);
+            // 根据文件名进行过滤
+            properties = properties.stream().filter(virtualFile -> virtualFile.getName().contains(Constants.I18N_ZH_CN_SUFFIX)).collect(Collectors.toList());
+            virtualFiles.addAll(properties);
+        }
+
+        virtualFiles.addAll(FilenameIndex.getVirtualFilesByName(moduleName + Constants.I18N_ZH_CN_SUFFIX,
+                scope));
+
+        return getProperties(project, virtualFiles);
+    }
+
+    public static List<IProperty> getModuleDataGridI18nPropertiesCN(Project project, Module module) {
+        String moduleName = getSimpleModuleName(module);
+        List<VirtualFile> virtualFiles = new ArrayList<>();
+
+        GlobalSearchScope scope = GlobalSearchScope.moduleScope(module);
+        if (ProjectTypeChecker.isTraditionalJavaWebProject(project, module)){
+            scope = GlobalSearchScope.projectScope(project);
+            virtualFiles.addAll(FilenameIndex.getVirtualFilesByName(Constants.I18N_DATAGRID_ZH_CN_SUFFIX,
+                    scope));
+            // 查找项目下所有.properties文件
+            Collection<VirtualFile> properties = FileTypeIndex.getFiles(FileTypeManager.getInstance().getFileTypeByExtension("properties"), scope);
+            // 根据文件名进行过滤
+            properties = properties.stream().filter(virtualFile -> virtualFile.getName().contains(Constants.I18N_DATAGRID_ZH_CN_SUFFIX)).collect(Collectors.toList());
+            virtualFiles.addAll(properties);
+        }
+
+        virtualFiles.addAll(FilenameIndex.getVirtualFilesByName(moduleName + Constants.I18N_DATAGRID_ZH_CN_SUFFIX,
+                scope));
+        return getProperties(project, virtualFiles);
     }
 }
 

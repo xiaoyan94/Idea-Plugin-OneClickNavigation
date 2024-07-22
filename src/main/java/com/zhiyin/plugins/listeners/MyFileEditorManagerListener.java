@@ -89,7 +89,7 @@ public class MyFileEditorManagerListener implements FileEditorManagerListener {
         }
     }
 
-    private static void collapseFoldRegion(Editor editor) {
+    public static void collapseFoldRegion(Editor editor) {
         if (editor != null) {
             editor.getFoldingModel().runBatchFoldingOperation(() -> {
                 FoldRegion[] allFoldRegions = editor.getFoldingModel().getAllFoldRegions();

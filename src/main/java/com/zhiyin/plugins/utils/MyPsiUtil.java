@@ -1,6 +1,5 @@
 package com.zhiyin.plugins.utils;
 
-import com.intellij.lang.folding.FoldingDescriptor;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleManager;
 import com.intellij.openapi.module.ModuleUtilCore;
@@ -62,12 +61,6 @@ public class MyPsiUtil {
 
         return outputPaths;
     }
-
-//    @NotNull
-//    @Deprecated
-//    public static String[] getOutputPathsDeperecated(Project project) {
-//        return CompilerPathsEx.getOutputPaths(ModuleManager.getInstance(project).getModules());
-//    }
 
     /**
      * 判断给定文件是否在编译输出路径内
@@ -131,6 +124,30 @@ public class MyPsiUtil {
             return false;
         }
         return psiFile instanceof XmlFile;
+    }
+
+    /**
+     * 判断是否是XML文件，并且是布局文件 或 Mapper文件
+     */
+    public static boolean isXmlFileWithI18n(@NotNull PsiElement element) {
+        boolean isXmlFile = MyPsiUtil.isXmlFile(element);
+        if (!isXmlFile){
+            return false;
+        }
+        boolean isLayoutFile = MyPsiUtil.isLayoutFile(element);
+        PsiFile psiFile = element.getContainingFile();
+        boolean isImpMapperXML = MyPsiUtil.isImpMapperXML(psiFile);
+
+        if (!isLayoutFile && !isImpMapperXML){
+            return false;
+        }
+
+        XmlTag parentXmlTag = MyPsiUtil.getParentXmlTag(element);
+        if (parentXmlTag != null){
+            String tagName = parentXmlTag.getName();
+            return "Title".equals(tagName) || "Field".equals(tagName) || "column".equals(tagName);
+        }
+        return false;
     }
 
 
@@ -219,7 +236,7 @@ public class MyPsiUtil {
 
         if ("PsiElement(FTL_FRAGMENT)".equals(element.toString()) && element.getText() != null && element.getText().startsWith("<@message")) {
             String inputString = element.getText();
-//          String inputString = "<@message key=\"com.zhiyin.mes.app.web.workline_title\"/>";
+//          String inputString = "<@message key=\"com.zhiyin.mes.app.web.workLine_title\"/>";
             String patternString = "key=(['\"])(.*?)(['\"])";
 
             Pattern pattern = Pattern.compile(patternString);

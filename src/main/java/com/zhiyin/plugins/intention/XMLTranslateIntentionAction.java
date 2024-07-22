@@ -202,24 +202,7 @@ public class XMLTranslateIntentionAction extends PsiElementBaseIntentionAction i
     @Override
     public boolean isAvailable(@NotNull Project project, Editor editor, @NotNull PsiElement element) {
 
-        boolean isXmlFile = MyPsiUtil.isXmlFile(element);
-        if (!isXmlFile){
-            return false;
-        }
-        boolean isLayoutFile = MyPsiUtil.isLayoutFile(element);
-        PsiFile psiFile = element.getContainingFile();
-        boolean isImpMapperXML = MyPsiUtil.isImpMapperXML(psiFile);
-
-        if (!isLayoutFile && !isImpMapperXML){
-            return false;
-        }
-
-        XmlTag parentXmlTag = MyPsiUtil.getParentXmlTag(element);
-        if (parentXmlTag != null){
-            String tagName = parentXmlTag.getName();
-            return "Title".equals(tagName) || "Field".equals(tagName) || "column".equals(tagName);
-        }
-        return false;
+        return MyPsiUtil.isXmlFileWithI18n(element);
     }
 
     /**

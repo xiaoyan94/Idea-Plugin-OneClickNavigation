@@ -1,17 +1,19 @@
 
 <plugins>
-    <plugin id="com.zhiyin.plugins.OneClickNavigation" url="https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.13.zip" version="1.0.13">
-        <change-notes>&lt;h3&gt;Fixed&lt;/h3&gt;&#13;
+    <plugin id="com.zhiyin.plugins.OneClickNavigation" url="https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.14.zip" version="1.0.14">
+        <change-notes>&lt;h3&gt;Added&lt;/h3&gt;&#13;
 &#13;
-&lt;ul&gt;&lt;li&gt;解决找不到framework system里的资源串的问题；&lt;/li&gt;&lt;li&gt;解决老的JavaWeb项目找不到web依赖的其他模块下的资源串的问题；&lt;/li&gt;&lt;/ul&gt;&#13;
+&lt;ul&gt;&lt;li&gt;增强中文资源串的复用体验，添加了代码自动完成提示 (输中文再按&lt;code&gt;Ctrl&lt;/code&gt;+&lt;code&gt;空格&lt;/code&gt;) 和一键输入；&lt;/li&gt;&lt;/ul&gt;&#13;
 &#13;
 &#13;
 </change-notes>
-        <description>&lt;p&gt;&lt;strong&gt;[OneClickNavigation][Github]&lt;/strong&gt; 是针对智引 Mes 项目开发的一个插件，用于提升日常开发效率。&lt;/p&gt;
+        <description>&lt;p&gt;&lt;strong&gt;&lt;a href="https://github.com/xiaoyan94/Idea-Plugin-OneClickNavigation"&gt;OneClickNavigation&lt;/a&gt;&lt;/strong&gt; 是针对智引 Mes 项目开发的一个插件，用于提升日常开发效率。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src="https://idea-plugin.oss.vaetech.uk/i18n1.gif" alt="i18n" /&gt;&lt;/p&gt;
 
 &lt;p&gt;此插件主要实现了以下功能：&lt;/p&gt;
 
-&lt;ul&gt;&lt;li&gt;Dao接口方法声明和Service中的Dao方法调用，&lt;strong&gt;一键跳转&lt;/strong&gt;到Mapper SQL&lt;/li&gt;&lt;li&gt;&lt;strong&gt;queryDaoDataT&lt;/strong&gt;方法参数和对应dao方法、xml&lt;strong&gt;互相跳转&lt;/strong&gt;，&lt;strong&gt;自动补全提示&lt;/strong&gt;（&lt;code&gt;Ctrl+空格&lt;/code&gt;）。&lt;/li&gt;&lt;li&gt;Moc 相关方法，一键跳转到 Moc xml文件。&lt;/li&gt;&lt;li&gt;大部分场景下的&lt;strong&gt;I18n中文资源串错误提示，中文折叠显示&lt;/strong&gt;。已支持：&lt;ul&gt;&lt;li&gt;Java 中的 I18nUtils.getMessage 等方法&lt;/li&gt;&lt;li&gt;HTML 中嵌入 FreeMarker 模板 message 指令&lt;/li&gt;&lt;li&gt;JSP 中的 message 标签&lt;/li&gt;&lt;li&gt;JavaScript 中的 i18n 方法&lt;/li&gt;&lt;li&gt;Layout 文件中 DataGrid 的 Title-&amp;gt;value 和 Field-&amp;gt;label&lt;/li&gt;&lt;li&gt;Imp*Mapper 文件中的 i18n&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;&lt;li&gt;大部分场景下的I18n资源串自动翻译（&lt;strong&gt;简繁英越&lt;/strong&gt;）和替换key（&lt;code&gt;Alt+Enter&lt;/code&gt; 手动触发或💡自动修复提示）。支持场景同上。&lt;/li&gt;&lt;li&gt;Imp*Mapper 文件中的 col 列字段&lt;strong&gt;一键排序&lt;/strong&gt;。&lt;/li&gt;&lt;li&gt;一键打开当前 java 源文件编译后的 class 文件目录。&lt;/li&gt;&lt;/ul&gt;
+&lt;ul&gt;&lt;li&gt;Dao接口方法声明和Service中的Dao方法调用，&lt;strong&gt;一键跳转&lt;/strong&gt;到Mapper SQL&lt;/li&gt;&lt;li&gt;&lt;strong&gt;queryDaoDataT&lt;/strong&gt;方法参数和对应dao方法、xml&lt;strong&gt;互相跳转&lt;/strong&gt;，&lt;strong&gt;自动补全提示&lt;/strong&gt;（&lt;code&gt;Ctrl+空格&lt;/code&gt;），方法参数错误提示。&lt;/li&gt;&lt;li&gt;Moc 相关通用方法，提供Java一键跳转到 Moc xml文件。&lt;/li&gt;&lt;li&gt;大部分场景下的&lt;strong&gt;I18n中文资源串错误提示，中文折叠显示&lt;/strong&gt;。已支持：&lt;ul&gt;&lt;li&gt;Java 中的 I18nUtils.getMessage 相关资源串方法&lt;/li&gt;&lt;li&gt;HTML 中 FreeMarker 模板的 message 指令&lt;/li&gt;&lt;li&gt;JSP 中的 message 标签&lt;/li&gt;&lt;li&gt;JavaScript 中的 i18n 方法&lt;/li&gt;&lt;li&gt;Layout 文件中 DataGrid 的 Title-&amp;gt;value 和 Field-&amp;gt;label&lt;/li&gt;&lt;li&gt;Imp*Mapper 文件中的 i18n&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;&lt;li&gt;大部分场景下的I18n资源串&lt;strong&gt;自动翻译&lt;/strong&gt;（&lt;strong&gt;简繁英越&lt;/strong&gt;）和&lt;strong&gt;自动替换key&lt;/strong&gt;（&lt;code&gt;Alt+Enter&lt;/code&gt; 手动触发或💡&lt;strong&gt;自动修复提示&lt;/strong&gt;）。支持场景同上。&lt;/li&gt;&lt;li&gt;Imp*Mapper 导入模板文件中的 col 列字段&lt;strong&gt;一键自动排序&lt;/strong&gt;。&lt;/li&gt;&lt;li&gt;一键打开当前 java 源文件编译后的 class 文件目录。&lt;/li&gt;&lt;li&gt;一键生成MOC文件。&lt;/li&gt;&lt;li&gt;一键生成Layout文件（测试中）。&lt;/li&gt;&lt;li&gt;一键百度搜索。&lt;/li&gt;&lt;li&gt;💡more useful features...&lt;/li&gt;&lt;/ul&gt;
 
 </description>
         <name>OneClickNavigation</name>

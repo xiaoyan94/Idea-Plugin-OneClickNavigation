@@ -4,6 +4,12 @@
 
 ## [Unreleased]
 
+## [1.0.14] - 2024-07-23
+
+### Added
+
+- 增强中文资源串的复用体验，添加了代码自动完成提示 (输中文再按`Ctrl`+`空格`) 和一键输入；
+
 ## [1.0.13] - 2024-07-09
 
 ### Fixed
@@ -113,6 +119,7 @@
 - 支持JavaScript代码中折叠显示I18n中文资源串;
 
 [Unreleased]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-Unreleased.zip
+[1.0.14]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.14.zip
 [1.0.13]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.13.zip
 [1.0.12]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.12.zip
 [1.0.11]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.11.zip

@@ -107,6 +107,11 @@
             <className>com.zhiyin.plugins.intention.FreemarkerI18nTranslateIntentionAction</className>
             <category>OneClickNavigation intentions</category>
         </intentionAction>-->
+        <completion.contributor language="JAVA" order="first" implementationClass="com.zhiyin.plugins.completion.JavaI18nCompletionContributor"/>
+        <completion.contributor language="XML" order="first" implementationClass="com.zhiyin.plugins.completion.XmlI18nCompletionContributor"/>
+        <defaultLiveTemplates file="liveTemplates/I18nTemplates.xml"/>
+        <annotator language="JAVA" order="first" implementationClass="com.zhiyin.plugins.annotator.SysLoggerAnnotator"/>
+        <annotator language="JAVA" order="first" implementationClass="com.zhiyin.plugins.annotator.StringUtilsAnnotator"/>
     </extensions>
     <actions>
         <group id="com.zhiyin.plugins.ToolsMenuGroup" text="OneClickNavigation插件" popup="true"
@@ -171,6 +176,16 @@
                 class="com.zhiyin.plugins.actions.ProjectTypeCheckAction" text="当前项目类型"
                 description="Print：测试当前项目类型">
             <add-to-group group-id="com.zhiyin.plugins.ToolsMenuGroup" anchor="last"/>
+        </action>
+        <action id="com.zhiyin.plugins.actions.codeGenerator.GenerateXmlAction" icon="com.zhiyin.plugins.resources.MyIcons.pandaIconSVG16_2"
+                class="com.zhiyin.plugins.actions.codeGenerator.GenerateXmlAction" text="测试生成文件"
+                description="Test generate XML file">
+            <add-to-group group-id="ProjectViewPopupMenu" anchor="first"/>
+        </action>
+        <action id="com.zhiyin.plugins.actions.codeGenerator.DataModelGeneratorAction" icon="com.zhiyin.plugins.resources.MyIcons.pandaIconSVG16_2"
+                class="com.zhiyin.plugins.actions.codeGenerator.DataModelGeneratorAction" text="模型代码生成器"
+                description="Moc、Layout、Controller、Service、Dao、MyBatis mapper一键生成">
+            <add-to-group group-id="ProjectViewPopupMenu" anchor="first"/>
         </action>
     </actions>
 

@@ -49,5 +49,12 @@ class StringUtil {
             }
         }
 
+        @JvmStatic
+        fun capitalize(str: String): String {
+            return str.replaceFirstChar {
+                if (it.isLowerCase()) it.titlecase(java.util.Locale.getDefault()) else it.toString()
+            }
+        }
+
     }
 }

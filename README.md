@@ -5,23 +5,29 @@
 > 仅适用于 IntelliJ IDEA 中的 CloudMes 项目。
 
 <!-- Plugin description -->
-**[OneClickNavigation][Github]** 是针对智引 Mes 项目开发的一个插件，用于提升日常开发效率。
+**[OneClickNavigation](https://github.com/xiaoyan94/Idea-Plugin-OneClickNavigation)** 是针对智引 Mes 项目开发的一个插件，用于提升日常开发效率。
+
+![i18n中文自动完成](https://idea-plugin.oss.vaetech.uk/i18n1.gif)
 
 此插件主要实现了以下功能：
 
 - Dao接口方法声明和Service中的Dao方法调用，**一键跳转**到Mapper SQL
-- **queryDaoDataT**方法参数和对应dao方法、xml**互相跳转**，**自动补全提示**（`Ctrl+空格`）。
-- Moc 相关方法，一键跳转到 Moc xml文件。
+- **queryDaoDataT**方法参数和对应dao方法、xml**互相跳转**，**自动补全提示**（`Ctrl+空格`），方法参数错误提示。
+- Moc 相关通用方法，提供Java一键跳转到 Moc xml文件。
 - 大部分场景下的**I18n中文资源串错误提示，中文折叠显示**。已支持：
-  - Java 中的 I18nUtils.getMessage 等方法
-  - HTML 中嵌入 FreeMarker 模板 message 指令
+  - Java 中的 I18nUtils.getMessage 相关资源串方法
+  - HTML 中 FreeMarker 模板的 message 指令
   - JSP 中的 message 标签
   - JavaScript 中的 i18n 方法
   - Layout 文件中 DataGrid 的 Title->value 和 Field->label
   - Imp*Mapper 文件中的 i18n
-- 大部分场景下的I18n资源串自动翻译（**简繁英越**）和替换key（`Alt+Enter` 手动触发或💡自动修复提示）。支持场景同上。
-- Imp*Mapper 文件中的 col 列字段**一键排序**。
+- 大部分场景下的I18n资源串**自动翻译**（**简繁英越**）和**自动替换key**（`Alt+Enter` 手动触发或💡**自动修复提示**）。支持场景同上。
+- Imp*Mapper 导入模板文件中的 col 列字段**一键自动排序**。
 - 一键打开当前 java 源文件编译后的 class 文件目录。
+- 一键生成MOC文件。
+- 一键生成Layout文件（测试中）。
+- 一键百度搜索。
+- 💡more useful features...
 
 
 <!-- Plugin description end -->
