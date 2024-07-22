@@ -5,9 +5,9 @@
 > 仅适用于 IntelliJ IDEA 中的 CloudMes 项目。
 
 <!-- Plugin description -->
-**[OneClickNavigation](https://github.com/xiaoyan94/Idea-Plugin-OneClickNavigation)** 是针对智引 Mes 项目开发的一个插件，用于提升日常开发效率。
 
 ![i18n中文自动完成](https://idea-plugin.oss.vaetech.uk/i18n1.gif)
+**[OneClickNavigation](https://github.com/xiaoyan94/Idea-Plugin-OneClickNavigation)** 是针对智引 Mes 项目开发的一个插件，用于提升日常开发效率。
 
 此插件主要实现了以下功能：
 
