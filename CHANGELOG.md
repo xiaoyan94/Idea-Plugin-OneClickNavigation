@@ -2,6 +2,8 @@
 
 # OneClickNavigation Changelog
 
+![i18n中文自动完成](https://idea-plugin.oss.vaetech.uk/i18n1.gif)
+
 ## [Unreleased]
 
 ## [1.0.14] - 2024-07-23
@@ -9,6 +11,12 @@
 ### Added
 
 - 增强中文资源串的复用体验，添加了代码自动完成提示 (输中文再按`Ctrl`+`空格`) 和一键输入；
+- 添加了一些代码实时模板，提升相关代码输入效率：
+    - JAVA: `i18n`, `i18np`, `gi`, `gs`, `gd`, `dict`
+    - MyBatis: `se`, `up`, `wh`, `if`, `for`, `date_format`
+- 添加 @SysLogger 注解被错误地使用在查询类方法上时的提示和一键修复
+- 添加 StringUtils.objToString 方法的不建议使用提示和一键修复
+- 代码生成器 (Alpha)
 
 ## [1.0.13] - 2024-07-09
 
