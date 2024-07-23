@@ -46,9 +46,20 @@ public class JavaI18nCompletionProvider extends BaseCompletionProvider {
                 value = StringUtil.unicodeToString(value);
             }
 
-            if (value != null && !value.contains(prefix)) {
+            if (value == null || !value.contains(prefix)) {
                 return;
             }
+
+            if (value.contains("\\n\\r")) {
+                System.out.println("value contains \\n");
+            }
+
+            value = value.replaceAll("\\n", "").replaceAll("\\r", "");
+
+            if (value.contains("\\u")) {
+                value = StringUtil.unicodeToString(value);
+            }
+
 
             result.addElement(LookupElementBuilder.create(Objects.requireNonNull(value))
                     .withLookupString(value)
