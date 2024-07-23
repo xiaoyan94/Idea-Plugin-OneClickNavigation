@@ -112,6 +112,7 @@
         <defaultLiveTemplates file="liveTemplates/I18nTemplates.xml"/>
         <annotator language="JAVA" order="first" implementationClass="com.zhiyin.plugins.annotator.SysLoggerAnnotator"/>
         <annotator language="JAVA" order="first" implementationClass="com.zhiyin.plugins.annotator.StringUtilsAnnotator"/>
+        <editorFactoryMouseListener implementation="com.zhiyin.plugins.listeners.MyEditorMouseListener"/>
     </extensions>
     <actions>
         <group id="com.zhiyin.plugins.ToolsMenuGroup" text="OneClickNavigation插件" popup="true"
