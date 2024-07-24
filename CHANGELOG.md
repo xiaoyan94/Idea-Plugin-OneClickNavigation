@@ -6,6 +6,25 @@
 
 ## [Unreleased]
 
+## [1.0.15] - 2024-07-25
+
+### Added
+
+- 增强已存在中文资源串的复用体验，添加了代码自动完成提示 (输中文再按`Ctrl`+`空格`) 和一键输入（Java、JS、Xml、Html）；
+- 添加了一些代码实时模板，提升相关代码输入效率：
+  - Java: `i18n`, `i18np`, `gi`, `gs`, `gd`, `dict`
+  - MyBatis Xml: `se`, `up`, `wh`, `if`, `for`, `date_format`
+- 添加 @SysLogger 注解被错误地使用在查询类方法上时的提示和一键修复
+- 添加 StringUtils.objToString 方法的不建议使用提示和一键修复
+
+### Improved
+
+- 优化代码跳转使用体验，点击图标前记住行偏移量，使用返回按钮或者`Ctrl Alt ←`时可以回到上次跳转所在行位置；
+
+### Alpha
+
+- 代码生成器 (Alpha 测试)
+
 ## [1.0.14] - 2024-07-23
 
 ### Added
@@ -127,6 +146,7 @@
 - 支持JavaScript代码中折叠显示I18n中文资源串;
 
 [Unreleased]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-Unreleased.zip
+[1.0.15]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.15.zip
 [1.0.14]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.14.zip
 [1.0.13]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.13.zip
 [1.0.12]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.12.zip
