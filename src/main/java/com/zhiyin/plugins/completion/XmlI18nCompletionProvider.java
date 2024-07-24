@@ -38,7 +38,16 @@ public class XmlI18nCompletionProvider extends BaseCompletionProvider {
 
     @Override
     protected boolean isApplicable(@NotNull PsiElement element, @NotNull CompletionParameters parameters, @NotNull ProcessingContext context, @NotNull CompletionResultSet result) {
-        return MyPsiUtil.isXmlFileWithI18n(element);
+        boolean isXmlFileWithI18n = MyPsiUtil.isXmlFileWithI18n(element);
+        if (!isXmlFileWithI18n) {
+            return false;
+        }
+        XmlAttribute xmlAttribute = PsiTreeUtil.getParentOfType(element, XmlAttribute.class);
+        if (xmlAttribute == null) {
+            return false;
+        }
+        String xmlAttributeName = xmlAttribute.getName();
+        return List.of("value", "chs", "eng", "viet", "label", "i18n").contains(xmlAttributeName);
     }
 
     private @NotNull Function<IProperty, InsertHandler<LookupElement>> getLookupElementInsertHandler(@NotNull CompletionParameters parameters) {

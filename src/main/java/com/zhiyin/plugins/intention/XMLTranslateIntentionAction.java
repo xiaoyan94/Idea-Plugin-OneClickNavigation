@@ -46,9 +46,9 @@ public class XMLTranslateIntentionAction extends PsiElementBaseIntentionAction i
 
         if (parentXmlTag != null && "Title".equals(parentXmlTag.getName())) {
             ApplicationManager.getApplication().invokeLater(() -> {
-                String sourceText = parentXmlTag.getAttributeValue("chs");
+                String sourceText = parentXmlTag.getAttributeValue("value");
                 if (sourceText == null) {
-                    sourceText = parentXmlTag.getAttributeValue("value");
+                    sourceText = parentXmlTag.getAttributeValue("chs");
                 }
                 if (sourceText == null) {
                     sourceText = "";
