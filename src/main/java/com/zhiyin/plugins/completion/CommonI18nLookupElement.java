@@ -6,16 +6,16 @@ import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementPresentation;
 import com.intellij.codeInsight.lookup.LookupElementRenderer;
 import com.intellij.lang.Language;
+import com.intellij.lang.html.HTMLLanguage;
 import com.intellij.lang.java.JavaLanguage;
+import com.intellij.lang.javascript.JavascriptLanguage;
 import com.intellij.lang.xml.XMLLanguage;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.editor.CaretModel;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.editor.LogicalPosition;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.impl.source.html.HtmlFileImpl;
+import com.intellij.psi.impl.source.tree.LeafPsiElement;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.xml.XmlTag;
-import com.zhiyin.plugins.listeners.MyFileEditorManagerListener;
 import com.zhiyin.plugins.resources.MyIcons;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -57,7 +57,23 @@ public class CommonI18nLookupElement extends LookupElement {
         }
 
         Language language = element.getLanguage();
-        if (language instanceof XMLLanguage){
+        PsiFile psiFile = element.getContainingFile();
+        if (language instanceof JavascriptLanguage) {
+            CharSequence newValue = chs;
+            if (element instanceof LeafPsiElement) {
+                String elementType = ((LeafPsiElement) element).getElementType().toString();
+                if (elementType.equals("JS:STRING_LITERAL")) {
+                    newValue = String.format("<@message key=\"%s\"/>", key);
+                } else if (elementType.equals("JS:IDENTIFIER")) {
+                    newValue = String.format("zhiyin.i18n.translate(\"%s\")", key);
+                }
+            }
+            context.getDocument().replaceString(context.getStartOffset(), context.getTailOffset(), newValue);
+        } else if (language instanceof HTMLLanguage || psiFile instanceof HtmlFileImpl) {
+            CharSequence i18nFreeMarkerDirective = String.format("<@message key=\"%s\"/>", key);
+            context.getDocument().replaceString(context.getStartOffset(), context.getTailOffset(), i18nFreeMarkerDirective);
+        } else if (language instanceof XMLLanguage) {
+            // Html 也会进来
             // Find the XmlTag parent
             XmlTag xmlTag = PsiTreeUtil.getParentOfType(element, XmlTag.class);
             if (xmlTag == null) {
@@ -66,7 +82,7 @@ public class CommonI18nLookupElement extends LookupElement {
 
             // Modify other attributes of the XmlTag based on the chosen LookupElement
             modifyXmlAttribute(xmlTag);
-        } else if (language instanceof JavaLanguage){
+        } else if (language instanceof JavaLanguage) {
             context.getDocument().replaceString(context.getStartOffset(), context.getTailOffset(), key);
         } else {
             context.getDocument().replaceString(context.getStartOffset(), context.getTailOffset(), chs);
@@ -75,17 +91,6 @@ public class CommonI18nLookupElement extends LookupElement {
         // Commit the document changes
         commitDocument(context);
 
-        ApplicationManager.getApplication().invokeLater(() -> {
-            // Refresh the editor to reflect the changes
-            Editor editor = context.getEditor();
-            editor.getContentComponent().repaint();
-
-            CaretModel caretModel = editor.getCaretModel();
-            LogicalPosition position = caretModel.getLogicalPosition();
-            int lineEndOffset = editor.getDocument().getLineEndOffset(position.line);
-            caretModel.moveToOffset(lineEndOffset);
-            MyFileEditorManagerListener.collapseFoldRegion(editor);
-        });
     }
 
     private void modifyXmlAttribute(@NotNull XmlTag xmlTag) {
