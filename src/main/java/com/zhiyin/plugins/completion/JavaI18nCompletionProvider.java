@@ -1,10 +1,8 @@
 package com.zhiyin.plugins.completion;
 
-import com.intellij.codeInsight.AutoPopupController;
 import com.intellij.codeInsight.completion.CompletionParameters;
 import com.intellij.codeInsight.completion.CompletionResultSet;
 import com.intellij.lang.properties.IProperty;
-import com.intellij.openapi.editor.EditorFactory;
 import com.intellij.openapi.module.Module;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiExpression;
