@@ -93,6 +93,9 @@ public class MyPropertiesUtil {
      * @return 多个 Property
      */
     public static List<Property> findModuleI18nProperties(Project project, Module module, String key) {
+        if (key == null) {
+            return new ArrayList<>();
+        }
         List<Property> result = new ArrayList<>();
         List<VirtualFile> virtualFiles = new ArrayList<>();
         String moduleName = getSimpleModuleName(module);
@@ -127,6 +130,9 @@ public class MyPropertiesUtil {
      */
     public static @NotNull List<Property> findModuleDataGridI18nProperties(Project project, Module module, String key) {
         List<Property> result = new ArrayList<>();
+        if (key == null) {
+            return result;
+        }
         List<VirtualFile> virtualFiles = new ArrayList<>();
         String moduleName = getSimpleModuleName(module);
         GlobalSearchScope scope;
@@ -164,6 +170,9 @@ public class MyPropertiesUtil {
      */
     public static List<Property> findModuleWebI18nProperties(Project project, Module module, String key) {
         List<Property> result = new ArrayList<>();
+        if (key == null) {
+            return result;
+        }
         List<VirtualFile> virtualFiles = new ArrayList<>();
 
         virtualFiles.addAll(FilenameIndex.getVirtualFilesByName(Constants.I18N_WEB_ZH_CN,
