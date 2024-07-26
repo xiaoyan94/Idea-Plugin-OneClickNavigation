@@ -11,6 +11,7 @@ import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.encoding.EncodingManager;
+import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.xml.XmlTag;
 import com.intellij.util.IncorrectOperationException;
@@ -66,6 +67,7 @@ public class XMLTranslateIntentionAction extends PsiElementBaseIntentionAction i
                     WriteCommandAction.runWriteCommandAction(project, () -> {
 //                        System.out.println("Current thread is " + Thread.currentThread().getName() + " propertyKey:" + propertyKey);
                         String enValue = inputModel.getEnglish();
+                        PsiDocumentManager.getInstance(project).commitDocument(editor.getDocument());
                         parentXmlTag.setAttribute("value", propertyKey);
                         parentXmlTag.setAttribute("chs", inputModel.getChinese());
                         parentXmlTag.setAttribute("eng", enValue);

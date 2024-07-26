@@ -102,6 +102,7 @@ public class TranslateAndReplaceIntentionAction extends PsiElementBaseIntentionA
 
                         // 替换literalExpression的文本内容
                         if (literalExpression != null) {
+                            PsiDocumentManager.getInstance(project).commitDocument(editor.getDocument());
                             literalExpression.replace(factory.createExpressionFromText("\"" + inputModel.getPropertyKey() + "\"", literalExpression));
                         }
                     });
