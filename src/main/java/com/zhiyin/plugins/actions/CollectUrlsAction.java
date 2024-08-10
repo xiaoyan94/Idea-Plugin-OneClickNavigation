@@ -4,6 +4,7 @@ import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.ui.Messages;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.JavaConstantExpressionEvaluator;
 import com.intellij.psi.impl.java.stubs.index.JavaAnnotationIndex;
@@ -21,37 +22,91 @@ public class CollectUrlsAction extends AnAction {
         "org.springframework.web.bind.annotation.DeleteMapping"
     };
 
+    // 缓存结构
+    private final Map<PsiClass, Set<String>> controllerUrlsCache = new HashMap<>();
+    private final Map<String, PsiMethod> urlMethodCache = new HashMap<>();
+
     @Override
     public void actionPerformed(AnActionEvent e) {
         Project project = e.getProject();
         if (project == null) return;
 
-        // Define the scope to search in (the whole project)
         GlobalSearchScope scope = GlobalSearchScope.allScope(project);
-//        scope = GlobalSearchScope.fileScope(e.getRequiredData(CommonDataKeys.PSI_FILE));
-        // Collect all controller URLs
-        Set<String> urls = new HashSet<>();
-        
-        // Search for classes with @Controller annotation
+        collectControllerUrls(project, scope);
+
+        // 显示收集到的 URL
+        showCollectedUrls(project);
+
+        // 测试 URL
+        String[] testUrls = {
+                "/Order/OrderSort/endFastStopDevice",
+                "/MesRoot/sysadm/Role/updateRoleById",
+                "/Mold/downloadTemplate",
+                "/Report/ProcessCapacityReport/exportProcessCapacityReport"
+        };
+
+        for (String url : testUrls) {
+            navigateToUrl(url);
+            Messages.showInfoMessage("Test URL: " + url, "Test Result");
+        }
+    }
+
+    private void navigateToUrl(String url) {
+        PsiMethod method = getMethodForUrl(url);
+        if (method != null) {
+            // 找到了对应的方法，进行导航
+            method.navigate(true);
+            System.out.println("Successfully navigated to: " + url);
+            System.out.println("Method: " + method.getName());
+            System.out.println("Containing class: " + method.getContainingClass().getQualifiedName());
+            System.out.println("File: " + method.getContainingFile().getVirtualFile().getPath());
+            System.out.println();
+        } else {
+            System.out.println("Could not find method for URL: " + url);
+            System.out.println();
+        }
+    }
+
+    private void collectControllerUrls(Project project, GlobalSearchScope scope) {
         List<PsiClass> controllers = findClassesWithAnnotationUsingIndex(project, "Controller", scope);
         for (PsiClass controller : controllers) {
             String classUrl = getMappingUrl(controller);
+            Set<String> methodUrls = new HashSet<>();
+            controllerUrlsCache.put(controller, methodUrls);
+
             PsiMethod[] methods = controller.getMethods();
             for (PsiMethod method : methods) {
                 String methodUrl = getMappingUrl(method);
-                if (methodUrl != null) {
-                    urls.add(classUrl + methodUrl);
+                if (methodUrl != null && !methodUrl.isEmpty()) {
+                    String fullUrl = classUrl + methodUrl;
+                    methodUrls.add(fullUrl);
+                    urlMethodCache.put(fullUrl, method);
                 }
             }
         }
-        
-        // Show collected URLs
+    }
+
+    private void showCollectedUrls(Project project) {
         StringBuilder message = new StringBuilder("Collected URLs:\n");
-        for (String url : urls) {
-            message.append(url).append("\n");
+        for (Map.Entry<PsiClass, Set<String>> entry : controllerUrlsCache.entrySet()) {
+            message.append("Controller: ").append(entry.getKey().getQualifiedName()).append("\n");
+            for (String url : entry.getValue()) {
+                message.append("  ").append(url).append("\n");
+            }
+            message.append("\n");
         }
-        
+
         com.intellij.openapi.ui.Messages.showMessageDialog(project, message.toString(), "Controller URLs", com.intellij.openapi.ui.Messages.getInformationIcon());
+    }
+
+    // 新增方法：获取指定 Controller 的所有 URL
+    public Set<String> getUrlsForController(PsiClass controller) {
+        return controllerUrlsCache.getOrDefault(controller, Collections.emptySet());
+    }
+
+    // 新增方法：根据 URL 获取对应的 PsiMethod
+    public PsiMethod getMethodForUrl(String url) {
+        return urlMethodCache.get(url);
     }
 
     public List<PsiClass> findClassesWithAnnotationUsingIndex(Project project, String annotationName, GlobalSearchScope scope) {
