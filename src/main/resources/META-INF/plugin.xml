@@ -147,6 +147,13 @@
                icon="com.zhiyin.plugins.resources.MyIcons.pandaIconSVG16_2">
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
 
+
+            <action id="com.zhiyin.plugins.actions.ConvertToCDATAAction"
+                    icon="com.zhiyin.plugins.resources.MyIcons.pandaIconSVG16_2"
+                    class="com.zhiyin.plugins.actions.ConvertToCDATAAction"
+                    text="转换为CDATA块"
+                    description="XML：将所选文本转换为 CDATA 块"/>
+
             <action id="com.zhiyin.plugins.actions.ImportMapperXMLSortColumnAction"
                     icon="com.zhiyin.plugins.resources.MyIcons.pandaIconSVG16_2"
                     class="com.zhiyin.plugins.actions.ImportMapperXMLSortColumnAction"
