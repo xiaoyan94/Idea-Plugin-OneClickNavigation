@@ -1,6 +1,6 @@
 <templateSet group="OneClickNavigationTemplates">
     <template name="i18n"
-              value="I18nUtil.getMessage($VAR$, &quot;$KEY$&quot;);$END$"
+              value="I18nUtil.getMessage($VAR$, &quot;$KEY$&quot;)$END$"
               description="I18nUtil.getMessage(userCode, &quot;&quot;);"
               toReformat="true"
               toShortenFQNames="true"
@@ -13,7 +13,7 @@
     </template>
 
     <template name="i18np"
-              value="I18nUtil.getMessage(StringUtils.getStringFromMap($VAR$, &quot;usercode&quot;), &quot;$KEY$&quot;);$END$"
+              value="I18nUtil.getMessage(StringUtils.getStringFromMap($VAR$, &quot;usercode&quot;), &quot;$KEY$&quot;)$END$"
               description="I18nUtil.getMessage(StringUtils.getStringFromMap(params, &quot;usercode&quot;), &quot;&quot;);"
               toReformat="true"
               toShortenFQNames="true"
@@ -26,7 +26,7 @@
     </template>
 
     <template name="I18n"
-              value="I18nUtil.getMessage($VAR$, &quot;$KEY$&quot;);$END$"
+              value="I18nUtil.getMessage($VAR$, &quot;$KEY$&quot;)$END$"
               description="I18nUtil.getMessage(userCode, &quot;&quot;);"
               toReformat="true"
               toShortenFQNames="true"
@@ -39,7 +39,7 @@
     </template>
 
     <template name="I18np"
-              value="I18nUtil.getMessage(StringUtils.getStringFromMap($VAR$, &quot;usercode&quot;), &quot;$KEY$&quot;);$END$"
+              value="I18nUtil.getMessage(StringUtils.getStringFromMap($VAR$, &quot;usercode&quot;), &quot;$KEY$&quot;)$END$"
               description="I18nUtil.getMessage(StringUtils.getStringFromMap(params, &quot;usercode&quot;), &quot;&quot;);"
               toReformat="true"
               toShortenFQNames="true"
@@ -158,8 +158,13 @@
             <option name="XML" value="true" />
         </context>
     </template>
-    <template name="date_format" value="date_format(a.$maintaintime$, '%Y-%m-%d %H:%i:%s') as $maintaintime$" description="" toReformat="false" toShortenFQNames="true">
+    <template name="date_format" value="date_format(a.$maintaintime$, '%Y-%m-%d %H:%i:%s') as $maintaintime$" description="date_format(a.$maintaintime$, '%Y-%m-%d %H:%i:%s') as $maintaintime$" toReformat="false" toShortenFQNames="true">
         <variable name="maintaintime" expression="" defaultValue="" alwaysStopAt="true" />
+        <context>
+            <option name="XML" value="true" />
+        </context>
+    </template>
+    <template name="&lt;=" value="&lt;![CDATA[ &lt;= ]]&gt;" description="&lt;![CDATA[ &lt;= ]]&gt;" toReformat="false" toShortenFQNames="true">
         <context>
             <option name="XML" value="true" />
         </context>
