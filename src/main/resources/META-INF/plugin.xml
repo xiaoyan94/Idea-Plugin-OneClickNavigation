@@ -197,6 +197,10 @@
                 description="Moc、Layout、Controller、Service、Dao、MyBatis mapper一键生成">
             <add-to-group group-id="ProjectViewPopupMenu" anchor="first"/>
         </action>
+        <action id="com.zhiyin.plugins.actions.CollectUrlsAction" class="com.zhiyin.plugins.actions.CollectUrlsAction"
+                text="测试收集Controller">
+            <add-to-group group-id="com.zhiyin.plugins.ToolsMenuGroup" anchor="last"/>
+        </action>
     </actions>
 
     <projectListeners>
