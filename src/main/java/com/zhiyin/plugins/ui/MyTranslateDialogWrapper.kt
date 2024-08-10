@@ -137,7 +137,7 @@ class MyTranslateDialogWrapper(private val project: Project?, private val module
                             englishUnicodeTextField.component.text = it.text.toUnicode()
                             // 复用已存在key时需保持不更改
                             if (!inputModel.propertyKeyExists) {
-                                i18nKeyTextField.component.text = "${moduleName}.${it.text.toSnakeCase()}"
+                                i18nKeyTextField.component.text = "com.zhiyin.mes.app.${simpleModuleName}.${it.text.toSnakeCase()}"
                             }
                             null
                         }
@@ -361,7 +361,7 @@ class MyTranslateDialogWrapper(private val project: Project?, private val module
             englishTextField.text(english)
             if (english.isNotEmpty()) {
                 englishUnicodeTextField.text(english.toUnicode())
-                i18nKeyTextField.text("${moduleName}.${english.toSnakeCase()}")
+                i18nKeyTextField.text("com.zhiyin.mes.app.${simpleModuleName}.${english.toSnakeCase()}")
             }
 
             chineseTWTextField.text(cht)
