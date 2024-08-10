@@ -12,6 +12,7 @@ import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiFile;
 
 public class ConvertToCDATAAction extends AnAction {
+    @SuppressWarnings("CodeBlock2Expr")
     @Override
     public void actionPerformed(AnActionEvent e) {
         Project project = e.getProject();
