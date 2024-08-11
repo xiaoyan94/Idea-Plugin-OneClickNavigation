@@ -23,6 +23,12 @@ public class MyPluginMessages {
         Notifications.Bus.notify(notification, project);
     }
 
+    public static void showInfo(String message, @Nullable Project project) {
+        final Notification notification = new Notification(Constants.NOTIFICATION_GROUP_ID, message, NotificationType.INFORMATION);
+        notification.setIcon(MyIcons.pandaIconSVG16_2);
+        Notifications.Bus.notify(notification, project);
+    }
+
     public static void showError(String title, String message, @Nullable Project project) {
         Notification notification = new Notification(Constants.NOTIFICATION_GROUP_ID, title, message, NotificationType.ERROR);
         notification.setIcon(MyIcons.pandaIconSVG16_2);

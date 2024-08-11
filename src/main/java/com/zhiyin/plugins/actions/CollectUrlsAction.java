@@ -7,6 +7,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.psi.*;
 import com.intellij.psi.search.GlobalSearchScope;
+import com.zhiyin.plugins.notification.MyPluginMessages;
 import com.zhiyin.plugins.service.ControllerUrlService;
 
 import java.util.*;
@@ -18,15 +19,16 @@ public class CollectUrlsAction extends AnAction {
         Project project = e.getProject();
         if (project == null) return;
 
-        GlobalSearchScope scope = GlobalSearchScope.fileScope(e.getRequiredData(CommonDataKeys.PSI_FILE));
+//        GlobalSearchScope scope = GlobalSearchScope.fileScope(e.getRequiredData(CommonDataKeys.PSI_FILE));
 //        scope = GlobalSearchScope.allScope(project);
-
+//
         ControllerUrlService urlService = project.getService(ControllerUrlService.class);
-        urlService.collectControllerUrls(scope, () -> {
-            // 在URL收集完成后执行
-//            showCollectedUrls(project, urlService);
-            testUrls(urlService);
-        });
+//        urlService.collectControllerUrls(scope, () -> {
+//            // 在URL收集完成后执行
+////            showCollectedUrls(project, urlService);
+//            testUrls(urlService);
+//        });
+        testUrls(urlService);
 
     }
 
@@ -37,7 +39,7 @@ public class CollectUrlsAction extends AnAction {
 //                "/Mold/downloadTemplate",
 //                "/Report/ProcessCapacityReport/exportProcessCapacityReport",
 //                "/api/v2/basic/getStationListByFactoryId",
-                "/feign-api/Device/insertDeviceDetailPic",
+//                "/feign-api/Device/insertDeviceDetailPic",
                 "feign-api/Device/insertDeviceDetailPic"
 //                "/feign-api/Mold/getMoldMonitorList",
 //                "feign-api/Mold/getMoldMonitorList"
@@ -56,14 +58,25 @@ public class CollectUrlsAction extends AnAction {
         List<PsiMethod> methods = urlService.getMethodForUrl(url);
         if (methods != null && !methods.isEmpty()) {
             String finalUrl = url;
+            List<PsiMethod> toRemove = new ArrayList<>();
             methods.forEach(method -> {
-                method.navigate(true);
+                if (method == null || method.getContainingClass() == null){
+                    toRemove.add(method);
+                    return;
+                }
+                try {
+                    method.navigate(true);
+                } catch (Exception e) {
+                    MyPluginMessages.showInfo("Navigation Error", "Failed to navigate to URL: " + finalUrl);
+                }
                 System.out.println("Successfully navigated to: " + finalUrl);
                 System.out.println("Method: " + method.getName());
-                System.out.println("Containing class: " + Objects.requireNonNull(method.getContainingClass()).getQualifiedName());
+                System.out.println("Containing class: " + method.getContainingClass().getQualifiedName());
                 System.out.println("File: " + method.getContainingFile().getVirtualFile().getPath());
                 System.out.println();
             });
+
+            toRemove.forEach(urlService::removeUrlsNullMethod);
 
         } else {
             System.out.println("Could not find method for URL: " + url);

@@ -9,16 +9,25 @@ import com.intellij.openapi.progress.impl.BackgroundableProcessIndicator;
 import com.intellij.openapi.project.DumbService;
 import com.intellij.openapi.project.NoAccessDuringPsiEvents;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.vfs.*;
+import com.intellij.openapi.vfs.newvfs.BulkFileListener;
+import com.intellij.openapi.vfs.newvfs.events.VFileCreateEvent;
+import com.intellij.openapi.vfs.newvfs.events.VFileDeleteEvent;
+import com.intellij.openapi.vfs.newvfs.events.VFileEvent;
+import com.intellij.openapi.vfs.newvfs.events.VFileMoveEvent;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.JavaConstantExpressionEvaluator;
+import com.intellij.psi.impl.PsiTreeChangeEventImpl;
 import com.intellij.psi.impl.java.stubs.index.JavaAnnotationIndex;
 import com.intellij.psi.search.GlobalSearchScope;
+import com.zhiyin.plugins.notification.MyPluginMessages;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicReference;
+
+import static org.apache.tools.ant.types.resources.MultiRootFileSet.SetType.file;
 
 @Service(Service.Level.PROJECT)
 public final class ControllerUrlService {
@@ -42,6 +51,100 @@ public final class ControllerUrlService {
 
     public ControllerUrlService(Project project) {
         this.project = project;
+        collectControllerUrls(() -> MyPluginMessages.showInfo("Controller URLs collected", project));
+
+        PsiManager.getInstance(project).addPsiTreeChangeListener(
+                new PsiTreeChangeAdapter() {
+
+                    @Override
+                    public void childAdded(@NotNull PsiTreeChangeEvent event) {
+                        handleChange(event);
+                    }
+
+                    @Override
+                    public void childRemoved(@NotNull PsiTreeChangeEvent event) {
+                        handleChange(event);
+                    }
+
+                    @Override
+                    public void childReplaced(@NotNull PsiTreeChangeEvent event) {
+                        handleChange(event);
+                    }
+
+                    @Override
+                    public void childMoved(@NotNull PsiTreeChangeEvent event) {
+                        handleChange(event);
+                    }
+
+                    @Override
+                    public void childrenChanged(@NotNull PsiTreeChangeEvent event) {
+                        handleChange(event);
+                    }
+
+                    @Override
+                    public void propertyChanged(@NotNull PsiTreeChangeEvent event) {
+                        handleChange(event);
+                    }
+
+                    private void handleChange(PsiTreeChangeEvent event) {
+                        if (event instanceof PsiTreeChangeEventImpl) {
+                            PsiTreeChangeEventImpl impl = (PsiTreeChangeEventImpl) event;
+                            PsiElement element = impl.getParent();
+
+                            // Check if the element is a PsiClass or PsiMethod
+                            if (element instanceof PsiClass || element instanceof PsiMethod) {
+                                PsiClass psiClass = element instanceof PsiClass ? (PsiClass) element : ((PsiMethod) element).getContainingClass();
+
+                                if (psiClass != null && hasRelevantAnnotation(psiClass)) {
+//                                    MyPluginMessages.showInfo("PsiTreeChangeEventImpl: ", "listening to changes: event type: " + impl.getClass().getSimpleName(), project);
+                                    if (event.getFile() != null) {
+                                        recollectControllerUrls(event.getFile().getVirtualFile());
+                                    } else {
+                                        collectControllerUrls(null);
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    // Utility method to check if a PsiClass has relevant annotations
+                    private boolean hasRelevantAnnotation(PsiClass psiClass) {
+                        for (PsiAnnotation annotation : psiClass.getAnnotations()) {
+                            String qualifiedName = annotation.getQualifiedName();
+                            if ("org.springframework.web.bind.annotation.Controller".equals(qualifiedName) ||
+                                    "org.springframework.web.bind.annotation.RestController".equals(qualifiedName) ||
+                                    "org.springframework.cloud.openfeign.FeignClient".equals(qualifiedName)) {
+                                return true;
+                            }
+                        }
+                        return false;
+                    }
+
+                    // 其他必要的重写方法...
+                },
+                PluginDisposable.getInstance(project)
+        );
+
+        // 添加文件系统监听器
+        project.getMessageBus().connect().subscribe(VirtualFileManager.VFS_CHANGES, new BulkFileListener() {
+            @Override
+            public void after(@NotNull List<? extends VFileEvent> events) {
+                for (VFileEvent event : events) {
+                    if(event instanceof VFileCreateEvent || event instanceof VFileDeleteEvent || event instanceof VFileMoveEvent) {
+                        if (event.getFile() != null && "java".equals(event.getFile().getExtension())) {
+//                            MyPluginMessages.showInfo("BulkFileListener: ","listening to changes: event type: " + event.getClass().getSimpleName(), project);
+                            collectControllerUrls(() -> MyPluginMessages.showInfo("Controller URLs collected", project));
+                            break;
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    public synchronized void recollectControllerUrls(VirtualFile file){
+        GlobalSearchScope scope = GlobalSearchScope.fileScope(project, file);
+//        collectControllerUrls(scope, () -> MyPluginMessages.showInfo("recollectControllerUrls file", file.getName(), project));
     }
 
     public void collectControllerUrls(Runnable onComplete) {
@@ -69,12 +172,10 @@ public final class ControllerUrlService {
                         }
                     }
                 };
-                ProgressIndicator indicator = ProgressManager.getGlobalProgressIndicator();
-                if (indicator == null) {
-                    indicator = new BackgroundableProcessIndicator(task);
-                    indicator.setIndeterminate(false);
-                    System.out.println("collectControllerUrls: Current thread:" + Thread.currentThread().getName());
-                }
+                ProgressIndicator indicator = new BackgroundableProcessIndicator(task);
+                indicator.setIndeterminate(false);
+                System.out.println("collectControllerUrls: Current thread:" + Thread.currentThread().getName());
+
                 ProgressManager.getInstance().runProcessWithProgressAsynchronously(task, indicator);
             });
 
@@ -120,22 +221,48 @@ public final class ControllerUrlService {
                         String fullUrl = classUrl + methodUrl;
                         fullUrl = fullUrl.startsWith("/") ? fullUrl : "/" + fullUrl;
                         methodUrls.add(fullUrl);
-                        tempUrlMethodCache.computeIfAbsent(fullUrl, k -> new ArrayList<>()).add(method);
+                        if (!scope.equals(GlobalSearchScope.projectScope(project))){
+                            List<PsiMethod> methodForUrl = getMethodForUrl(fullUrl);
+                            tempUrlMethodCache.put(fullUrl, methodForUrl);
+                        }
+                        List<PsiMethod> psiMethods = tempUrlMethodCache.computeIfAbsent(fullUrl, k -> new ArrayList<>());
+                        if (!psiMethods.contains(method)){
+                            psiMethods.add(method);
+                        }
+                        psiMethods.removeIf(Objects::isNull);
+
                     }
                 }
             });
         }
 
         synchronized (this) {
-            controllerUrlsCache.clear();
-            controllerUrlsCache.putAll(tempControllerUrlsCache);
-            urlMethodCache.clear();
-            urlMethodCache.putAll(tempUrlMethodCache);
+            if (scope.equals(GlobalSearchScope.projectScope(project))){
+                // project scope: 收集所有
+                controllerUrlsCache.clear();
+                controllerUrlsCache.putAll(tempControllerUrlsCache);
+                urlMethodCache.clear();
+                urlMethodCache.putAll(tempUrlMethodCache);
+            } else {
+                // file scope
+                controllerUrlsCache.putAll(tempControllerUrlsCache);
+                urlMethodCache.putAll(tempUrlMethodCache);
+            }
+
         }
     }
 
     public synchronized Set<String> getUrlsForController(PsiClass controller) {
         return new HashSet<>(controllerUrlsCache.getOrDefault(controller, Collections.emptySet()));
+    }
+
+    public synchronized void removeUrlsNullMethod(PsiMethod method) {
+//        MyPluginMessages.showInfo("removeUrlsNullMethod", "remove method: " + method);
+        urlMethodCache.forEach((key, psiMethods) -> {
+            // Define your condition
+            psiMethods.removeIf(psiMethod -> psiMethod == method);
+        });
+
     }
 
     public synchronized List<PsiMethod> getMethodForUrl(String url) {

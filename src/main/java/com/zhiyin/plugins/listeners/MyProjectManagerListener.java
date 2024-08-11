@@ -13,6 +13,7 @@ import com.intellij.openapi.project.ProjectManagerListener;
 import com.intellij.openapi.util.Condition;
 import com.intellij.util.xml.DomService;
 import com.zhiyin.plugins.resources.MyIcons;
+import com.zhiyin.plugins.service.ControllerUrlService;
 import com.zhiyin.plugins.service.MyProjectService;
 import org.jetbrains.annotations.NotNull;
 
@@ -50,6 +51,8 @@ public class MyProjectManagerListener implements ProjectManagerListener {
             MyProjectService myProjectService = project.getService(MyProjectService.class);
             System.out.println("reInitXmlFileMap start");
             myProjectService.reInitXmlFileMap();
+
+            project.getService(ControllerUrlService.class);
 
             System.out.println("return runWhenSmart");
         });

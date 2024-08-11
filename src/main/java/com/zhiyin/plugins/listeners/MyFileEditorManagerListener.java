@@ -14,8 +14,11 @@ import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.fileEditor.FileEditorManagerEvent;
 import com.intellij.openapi.fileEditor.FileEditorManagerListener;
 import com.intellij.openapi.fileEditor.ex.FileEditorWithProvider;
+import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.zhiyin.plugins.notification.MyPluginMessages;
 import com.zhiyin.plugins.resources.Constants;
+import com.zhiyin.plugins.service.ControllerUrlService;
 import com.zhiyin.plugins.settings.AppSettingsState;
 import org.jetbrains.annotations.NotNull;
 
@@ -61,6 +64,8 @@ public class MyFileEditorManagerListener implements FileEditorManagerListener {
 
         collapseFoldRegion(source);
 
+//        MyPluginMessages.showInfo("fileOpened", file.getName(), source.getProject());
+
     }
 
     /**
@@ -71,6 +76,7 @@ public class MyFileEditorManagerListener implements FileEditorManagerListener {
     public void fileClosed(@NotNull FileEditorManager source, @NotNull VirtualFile file) {
 //        collapseFoldRegion(source);
         FileEditorManagerListener.super.fileClosed(source, file);
+//        MyPluginMessages.showInfo("fileClosed", file.getName(), source.getProject());
     }
 
     /**
@@ -80,6 +86,15 @@ public class MyFileEditorManagerListener implements FileEditorManagerListener {
     public void selectionChanged(@NotNull FileEditorManagerEvent event) {
         FileEditorManagerListener.super.selectionChanged(event);
         collapseFoldRegion(event.getManager());
+
+        Project project = event.getManager().getProject();
+        ControllerUrlService controllerUrlService = project.getService(ControllerUrlService.class);
+        VirtualFile oldFile = event.getOldFile();
+        if (event.getOldFile() != null && event.getNewFile() != null) {
+//            MyPluginMessages.showInfo("selectionChanged", oldFile.getName() + " -> " + event.getNewFile().getName(), project);
+            controllerUrlService.recollectControllerUrls(oldFile);
+        }
+
     }
 
     private static void collapseFoldRegion(@NotNull FileEditorManager source) {
