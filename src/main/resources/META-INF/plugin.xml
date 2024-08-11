@@ -78,6 +78,7 @@
         <codeInsight.lineMarkerProvider language="JAVA" implementationClass="com.zhiyin.plugins.oneClickNavigation.codeInsight.JavaLineMarkerProvider"/>
         <codeInsight.lineMarkerProvider language="JAVA" implementationClass="com.zhiyin.plugins.oneClickNavigation.codeInsight.JavaToMocLineMarkerProvider"/>
         <codeInsight.lineMarkerProvider language="XML" implementationClass="com.zhiyin.plugins.oneClickNavigation.codeInsight.MapperXmlLineMarkerProvider"/>
+        <codeInsight.lineMarkerProvider language="JAVA" implementationClass="com.zhiyin.plugins.provider.lineMarkers.FeignClientRelatedItemLineMarkerProvider"/>
 
         <notificationGroup displayType="BALLOON" id="ZhiyinOneClickNavigation"/>
 

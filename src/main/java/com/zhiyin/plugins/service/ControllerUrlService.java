@@ -103,6 +103,8 @@ public final class ControllerUrlService {
                                         collectControllerUrls(null);
                                     }
                                 }
+                            } else {
+                                // TODO 删除方法在撤销导致消失问题
                             }
                         }
                     }
@@ -299,7 +301,7 @@ public final class ControllerUrlService {
         return future;
     }
 
-    private String getMappingUrl(PsiElement element) {
+    public String getMappingUrl(PsiElement element) {
 
         for (String annotationFQN : REQUEST_MAPPING_ANNOTATIONS) {
             PsiAnnotation annotation = getAnnotation(element, annotationFQN);
@@ -323,6 +325,7 @@ public final class ControllerUrlService {
         if (memberValue instanceof PsiArrayInitializerMemberValue) {
             PsiArrayInitializerMemberValue arrayValue = (PsiArrayInitializerMemberValue) memberValue;
             for (PsiAnnotationMemberValue memberValue2 : arrayValue.getInitializers()) {
+                // TODO: multiple values to be supported
                 if (memberValue2 instanceof PsiLiteralExpression) {
                     Object constant = JavaConstantExpressionEvaluator.computeConstantExpression((PsiExpression) memberValue2, false);
                     return constant == null ? null : constant.toString();
