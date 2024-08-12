@@ -118,6 +118,7 @@
         <editorFactoryMouseListener implementation="com.zhiyin.plugins.listeners.MyEditorMouseListener"/>
         <codeInsight.lineMarkerProvider language="JavaScript" implementationClass="com.zhiyin.plugins.provider.lineMarkers.JSUrlRelatedItemLineMarkerProvider"/>
         <codeInsight.lineMarkerProvider language="XML" implementationClass="com.zhiyin.plugins.provider.lineMarkers.LayoutUrlRelatedItemLineMarkerProvider"/>
+        <codeInsight.lineMarkerProvider language="HTML" implementationClass="com.zhiyin.plugins.provider.lineMarkers.JSLayoutRelatedItemLineMarkerProvider"/>
     </extensions>
     <actions>
         <group id="com.zhiyin.plugins.ToolsMenuGroup" text="OneClickNavigation插件" popup="true"

@@ -13,6 +13,7 @@
 - [x] 支持Feign客户端URL到RestController的一键跳转
 - [x] 支持RestController URL到调用它的Feign客户端的反向查找跳转
 - [x] 支持Html中的URL到Controller的一键跳转
+- [x] 支持Html中的requestUri到Layout文件的一键跳转
 - [x] 支持Layout中的URL到Controller的一键跳转
 - [x] 资源串默认带出的 key 去除项目名
 - [x] xml中选中文本一键转换为CDATA块
@@ -165,6 +166,8 @@
 - 支持JavaScript代码中折叠显示I18n中文资源串;
 
 [Unreleased]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-Unreleased.zip
+[1.0.17]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.17.zip
+[1.0.16]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.16.zip
 [1.0.15]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.15.zip
 [1.0.14]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.14.zip
 [1.0.13]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.13.zip
