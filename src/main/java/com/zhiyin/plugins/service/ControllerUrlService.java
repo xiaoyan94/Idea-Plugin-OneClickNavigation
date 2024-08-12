@@ -20,17 +20,23 @@ import com.intellij.psi.impl.JavaConstantExpressionEvaluator;
 import com.intellij.psi.impl.PsiTreeChangeEventImpl;
 import com.intellij.psi.impl.java.stubs.index.JavaAnnotationIndex;
 import com.intellij.psi.search.GlobalSearchScope;
+import com.intellij.psi.util.PsiUtil;
 import com.zhiyin.plugins.notification.MyPluginMessages;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 
-import static org.apache.tools.ant.types.resources.MultiRootFileSet.SetType.file;
+import static com.zhiyin.plugins.utils.MyPsiUtil.*;
 
 @Service(Service.Level.PROJECT)
 public final class ControllerUrlService {
+
+    private long lastExecutionTime = 0; // Timestamp of the last execution
+    private final long MIN_INTERVAL_MS = TimeUnit.SECONDS.toMillis(60); // Minimum interval between executions (e.g., 5 seconds)
 
     private static final String[] REQUEST_MAPPING_ANNOTATIONS = {
             "org.springframework.web.bind.annotation.RequestMapping",
@@ -51,8 +57,52 @@ public final class ControllerUrlService {
 
     public ControllerUrlService(Project project) {
         this.project = project;
-        collectControllerUrls(() -> MyPluginMessages.showInfo("Controller URLs collected", project));
+        initControllerUrlsCache();
 
+        registerPsiTreeChangeListener(project);
+
+        // 添加文件系统监听器
+        registerVFSChangeListener(project);
+    }
+
+    private void registerVFSChangeListener(Project project) {
+        project.getMessageBus().connect().subscribe(VirtualFileManager.VFS_CHANGES, new BulkFileListener() {
+            @Override
+            public void after(@NotNull List<? extends VFileEvent> events) {
+                for (VFileEvent event : events) {
+                    if(event instanceof VFileCreateEvent || event instanceof VFileDeleteEvent || event instanceof VFileMoveEvent) {
+                        VirtualFile file = event.getFile();
+                        if (file != null && file.isValid() && "java".equals(file.getExtension())) {
+                            DumbService.getInstance(project).runWhenSmart(() -> {
+                                ApplicationManager.getApplication().runReadAction(() -> {
+                                    PsiFile psiFile = PsiUtil.getPsiFile(project, file);
+                                    if (psiFile instanceof PsiJavaFile) {
+                                        PsiJavaFile javaFile = (PsiJavaFile) psiFile;
+                                        for (PsiClass psiClass : javaFile.getClasses()) {
+                                            if (isAnnotatedWithFeignClient(psiClass) ||
+                                                    isAnnotatedWithRestController(psiClass) ||
+                                                    isAnnotatedWithController(psiClass)) {
+
+                                                // Do something with the identified class
+                                                collectControllerUrls(() -> MyPluginMessages.showInfo("Controller URLs collected", project));
+                                                break;
+                                            }
+                                        }
+                                    }
+                                });
+                            });
+
+//                            MyPluginMessages.showInfo("BulkFileListener: ","listening to changes: event type: " + event.getClass().getSimpleName(), project);
+//                            collectControllerUrls(() -> MyPluginMessages.showInfo("Controller URLs collected", project));
+//                            break;
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    private void registerPsiTreeChangeListener(Project project) {
         PsiManager.getInstance(project).addPsiTreeChangeListener(
                 new PsiTreeChangeAdapter() {
 
@@ -126,37 +176,42 @@ public final class ControllerUrlService {
                 },
                 PluginDisposable.getInstance(project)
         );
+    }
 
-        // 添加文件系统监听器
-        project.getMessageBus().connect().subscribe(VirtualFileManager.VFS_CHANGES, new BulkFileListener() {
-            @Override
-            public void after(@NotNull List<? extends VFileEvent> events) {
-                for (VFileEvent event : events) {
-                    if(event instanceof VFileCreateEvent || event instanceof VFileDeleteEvent || event instanceof VFileMoveEvent) {
-                        if (event.getFile() != null && "java".equals(event.getFile().getExtension())) {
-//                            MyPluginMessages.showInfo("BulkFileListener: ","listening to changes: event type: " + event.getClass().getSimpleName(), project);
-                            collectControllerUrls(() -> MyPluginMessages.showInfo("Controller URLs collected", project));
-                            break;
-                        }
-                    }
-                }
-            }
-        });
+    public void initControllerUrlsCache() {
+        collectControllerUrls(() -> MyPluginMessages.showInfo("OneClickNavigation", "成功加载: " + controllerUrlsCache.size() + " Controllers, " + urlMethodCache.size() + " API urls", project));
     }
 
     public synchronized void recollectControllerUrls(VirtualFile file){
-        GlobalSearchScope scope = GlobalSearchScope.fileScope(project, file);
-//        collectControllerUrls(scope, () -> MyPluginMessages.showInfo("recollectControllerUrls file", file.getName(), project));
+        AtomicReference<GlobalSearchScope> scope0 = new AtomicReference<>();
+        ApplicationManager.getApplication().runReadAction(() -> {
+            scope0.set(GlobalSearchScope.fileScope(project, file));
+        });
+
+        GlobalSearchScope scope = scope0.get();
+        collectControllerUrls(scope, () -> MyPluginMessages.showInfo("recollectControllerUrls file", file.getName(), project));
+//        collectControllerUrls(() -> {});
     }
 
     public void collectControllerUrls(Runnable onComplete) {
-        collectControllerUrls(GlobalSearchScope.projectScope(project),onComplete);
+        collectControllerUrls(GlobalSearchScope.allScope(project),onComplete);
     }
 
     public void collectControllerUrls(GlobalSearchScope scope, Runnable onComplete) {
+        long currentTime = System.currentTimeMillis();
+        if (currentTime - lastExecutionTime < MIN_INTERVAL_MS) {
+            System.out.println("Skipped execution to respect the time interval.");
+//            isCollecting.set(false);
+            return;
+        } else {
+            lastExecutionTime = currentTime; // Update the last execution time
+        }
+
         if (isCollecting.compareAndSet(false, true)) {
             DumbService.getInstance(project).runWhenSmart(() -> {
-                if (project.isDisposed() || NoAccessDuringPsiEvents.isInsideEventProcessing()) {
+                if (project.isDisposed()){// || NoAccessDuringPsiEvents.isInsideEventProcessing()) {
+                    isCollecting.set(false);
+                    System.out.println("collectControllerUrls: project is disposed: " + project.isDisposed() + ", NoAccessDuringPsiEvents: " + NoAccessDuringPsiEvents.isInsideEventProcessing());
                     return;
                 }
 
@@ -176,7 +231,7 @@ public final class ControllerUrlService {
                 };
                 ProgressIndicator indicator = new BackgroundableProcessIndicator(task);
                 indicator.setIndeterminate(false);
-                System.out.println("collectControllerUrls: Current thread:" + Thread.currentThread().getName());
+                System.out.println("collectControllerUrls: Current scope:" + scope);
 
                 ProgressManager.getInstance().runProcessWithProgressAsynchronously(task, indicator);
             });
@@ -223,9 +278,10 @@ public final class ControllerUrlService {
                         String fullUrl = classUrl + methodUrl;
                         fullUrl = fullUrl.startsWith("/") ? fullUrl : "/" + fullUrl;
                         methodUrls.add(fullUrl);
-                        if (!scope.equals(GlobalSearchScope.projectScope(project))){
+                        if (!(scope.equals(GlobalSearchScope.allScope(project)) || scope.equals(GlobalSearchScope.projectScope(project)))){
                             List<PsiMethod> methodForUrl = getMethodForUrl(fullUrl);
                             tempUrlMethodCache.put(fullUrl, methodForUrl);
+                            System.out.println("collectControllerUrls: methodForUrl: " + methodForUrl + ", fullUrl: " + fullUrl);
                         }
                         List<PsiMethod> psiMethods = tempUrlMethodCache.computeIfAbsent(fullUrl, k -> new ArrayList<>());
                         if (!psiMethods.contains(method)){
@@ -239,14 +295,16 @@ public final class ControllerUrlService {
         }
 
         synchronized (this) {
-            if (scope.equals(GlobalSearchScope.projectScope(project))){
+            if (scope.equals(GlobalSearchScope.allScope(project)) || scope.equals(GlobalSearchScope.projectScope(project))){
                 // project scope: 收集所有
+                System.out.println("collectControllerUrls: project scope: " + scope);
                 controllerUrlsCache.clear();
                 controllerUrlsCache.putAll(tempControllerUrlsCache);
                 urlMethodCache.clear();
                 urlMethodCache.putAll(tempUrlMethodCache);
             } else {
                 // file scope
+                System.out.println("collectControllerUrls: file scope: " + scope);
                 controllerUrlsCache.putAll(tempControllerUrlsCache);
                 urlMethodCache.putAll(tempUrlMethodCache);
             }
@@ -267,8 +325,14 @@ public final class ControllerUrlService {
 
     }
 
-    public synchronized List<PsiMethod> getMethodForUrl(String url) {
-        return urlMethodCache.get(url);
+    public @NotNull List<PsiMethod> getMethodForUrl(String url) {
+//        synchronized (this) {
+        if (urlMethodCache.containsKey(url)) {
+//            System.out.println("getMethodForUrl: " + url + ", total urls: " + urlMethodCache.size() + ", current methods: " + urlMethodCache.get(url));
+            return urlMethodCache.get(url);
+            }
+//        }
+        return Collections.emptyList();
     }
 
     public synchronized Map<PsiClass, Set<String>> getAllControllerUrls() {
@@ -278,8 +342,8 @@ public final class ControllerUrlService {
     public CompletableFuture<List<PsiClass>> findClassesWithAnnotationUsingIndex(Project project, String annotationName, GlobalSearchScope scope) {
         CompletableFuture<List<PsiClass>> future = new CompletableFuture<>();
 
-        ApplicationManager.getApplication().invokeLater(() -> {
-            ApplicationManager.getApplication().assertReadAccessAllowed();
+//        ApplicationManager.getApplication().invokeLater(() -> {
+//            ApplicationManager.getApplication().assertReadAccessAllowed();
             ApplicationManager.getApplication().runReadAction(() -> {
                 try {
                     List<PsiClass> result = new ArrayList<>();
@@ -296,7 +360,7 @@ public final class ControllerUrlService {
                     future.completeExceptionally(e);
                 }
             });
-        });
+//        });
 
         return future;
     }

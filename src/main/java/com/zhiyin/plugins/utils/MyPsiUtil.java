@@ -16,6 +16,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -252,5 +253,26 @@ public class MyPsiUtil {
         }
 
         return null;
+    }
+
+    public static boolean isAnnotatedWithFeignClient(PsiClass psiClass) {
+        return hasAnnotation(psiClass, "org.springframework.cloud.openfeign.FeignClient");
+    }
+
+    public static boolean isAnnotatedWithRestController(PsiClass psiClass) {
+        return hasAnnotation(psiClass, "org.springframework.web.bind.annotation.RestController");
+    }
+
+    public static boolean isAnnotatedWithController(PsiClass psiClass) {
+        return hasAnnotation(psiClass, "org.springframework.stereotype.Controller");
+    }
+
+    public static boolean hasAnnotation(PsiClass psiClass, String annotationQualifiedName) {
+        for (PsiAnnotation annotation : psiClass.getAnnotations()) {
+            if (Objects.equals(annotation.getQualifiedName(), annotationQualifiedName)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

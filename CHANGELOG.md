@@ -6,6 +6,25 @@
 
 ## [Unreleased]
 
+## [1.0.17] - 2024-08-12
+
+### Added
+
+- [x] 支持Feign客户端URL到RestController的一键跳转
+- [x] 支持RestController URL到调用它的Feign客户端的反向查找跳转
+- [x] 支持Html中的URL到Controller的一键跳转
+- [x] 支持Layout中的URL到Controller的一键跳转
+- [x] 资源串默认带出的 key 去除项目名
+- [x] xml中选中文本一键转换为CDATA块
+
+## [1.0.16] - 2024-08-12
+
+### Added
+
+- [x] xml中选中文本一键转换为CDATA块
+- [x] 资源串默认带出的 key 去除项目名
+- [x] 支持Feign客户端URL到RestController的一键跳转
+
 ## [1.0.15] - 2024-07-25
 
 ### Added

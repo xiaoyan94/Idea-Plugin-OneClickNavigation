@@ -16,6 +16,7 @@ import com.intellij.openapi.fileEditor.FileEditorManagerListener;
 import com.intellij.openapi.fileEditor.ex.FileEditorWithProvider;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.openapi.vfs.VirtualFileManager;
 import com.zhiyin.plugins.notification.MyPluginMessages;
 import com.zhiyin.plugins.resources.Constants;
 import com.zhiyin.plugins.service.ControllerUrlService;
@@ -87,13 +88,14 @@ public class MyFileEditorManagerListener implements FileEditorManagerListener {
         FileEditorManagerListener.super.selectionChanged(event);
         collapseFoldRegion(event.getManager());
 
-        Project project = event.getManager().getProject();
-        ControllerUrlService controllerUrlService = project.getService(ControllerUrlService.class);
-        VirtualFile oldFile = event.getOldFile();
-        if (event.getOldFile() != null && event.getNewFile() != null) {
-//            MyPluginMessages.showInfo("selectionChanged", oldFile.getName() + " -> " + event.getNewFile().getName(), project);
-            controllerUrlService.recollectControllerUrls(oldFile);
-        }
+        ApplicationManager.getApplication().executeOnPooledThread(() ->{
+            Project project = event.getManager().getProject();
+            VirtualFile oldFile = event.getOldFile();
+            if (event.getOldFile() != null && event.getOldFile().isValid() && "java".equalsIgnoreCase(event.getOldFile().getFileType().getName())) {
+                ControllerUrlService controllerUrlService = project.getService(ControllerUrlService.class);
+                controllerUrlService.recollectControllerUrls(oldFile);
+            }
+        });
 
     }
 

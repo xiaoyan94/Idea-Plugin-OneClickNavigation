@@ -1,17 +1,9 @@
 
 <plugins>
-    <plugin id="com.zhiyin.plugins.OneClickNavigation" url="https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.15.zip" version="1.0.15">
+    <plugin id="com.zhiyin.plugins.OneClickNavigation" url="https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.17.zip" version="1.0.17">
         <change-notes>&lt;h3&gt;Added&lt;/h3&gt;&#13;
 &#13;
-&lt;ul&gt;&lt;li&gt;增强已存在中文资源串的复用体验，添加了代码自动完成提示 (输中文再按&lt;code&gt;Ctrl&lt;/code&gt;+&lt;code&gt;空格&lt;/code&gt;) 和一键输入（Java、JS、Xml、Html）；&lt;/li&gt;&lt;li&gt;添加了一些代码实时模板，提升相关代码输入效率：&lt;ul&gt;&lt;li&gt;Java: &lt;code&gt;i18n&lt;/code&gt;, &lt;code&gt;i18np&lt;/code&gt;, &lt;code&gt;gi&lt;/code&gt;, &lt;code&gt;gs&lt;/code&gt;, &lt;code&gt;gd&lt;/code&gt;, &lt;code&gt;dict&lt;/code&gt;&lt;/li&gt;&lt;li&gt;MyBatis Xml: &lt;code&gt;se&lt;/code&gt;, &lt;code&gt;up&lt;/code&gt;, &lt;code&gt;wh&lt;/code&gt;, &lt;code&gt;if&lt;/code&gt;, &lt;code&gt;for&lt;/code&gt;, &lt;code&gt;date_format&lt;/code&gt;&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;&lt;li&gt;添加 @SysLogger 注解被错误地使用在查询类方法上时的提示和一键修复&lt;/li&gt;&lt;li&gt;添加 StringUtils.objToString 方法的不建议使用提示和一键修复&lt;/li&gt;&lt;/ul&gt;&#13;
-&#13;
-&lt;h3&gt;Improved&lt;/h3&gt;&#13;
-&#13;
-&lt;ul&gt;&lt;li&gt;优化代码跳转使用体验，点击图标前记住行偏移量，使用返回按钮或者&lt;code&gt;Ctrl Alt ←&lt;/code&gt;时可以回到上次跳转所在行位置；&lt;/li&gt;&lt;/ul&gt;&#13;
-&#13;
-&lt;h3&gt;Alpha&lt;/h3&gt;&#13;
-&#13;
-&lt;ul&gt;&lt;li&gt;代码生成器 (Alpha 测试)&lt;/li&gt;&lt;/ul&gt;&#13;
+&lt;ul&gt;&lt;li class="task-list-item"&gt;&lt;input type="checkbox" class="task-list-item-checkbox" checked disabled /&gt;支持Feign客户端URL到RestController的一键跳转&lt;/li&gt;&lt;li class="task-list-item"&gt;&lt;input type="checkbox" class="task-list-item-checkbox" checked disabled /&gt;支持RestController URL到调用它的Feign客户端的反向查找跳转&lt;/li&gt;&lt;li class="task-list-item"&gt;&lt;input type="checkbox" class="task-list-item-checkbox" checked disabled /&gt;支持Html中的URL到Controller的一键跳转&lt;/li&gt;&lt;li class="task-list-item"&gt;&lt;input type="checkbox" class="task-list-item-checkbox" checked disabled /&gt;支持Layout中的URL到Controller的一键跳转&lt;/li&gt;&lt;li class="task-list-item"&gt;&lt;input type="checkbox" class="task-list-item-checkbox" checked disabled /&gt;资源串默认带出的 key 去除项目名&lt;/li&gt;&lt;li class="task-list-item"&gt;&lt;input type="checkbox" class="task-list-item-checkbox" checked disabled /&gt;xml中选中文本一键转换为CDATA块&lt;/li&gt;&lt;/ul&gt;&#13;
 &#13;
 &#13;
 </change-notes>

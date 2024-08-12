@@ -116,6 +116,8 @@
         <annotator language="JAVA" order="first" implementationClass="com.zhiyin.plugins.annotator.SysLoggerAnnotator"/>
         <annotator language="JAVA" order="first" implementationClass="com.zhiyin.plugins.annotator.StringUtilsAnnotator"/>
         <editorFactoryMouseListener implementation="com.zhiyin.plugins.listeners.MyEditorMouseListener"/>
+        <codeInsight.lineMarkerProvider language="JavaScript" implementationClass="com.zhiyin.plugins.provider.lineMarkers.JSUrlRelatedItemLineMarkerProvider"/>
+        <codeInsight.lineMarkerProvider language="XML" implementationClass="com.zhiyin.plugins.provider.lineMarkers.LayoutUrlRelatedItemLineMarkerProvider"/>
     </extensions>
     <actions>
         <group id="com.zhiyin.plugins.ToolsMenuGroup" text="OneClickNavigation插件" popup="true"

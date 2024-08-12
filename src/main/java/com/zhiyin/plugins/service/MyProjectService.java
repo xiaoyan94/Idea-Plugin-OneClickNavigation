@@ -188,7 +188,7 @@ public final class MyProjectService {
         }
         String key = namespace.getValue();
         if (key == null) {
-            LOG.warn("key is null, element: " + element);
+//            LOG.warn("key is null, element: " + element);
             return;
         }
         xmlFileMap.compute(key, (k, v) -> {
@@ -203,7 +203,7 @@ public final class MyProjectService {
     private void cacheMocToMap(DomFileElement<Moc> element) {
         String key = element.getRootElement().getName().getValue();
         if (key == null) {
-            LOG.warn("key is null, element: " + element);
+//            LOG.warn("key is null, element: " + element);
             return;
         }
         mocFileMap.compute(key, (k, v) -> {

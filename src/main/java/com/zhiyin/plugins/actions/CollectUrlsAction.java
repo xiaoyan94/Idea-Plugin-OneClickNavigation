@@ -19,16 +19,16 @@ public class CollectUrlsAction extends AnAction {
         Project project = e.getProject();
         if (project == null) return;
 
-//        GlobalSearchScope scope = GlobalSearchScope.fileScope(e.getRequiredData(CommonDataKeys.PSI_FILE));
-//        scope = GlobalSearchScope.allScope(project);
+        GlobalSearchScope scope;// = GlobalSearchScope.fileScope(e.getRequiredData(CommonDataKeys.PSI_FILE));
+        scope = GlobalSearchScope.allScope(project);
 //
         ControllerUrlService urlService = project.getService(ControllerUrlService.class);
-//        urlService.collectControllerUrls(scope, () -> {
+        urlService.collectControllerUrls(scope, () -> {
 //            // 在URL收集完成后执行
 ////            showCollectedUrls(project, urlService);
-//            testUrls(urlService);
-//        });
-        testUrls(urlService);
+            testUrls(urlService);
+        });
+//        testUrls(urlService);
 
     }
 
@@ -47,7 +47,7 @@ public class CollectUrlsAction extends AnAction {
 
         for (String url : testUrls) {
             navigateToUrl(url, urlService);
-            Messages.showInfoMessage("Test URL: " + url, "Test Result");
+//            Messages.showInfoMessage("Test URL: " + url, "Test Result");
         }
     }
 

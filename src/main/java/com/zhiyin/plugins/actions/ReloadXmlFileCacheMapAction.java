@@ -3,6 +3,7 @@ package com.zhiyin.plugins.actions;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.project.Project;
+import com.zhiyin.plugins.service.ControllerUrlService;
 import com.zhiyin.plugins.service.MyProjectService;
 
 public class ReloadXmlFileCacheMapAction extends AnAction {
@@ -29,6 +30,7 @@ public class ReloadXmlFileCacheMapAction extends AnAction {
 //        Map<String, Mapper> xmlFileMap = project.getService(MyProjectService.class).getXmlFileMap();
 
         project.getService(MyProjectService.class).reInitXmlFileMap();
+        project.getService(ControllerUrlService.class).initControllerUrlsCache();
 
 //        Statement statement = xmlFileMap.get("com.zhiyin.dao.order.IOrderDao").getStatements().get(0);
 //        System.out.println(statement.getId());

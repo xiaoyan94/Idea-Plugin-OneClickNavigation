@@ -64,7 +64,7 @@ public class JavaLineMarkerProvider extends RelatedItemLineMarkerProvider {
             NavigationGutterIconBuilder<PsiElement> builder;
             builder = NavigationGutterIconBuilder
                     .create(MyIcons.pandaIconSVG16_2)
-                    .setAlignment(GutterIconRenderer.Alignment.RIGHT)
+                    .setAlignment(GutterIconRenderer.Alignment.LEFT)
                     .setTargets(targets)
                     .setTooltipText(Constants.NAVIGATE_TO_MAPPER);
             RelatedItemLineMarkerInfo<PsiElement> relatedItemLineMarkerInfo = builder.createLineMarkerInfo(element);
