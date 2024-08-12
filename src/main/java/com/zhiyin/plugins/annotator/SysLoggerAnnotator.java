@@ -30,8 +30,8 @@ public class SysLoggerAnnotator implements Annotator {
             if (Objects.equals(annotation.getQualifiedName(), SYS_LOGGER_FQN)) {
                 PsiMethod method = PsiTreeUtil.getParentOfType(annotation, PsiMethod.class);
                 if (method != null && isQueryRelatedMethod(method.getName())) {
-                    holder.newAnnotation(HighlightSeverity.ERROR, "请不要在查询相关方法上使用 @SysLogger 注解")
-                            .highlightType(ProblemHighlightType.ERROR)
+                    holder.newAnnotation(HighlightSeverity.WARNING, "请不要在查询相关方法上使用 @SysLogger 注解")
+                            .highlightType(ProblemHighlightType.LIKE_UNUSED_SYMBOL)
                             .withFix(new RemoveSysLoggerFix(annotation))
 //                            .range(annotation.getTextRange())
                             .gutterIconRenderer(new MyJavaAnnotator.MyRenderer(annotation, MyIcons.pandaIcon16, "请不要在查询相关方法上使用 @SysLogger 注解"))
