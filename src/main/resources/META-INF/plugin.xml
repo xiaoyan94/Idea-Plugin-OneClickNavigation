@@ -119,6 +119,7 @@
         <codeInsight.lineMarkerProvider language="JavaScript" implementationClass="com.zhiyin.plugins.provider.lineMarkers.JSUrlRelatedItemLineMarkerProvider"/>
         <codeInsight.lineMarkerProvider language="XML" implementationClass="com.zhiyin.plugins.provider.lineMarkers.LayoutUrlRelatedItemLineMarkerProvider"/>
         <codeInsight.lineMarkerProvider language="HTML" implementationClass="com.zhiyin.plugins.provider.lineMarkers.JSLayoutRelatedItemLineMarkerProvider"/>
+        <completion.contributor language="XML" order="first" implementationClass="com.zhiyin.plugins.completion.XmlLayoutComboboxCompletionContributor"/>
     </extensions>
     <actions>
         <group id="com.zhiyin.plugins.ToolsMenuGroup" text="OneClickNavigation插件" popup="true"
@@ -204,6 +205,12 @@
         <action id="com.zhiyin.plugins.actions.CollectUrlsAction" class="com.zhiyin.plugins.actions.CollectUrlsAction"
                 text="测试收集Controller">
             <add-to-group group-id="com.zhiyin.plugins.ToolsMenuGroup" anchor="last"/>
+        </action>
+        <action id="com.zhiyin.plugins.actions.EfficientSearchXmlTagAction"
+                class="com.zhiyin.plugins.actions.EfficientSearchXmlTagAction" text="TestAction"
+                description="To Test Sth.">
+            <add-to-group group-id="com.zhiyin.plugins.ToolsMenuGroup" anchor="after"
+                          relative-to-action="com.zhiyin.plugins.actions.CollectUrlsAction"/>
         </action>
     </actions>
 
