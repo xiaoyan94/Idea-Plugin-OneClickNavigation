@@ -2,8 +2,7 @@ package com.zhiyin.plugins.completion;
 
 import com.intellij.codeInsight.completion.CompletionParameters;
 import com.intellij.codeInsight.completion.CompletionResultSet;
-import com.intellij.codeInsight.lookup.LookupElement;
-import com.intellij.codeInsight.lookup.LookupElementBuilder;
+import com.intellij.codeInsight.lookup.*;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.util.PsiTreeUtil;
@@ -27,11 +26,18 @@ public class XmlLayoutComboboxCompletionProvider extends BaseCompletionProvider 
 
         for (String value : cachedResults) {
             LookupElement lookupElement = LookupElementBuilder.create(value)
-                    .withPresentableText(value)
-                    .withIcon(MyIcons.pandaIconSVG16_2)
-//                    .withCaseSensitivity(false)
+                    .withExpensiveRenderer(new LookupElementRenderer<>(){
+
+                        @Override
+                        public void renderElement(LookupElement element, LookupElementPresentation presentation) {
+                            presentation.setIcon(MyIcons.pandaIconSVG16_2);
+                            presentation.setItemText(value);
+                        }
+                    })
 //                    .withTailText()
-                    .withLookupString(value);
+//                    .withLookupString(value)
+                    .withCaseSensitivity(false)
+                    .withAutoCompletionPolicy(AutoCompletionPolicy.NEVER_AUTOCOMPLETE);
             result.addElement(lookupElement);
         }
     }

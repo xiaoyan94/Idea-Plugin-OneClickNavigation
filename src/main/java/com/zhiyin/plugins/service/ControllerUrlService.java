@@ -182,14 +182,14 @@ public final class ControllerUrlService {
         collectControllerUrls(() -> MyPluginMessages.showInfo("OneClickNavigation", "成功加载: " + controllerUrlsCache.size() + " Controllers, " + urlMethodCache.size() + " API urls", project));
     }
 
-    public synchronized void recollectControllerUrls(VirtualFile file){
+    public void recollectControllerUrls(VirtualFile file){
         AtomicReference<GlobalSearchScope> scope0 = new AtomicReference<>();
         ApplicationManager.getApplication().runReadAction(() -> {
             scope0.set(GlobalSearchScope.fileScope(project, file));
         });
 
         GlobalSearchScope scope = scope0.get();
-        collectControllerUrls(scope, () -> MyPluginMessages.showInfo("recollectControllerUrls file", file.getName(), project));
+        collectControllerUrls(scope, () -> System.out.println("collectControllerUrls: " + file.getPath()));
 //        collectControllerUrls(() -> {});
     }
 
@@ -332,7 +332,8 @@ public final class ControllerUrlService {
             return urlMethodCache.get(url);
             }
 //        }
-        return Collections.emptyList();
+//        return Collections.synchronizedList(new ArrayList<>());
+        return new ArrayList<>();
     }
 
     public synchronized Map<PsiClass, Set<String>> getAllControllerUrls() {

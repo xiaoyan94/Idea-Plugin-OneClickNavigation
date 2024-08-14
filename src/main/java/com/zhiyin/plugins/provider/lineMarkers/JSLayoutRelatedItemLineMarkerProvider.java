@@ -3,7 +3,7 @@ package com.zhiyin.plugins.provider.lineMarkers;
 import com.intellij.codeInsight.daemon.RelatedItemLineMarkerInfo;
 import com.intellij.codeInsight.daemon.RelatedItemLineMarkerProvider;
 import com.intellij.codeInsight.navigation.NavigationGutterIconBuilder;
-import com.intellij.lang.javascript.psi.JSLiteralExpression;
+import com.intellij.lang.javascript.psi.JSVariable;
 import com.intellij.openapi.editor.markup.GutterIconRenderer;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFileManager;
@@ -21,28 +21,14 @@ public class JSLayoutRelatedItemLineMarkerProvider extends RelatedItemLineMarker
     @Override
     public void collectNavigationMarkers(@NotNull PsiElement element, @NotNull Collection<?
             super RelatedItemLineMarkerInfo<?>> result) {
-        PsiElement targetElement;
-
-        if (element instanceof LeafPsiElement) {
-            targetElement = element;
-            String elementType = ((LeafPsiElement) element).getElementType().toString();
-            if (elementType.equals("JS:STRING_LITERAL")) {
-                element = element.getParent();
+        if (element instanceof JSVariable) {
+            JSVariable variable = (JSVariable) element;
+            if ("dataGridMap".equals(variable.getName())) {
+                PsiElement firstChild = element.getFirstChild();
+                System.out.println("firstChild: " + firstChild + ", isLeaf: " + (firstChild instanceof LeafPsiElement));
+                registerControllerUrlLineMarker(element, result, "", firstChild != null ? firstChild : element);
             }
-        } else {
-            return;
         }
-
-        if (!(element instanceof JSLiteralExpression)) {
-            return;
-        }
-
-        String stringValue = ((JSLiteralExpression) element).getStringValue();
-        if (stringValue == null || !stringValue.equals("${request.getRequestUri()}")) {
-            return;
-        }
-
-        registerControllerUrlLineMarker(element, result, stringValue, targetElement);
     }
 
     /**
@@ -50,10 +36,10 @@ public class JSLayoutRelatedItemLineMarkerProvider extends RelatedItemLineMarker
      * @param element 变量
      * @param result 结果集
      * @param stringValue url
-     * @param targetElement 要注册行标记器的叶子节点
+     * @param registerElement 要注册行标记器的叶子节点
      */
     @SuppressWarnings("unused")
-    public static void registerControllerUrlLineMarker(@NotNull PsiElement element, @NotNull Collection<? super RelatedItemLineMarkerInfo<?>> result, String stringValue, @NotNull PsiElement targetElement) {
+    public static void registerControllerUrlLineMarker(@NotNull PsiElement element, @NotNull Collection<? super RelatedItemLineMarkerInfo<?>> result, String stringValue, @NotNull PsiElement registerElement) {
         // 获取element所在文件完整路径
         // WEB-INF/view/MesRoot/Produce/DutyRecord.html
         String filePath = element.getContainingFile().getVirtualFile().getPath();
@@ -82,9 +68,9 @@ public class JSLayoutRelatedItemLineMarkerProvider extends RelatedItemLineMarker
         builder = NavigationGutterIconBuilder
                 .create(MyIcons.pandaIconSVG16_2)
                 .setAlignment(GutterIconRenderer.Alignment.LEFT)
-                .setTargets(psiFile)
+                .setTarget(psiFile.getNavigationElement())
                 .setTooltipText("跳转到Layout文件");
-        RelatedItemLineMarkerInfo<PsiElement> relatedItemLineMarkerInfo = builder.createLineMarkerInfo(targetElement);
+        RelatedItemLineMarkerInfo<PsiElement> relatedItemLineMarkerInfo = builder.createLineMarkerInfo(registerElement);
         result.add(relatedItemLineMarkerInfo);
     }
 }

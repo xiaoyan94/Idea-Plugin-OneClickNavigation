@@ -73,7 +73,7 @@ public class JSUrlRelatedItemLineMarkerProvider extends RelatedItemLineMarkerPro
             if (m == null || m.getContainingClass() == null) {
                 return;
             }
-            targets.add(m);
+            targets.add(m.getNavigationElement());
         });
 
         // "/Produce/layout/getDataGridColumns" -> "/{module}/layout/getDataGridColumns"
