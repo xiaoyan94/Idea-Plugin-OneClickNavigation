@@ -193,6 +193,10 @@ tasks {
 
     }
 
+    buildSearchableOptions {
+        enabled = false
+    }
+
     generateBlockMap {
         // Depend on either signPlugin or buildPlugin, depending on which task provides the file in the uploadPlugin
         dependsOn(project.tasks.named("buildPlugin"))
