@@ -3,20 +3,25 @@ package com.zhiyin.plugins.provider.lineMarkers;
 import com.intellij.codeInsight.daemon.RelatedItemLineMarkerInfo;
 import com.intellij.codeInsight.daemon.RelatedItemLineMarkerProvider;
 import com.intellij.codeInsight.navigation.NavigationGutterIconBuilder;
+import com.intellij.openapi.application.ModalityState;
+import com.intellij.openapi.application.ReadAction;
 import com.intellij.openapi.editor.markup.GutterIconRenderer;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
+import com.intellij.util.SlowOperations;
+import com.intellij.util.concurrency.NonUrgentExecutor;
 import com.zhiyin.plugins.resources.MyIcons;
 import com.zhiyin.plugins.service.ControllerUrlService;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class FeignClientRelatedItemLineMarkerProvider extends RelatedItemLineMarkerProvider {
+
+    private final Map<PsiElement, RelatedItemLineMarkerInfo<?>> cache = new ConcurrentHashMap<>();
 
     @Override
     public void collectNavigationMarkers(@NotNull PsiElement element, @NotNull Collection<?
@@ -25,15 +30,45 @@ public class FeignClientRelatedItemLineMarkerProvider extends RelatedItemLineMar
             return;
         }
 
+        // 在计算结果之前检查缓存
+        RelatedItemLineMarkerInfo<?> cachedInfo = cache.get(element);
+        if (cachedInfo != null) {
+            result.add(cachedInfo);
+            return;
+        }
+
+        ReadAction.nonBlocking(() -> {
+                    RelatedItemLineMarkerInfo<PsiElement> info = SlowOperations.allowSlowOperations(() -> getPsiElementRelatedItemLineMarkerInfo(element));
+                    // 将结果添加到缓存
+                    if(info != null){
+                        cache.put(element, info);
+                    }
+                    return info;
+                })
+                .inSmartMode(element.getProject())
+                .finishOnUiThread(ModalityState.NON_MODAL, (relatedItemLineMarkerInfo) -> {
+                    if (relatedItemLineMarkerInfo != null) {
+                        result.add(relatedItemLineMarkerInfo);
+                    }
+                })
+                .submit(NonUrgentExecutor.getInstance());
+
+//        RelatedItemLineMarkerInfo<PsiElement> relatedItemLineMarkerInfo = getPsiElementRelatedItemLineMarkerInfo(element);
+//        if (relatedItemLineMarkerInfo == null) return;
+//        result.add(relatedItemLineMarkerInfo);
+    }
+
+    private @Nullable RelatedItemLineMarkerInfo<PsiElement> getPsiElementRelatedItemLineMarkerInfo(@NotNull PsiElement element) {
+
         PsiElement registeredLeafElement = element;
         element = element.getParent();
 
         if(!(element instanceof PsiLiteralExpression)) {
-            return;
+            return null;
         }
 
         if (!(element.getParent() instanceof PsiArrayInitializerMemberValue || element.getParent() instanceof PsiNameValuePair)) {
-            return;
+            return null;
         }
 
         PsiNameValuePair nameValuePair;
@@ -44,7 +79,7 @@ public class FeignClientRelatedItemLineMarkerProvider extends RelatedItemLineMar
         }
 
         if (nameValuePair.getName() != null && !Objects.equals(nameValuePair.getName(), "value")) {
-            return;
+            return null;
         }
 
         if (nameValuePair.getParent() instanceof PsiAnnotationParameterList && nameValuePair.getParent().getParent() instanceof PsiAnnotation){
@@ -55,14 +90,14 @@ public class FeignClientRelatedItemLineMarkerProvider extends RelatedItemLineMar
                 || "org.springframework.web.bind.annotation.DeleteMapping".equals(qualifiedName)
                 || "org.springframework.web.bind.annotation.RequestMapping".equals(qualifiedName)
             )) {
-                return;
+                return null;
             }
         }
 
         element = PsiTreeUtil.getParentOfType(element, PsiMethod.class);
 
         if (element == null) {
-            return;
+            return null;
         }
 
         Project project = element.getProject();
@@ -71,18 +106,18 @@ public class FeignClientRelatedItemLineMarkerProvider extends RelatedItemLineMar
 
         PsiAnnotation[] annotations = method.getAnnotations();
         if(annotations.length == 0){
-            return;
+            return null;
         }
 
         PsiClass containingClass = method.getContainingClass();
 
-        if (containingClass == null || !isFeignClient(containingClass)) {
-            return;
+        if (containingClass == null || !(isFeignClient(containingClass) || isRestController(containingClass))) {
+            return null;
         }
 
         List<String> urls = extractUrlsFromMethod(project, containingClass, method);
         if (urls.isEmpty()) {
-            return;
+            return null;
         }
 
         List<PsiElement> targets = new ArrayList<>();
@@ -93,15 +128,15 @@ public class FeignClientRelatedItemLineMarkerProvider extends RelatedItemLineMar
             }
 
             List<PsiMethod> methods = urlService.getMethodForUrl(url);
-            if (methods == null || methods.isEmpty()) {
-                return;
-            }
-            List<PsiMethod> toRemove = new ArrayList<>();
-            for (PsiMethod psiMethod : methods) {
-                if (psiMethod == null || psiMethod.getContainingClass() == null){
-                    toRemove.add(psiMethod);
-                }
-            }
+//            if (methods.isEmpty()) {
+//                return;
+//            }
+//            List<PsiMethod> toRemove = new ArrayList<>();
+//            for (PsiMethod psiMethod : methods) {
+//                if (psiMethod == null || psiMethod.getContainingClass() == null){
+//                    toRemove.add(psiMethod);
+//                }
+//            }
 //            toRemove.forEach(urlService::removeUrlsNullMethod);
 
             // TODO 根据设置决定可以跳转哪些
@@ -113,7 +148,12 @@ public class FeignClientRelatedItemLineMarkerProvider extends RelatedItemLineMar
 //            methods.removeIf(m -> m == null || m.getContainingClass() == null || m.getContainingClass() == containingClass);
 
             methods.forEach(m -> {
-                if (m == null || m.getContainingClass() == null || m.getContainingClass() == containingClass) {
+                if (m == null) return;
+                PsiClass mContainingClass = m.getContainingClass();
+                if (mContainingClass == null || mContainingClass == containingClass) {
+                    return;
+                }
+                if (isFeignClient(containingClass) && isFeignClient(mContainingClass)){
                     return;
                 }
                 targets.add(m);
@@ -123,7 +163,7 @@ public class FeignClientRelatedItemLineMarkerProvider extends RelatedItemLineMar
         });
 
         if (targets.isEmpty()) {
-            return;
+            return null;
         }
 
         // 创建导航图标并添加到结果集中
@@ -135,16 +175,25 @@ public class FeignClientRelatedItemLineMarkerProvider extends RelatedItemLineMar
                 .setTooltipText("Navigate to RestController")
                 .setPopupTitle("Feign Client URLs -> RestController method");
         RelatedItemLineMarkerInfo<PsiElement> relatedItemLineMarkerInfo = builder.createLineMarkerInfo(registeredLeafElement);
-        result.add(relatedItemLineMarkerInfo);
+        return relatedItemLineMarkerInfo;
     }
 
     private boolean isFeignClient(PsiClass psiClass) {
         for (PsiAnnotation annotation : psiClass.getAnnotations()) {
             String qualifiedName = annotation.getQualifiedName();
             // RestController
-            if ("org.springframework.cloud.openfeign.FeignClient".equals(qualifiedName)
-                    || "org.springframework.web.bind.annotation.RestController".equals(qualifiedName)
-            ) {
+            if ("org.springframework.cloud.openfeign.FeignClient".equals(qualifiedName)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean isRestController(PsiClass psiClass) {
+        for (PsiAnnotation annotation : psiClass.getAnnotations()) {
+            String qualifiedName = annotation.getQualifiedName();
+            // RestController
+            if ("org.springframework.web.bind.annotation.RestController".equals(qualifiedName)) {
                 return true;
             }
         }
@@ -162,12 +211,4 @@ public class FeignClientRelatedItemLineMarkerProvider extends RelatedItemLineMar
         return List.of(); // Replace with actual URL extraction logic
     }
 
-    private String constructUrl(PsiMethod method, List<String> urls) {
-        // Construct the URL based on method and URL patterns
-        return urls.stream().findFirst().orElse(""); // Simplified for example
-    }
-
-    private void callYourService(String url) {
-        // Implement URL handling, e.g., call your service or navigate
-    }
 }

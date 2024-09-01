@@ -64,7 +64,6 @@
 
         <psi.referenceContributor language="JAVA" implementation="com.zhiyin.plugins.referenceContributor.MyJavaReferenceContributor"/>
         <psi.referenceContributor language="XML" implementation="com.zhiyin.plugins.referenceContributor.MyXMLReferenceContributor"/>
-        <psi.referenceContributor language="JavaScript" implementation="com.zhiyin.plugins.referenceContributor.MyJSReferenceContributor"/>
 
         <completion.confidence language="JAVA" implementationClass="com.zhiyin.plugins.referenceContributor.MyCompletionConfidence"/>
 
@@ -78,7 +77,7 @@
         <codeInsight.lineMarkerProvider language="JAVA" implementationClass="com.zhiyin.plugins.oneClickNavigation.codeInsight.JavaLineMarkerProvider"/>
         <codeInsight.lineMarkerProvider language="JAVA" implementationClass="com.zhiyin.plugins.oneClickNavigation.codeInsight.JavaToMocLineMarkerProvider"/>
         <codeInsight.lineMarkerProvider language="XML" implementationClass="com.zhiyin.plugins.oneClickNavigation.codeInsight.MapperXmlLineMarkerProvider"/>
-        <codeInsight.lineMarkerProvider language="JAVA" implementationClass="com.zhiyin.plugins.provider.lineMarkers.FeignClientRelatedItemLineMarkerProvider"/>
+        <!--<codeInsight.lineMarkerProvider language="JAVA" implementationClass="com.zhiyin.plugins.provider.lineMarkers.FeignClientRelatedItemLineMarkerProvider"/>-->
 
         <notificationGroup displayType="BALLOON" id="ZhiyinOneClickNavigation"/>
 
@@ -114,11 +113,13 @@
         <completion.contributor language="JavaScript" order="first" implementationClass="com.zhiyin.plugins.completion.HtmlI18nCompletionContributor"/>
         <defaultLiveTemplates file="liveTemplates/I18nTemplates.xml"/>
         <annotator language="JAVA" order="first" implementationClass="com.zhiyin.plugins.annotator.SysLoggerAnnotator"/>
-        <annotator language="JAVA" order="first" implementationClass="com.zhiyin.plugins.annotator.StringUtilsAnnotator"/>
+<!--        <annotator language="JAVA" order="first" implementationClass="com.zhiyin.plugins.annotator.StringUtilsAnnotator"/>-->
         <editorFactoryMouseListener implementation="com.zhiyin.plugins.listeners.MyEditorMouseListener"/>
-        <codeInsight.lineMarkerProvider language="JavaScript" implementationClass="com.zhiyin.plugins.provider.lineMarkers.JSUrlRelatedItemLineMarkerProvider"/>
+        <!--TODO：改为Action -->
+<!--        <codeInsight.lineMarkerProvider language="JavaScript" implementationClass="com.zhiyin.plugins.provider.lineMarkers.JSUrlRelatedItemLineMarkerProvider"/>-->
         <codeInsight.lineMarkerProvider language="XML" implementationClass="com.zhiyin.plugins.provider.lineMarkers.LayoutUrlRelatedItemLineMarkerProvider"/>
-        <codeInsight.lineMarkerProvider language="HTML" implementationClass="com.zhiyin.plugins.provider.lineMarkers.JSLayoutRelatedItemLineMarkerProvider"/>
+        <!--TODO：改为Action：GoToLayout-->
+<!--        <codeInsight.lineMarkerProvider language="HTML" implementationClass="com.zhiyin.plugins.provider.lineMarkers.JSLayoutRelatedItemLineMarkerProvider"/>-->
         <completion.contributor language="XML" order="first" implementationClass="com.zhiyin.plugins.completion.XmlLayoutComboboxCompletionContributor"/>
     </extensions>
     <actions>
@@ -171,6 +172,13 @@
                     text="打开class文件"
                     icon="com.zhiyin.plugins.resources.MyIcons.pandaIconSVG16_2"
                     description="Opens the corresponding .class file for the current Java file">
+            </action>
+
+            <action id="com.zhiyin.plugins.actions.GoToLayoutXmlAction"
+                    class="com.zhiyin.plugins.actions.GoToLayoutXmlAction"
+                    text="打开Layout文件"
+                    icon="com.zhiyin.plugins.resources.MyIcons.pandaIconSVG16_2"
+                    description="Guess layout file">
             </action>
 
             <action id="com.zhiyin.plugins.actions.InsertFreeMarkerI18nDirectiveAction"

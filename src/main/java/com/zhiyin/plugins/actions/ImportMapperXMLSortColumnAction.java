@@ -68,7 +68,7 @@ public class ImportMapperXMLSortColumnAction extends AnAction {
         super.update(e);
         // 获取当前PsiElement
         PsiFile psiFile = e.getData(CommonDataKeys.PSI_FILE);
-        e.getPresentation().setEnabled(MyPsiUtil.isImpMapperXML(psiFile));
+        e.getPresentation().setEnabledAndVisible(MyPsiUtil.isImpMapperXML(psiFile));
     }
 
     // @AvailableSince(value = "222.3345.118")

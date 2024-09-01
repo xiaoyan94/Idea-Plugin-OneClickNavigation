@@ -88,14 +88,14 @@ public class MyFileEditorManagerListener implements FileEditorManagerListener {
         FileEditorManagerListener.super.selectionChanged(event);
         collapseFoldRegion(event.getManager());
 
-        ApplicationManager.getApplication().executeOnPooledThread(() ->{
+        /*ApplicationManager.getApplication().executeOnPooledThread(() ->{
             Project project = event.getManager().getProject();
             VirtualFile oldFile = event.getOldFile();
             if (event.getOldFile() != null && event.getOldFile().isValid() && "java".equalsIgnoreCase(event.getOldFile().getFileType().getName())) {
                 ControllerUrlService controllerUrlService = project.getService(ControllerUrlService.class);
                 controllerUrlService.recollectControllerUrls(oldFile);
             }
-        });
+        });*/
 
     }
 

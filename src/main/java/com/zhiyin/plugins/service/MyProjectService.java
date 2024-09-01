@@ -149,7 +149,7 @@ public final class MyProjectService {
         }
         if (processedFiles.get() == totalFiles) {
             String content = String.format("成功加载%d条Mapper, %d条Moc", xmlFileMap.size(), mocFileMap.size());
-            MyPluginMessages.showInfo("OneClickNavigation", content);
+            MyPluginMessages.showInfo("OneClickNavigation", content, project);
         }
 //        });
 

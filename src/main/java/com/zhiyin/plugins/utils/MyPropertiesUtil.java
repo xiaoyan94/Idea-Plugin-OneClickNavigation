@@ -7,6 +7,7 @@ import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.fileTypes.FileTypeManager;
 import com.intellij.openapi.module.Module;
+import com.intellij.openapi.project.DumbService;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.encoding.EncodingManager;
@@ -14,6 +15,7 @@ import com.intellij.psi.PsiManager;
 import com.intellij.psi.search.FileTypeIndex;
 import com.intellij.psi.search.FilenameIndex;
 import com.intellij.psi.search.GlobalSearchScope;
+import com.intellij.util.SlowOperations;
 import com.intellij.util.containers.ContainerUtil;
 import com.zhiyin.plugins.resources.Constants;
 import org.jetbrains.annotations.NotNull;
@@ -267,19 +269,23 @@ public class MyPropertiesUtil {
         }
 
         String moduleName = getSimpleModuleName(module);
-        List<VirtualFile> virtualFiles = new ArrayList<>(FilenameIndex.getVirtualFilesByName(moduleName + Constants.I18N_ZH_CN_SUFFIX,
-                GlobalSearchScope.moduleScope(module)));
 
-        List<IProperty> allProperties = getProperties(project, virtualFiles);
-        Optional<Property> foundProperty = allProperties.stream()
-                .filter(iProperty -> iProperty instanceof Property && comparePropertyValue(value, iProperty))
-                .map(iProperty -> (Property) iProperty)
-                .findFirst();
-        foundProperty.ifPresent((property) -> {
-            List<Property> properties = MyPropertiesUtil.findModuleI18nProperties(project, module, property.getKey());
-            if (properties != null && !properties.isEmpty()) {
-                result.addAll(properties);
-            }
+        SlowOperations.allowSlowOperations(() -> {
+            DumbService.getInstance(project).runReadActionInSmartMode(() -> {
+                List<VirtualFile> virtualFiles = new ArrayList<>(FilenameIndex.getVirtualFilesByName(moduleName + Constants.I18N_ZH_CN_SUFFIX,
+                        GlobalSearchScope.moduleScope(module)));
+                List<IProperty> allProperties = getProperties(project, virtualFiles);
+                Optional<Property> foundProperty = allProperties.stream()
+                        .filter(iProperty -> iProperty instanceof Property && comparePropertyValue(value, iProperty))
+                        .map(iProperty -> (Property) iProperty)
+                        .findFirst();
+                foundProperty.ifPresent((property) -> {
+                    List<Property> properties = MyPropertiesUtil.findModuleI18nProperties(project, module, property.getKey());
+                    if (properties != null && !properties.isEmpty()) {
+                        result.addAll(properties);
+                    }
+                });
+            });
         });
 
         return result;
@@ -299,19 +305,23 @@ public class MyPropertiesUtil {
         }
 
         String moduleName = getSimpleModuleName(module);
-        List<VirtualFile> virtualFiles = new ArrayList<>(FilenameIndex.getVirtualFilesByName(moduleName + Constants.I18N_WEB_ZH_CN,
-                GlobalSearchScope.moduleScope(module)));
 
-        List<IProperty> allProperties = getProperties(project, virtualFiles);
-        Optional<Property> foundProperty = allProperties.stream()
-                .filter(iProperty -> iProperty instanceof Property && comparePropertyValue(value, iProperty))
-                .map(iProperty -> (Property) iProperty)
-                .findFirst();
-        foundProperty.ifPresent((property) -> {
-            List<Property> properties = MyPropertiesUtil.findModuleWebI18nProperties(project, module, property.getKey());
-            if (properties != null && !properties.isEmpty()) {
-                result.addAll(properties);
-            }
+        SlowOperations.allowSlowOperations(() -> {
+            DumbService.getInstance(project).runReadActionInSmartMode(() -> {
+                List<VirtualFile> virtualFiles = new ArrayList<>(FilenameIndex.getVirtualFilesByName(moduleName + Constants.I18N_WEB_ZH_CN,
+                        GlobalSearchScope.moduleScope(module)));
+                List<IProperty> allProperties = getProperties(project, virtualFiles);
+                Optional<Property> foundProperty = allProperties.stream()
+                        .filter(iProperty -> iProperty instanceof Property && comparePropertyValue(value, iProperty))
+                        .map(iProperty -> (Property) iProperty)
+                        .findFirst();
+                foundProperty.ifPresent((property) -> {
+                    List<Property> properties = MyPropertiesUtil.findModuleWebI18nProperties(project, module, property.getKey());
+                    if (properties != null && !properties.isEmpty()) {
+                        result.addAll(properties);
+                    }
+                });
+            });
         });
 
         return result;
@@ -331,19 +341,23 @@ public class MyPropertiesUtil {
         }
 
         String moduleName = getSimpleModuleName(module);
-        List<VirtualFile> virtualFiles = new ArrayList<>(FilenameIndex.getVirtualFilesByName(moduleName + Constants.I18N_DATAGRID_ZH_CN_SUFFIX,
-                GlobalSearchScope.moduleScope(module)));
 
-        List<IProperty> allProperties = getProperties(project, virtualFiles);
-        Optional<Property> foundProperty = allProperties.stream()
-                .filter(iProperty -> iProperty instanceof Property && comparePropertyValue(value, iProperty))
-                .map(iProperty -> (Property) iProperty)
-                .findFirst();
-        foundProperty.ifPresent((property) -> {
-            List<Property> properties = MyPropertiesUtil.findModuleDataGridI18nProperties(project, module, property.getKey());
-            if (!properties.isEmpty()) {
-                result.addAll(properties);
-            }
+        SlowOperations.allowSlowOperations(() -> {
+            DumbService.getInstance(project).runReadActionInSmartMode(() -> {
+                List<VirtualFile> virtualFiles = new ArrayList<>(FilenameIndex.getVirtualFilesByName(moduleName + Constants.I18N_DATAGRID_ZH_CN_SUFFIX,
+                        GlobalSearchScope.moduleScope(module)));
+                List<IProperty> allProperties = getProperties(project, virtualFiles);
+                Optional<Property> foundProperty = allProperties.stream()
+                        .filter(iProperty -> iProperty instanceof Property && comparePropertyValue(value, iProperty))
+                        .map(iProperty -> (Property) iProperty)
+                        .findFirst();
+                foundProperty.ifPresent((property) -> {
+                    List<Property> properties = MyPropertiesUtil.findModuleDataGridI18nProperties(project, module, property.getKey());
+                    if (!properties.isEmpty()) {
+                        result.addAll(properties);
+                    }
+                });
+            });
         });
 
         return result;
@@ -363,11 +377,13 @@ public class MyPropertiesUtil {
         }
 
         String moduleName = getSimpleModuleName(module);
-        List<VirtualFile> virtualFiles = new ArrayList<>(FilenameIndex.getVirtualFilesByName(moduleName + Constants.I18N_DATAGRID_ZH_CN_SUFFIX,
-                GlobalSearchScope.moduleScope(module)));
-
-        List<IProperty> allProperties = getProperties(project, virtualFiles);
-        return getKeysFromProperties(value, allProperties, result);
+        return SlowOperations.allowSlowOperations(() -> {
+            List<VirtualFile> virtualFiles = new ArrayList<>(FilenameIndex.getVirtualFilesByName(moduleName + Constants.I18N_DATAGRID_ZH_CN_SUFFIX,
+                    GlobalSearchScope.moduleScope(module)));
+            List<IProperty> allProperties = getProperties(project, virtualFiles);
+            return getKeysFromProperties(value, allProperties, result);
+        });
+//        return getKeysFromProperties(value, allProperties, result);
     }
 
     private static String @NotNull [] getKeysFromProperties(String value, List<IProperty> allProperties, List<String> result) {

@@ -28,4 +28,7 @@ data class TranslateSettingsState (
      * 翻译资源串弹窗设置：当资源串中包含翻译原文时，是否直接执行替换
      */
     var doOKActionWhenI18nKeyExists: Boolean = false,
+
+    var enableFeignToRestController: Boolean = false,
+    var enableHtmlUrlToController: Boolean = false,
 )

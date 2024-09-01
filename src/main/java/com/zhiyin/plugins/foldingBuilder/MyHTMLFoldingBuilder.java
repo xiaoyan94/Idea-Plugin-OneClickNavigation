@@ -178,7 +178,7 @@ public class MyHTMLFoldingBuilder extends FoldingBuilderEx {
                 String keyValue = MyPsiUtil.retrieveI18nKeyFromFreemarkerDirective(element);
                 if (keyValue != null) {
                     String propertyValue = MyPropertiesUtil.findModuleWebI18nPropertyValue(project, module, keyValue);
-                    LOG.info("Freemarker FtlStringLiteral child: key:" + keyValue + ", propertyValue :" + propertyValue);
+//                    LOG.info("Freemarker FtlStringLiteral child: key:" + keyValue + ", propertyValue :" + propertyValue);
 
                     if (propertyValue != null) {
                         FoldingDescriptor foldingDescriptor = new FoldingDescriptor(element, element.getTextOffset(),

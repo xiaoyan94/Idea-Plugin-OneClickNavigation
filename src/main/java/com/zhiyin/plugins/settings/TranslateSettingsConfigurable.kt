@@ -17,6 +17,25 @@ class TranslateSettingsConfigurable :
      */
     override fun createPanel(): DialogPanel {
         return panel {
+            group("功能设置") {
+                row {
+                    checkBox("Feign接口跳转RestController")
+                        .bindSelected(
+                            { settings.state.enableFeignToRestController},
+                            { settings.state.enableFeignToRestController = it})
+
+                    contextHelp("若担心影响性能，则可取消勾选。修改后需重启项目生效。", "开启Feign接口和RestController的互相跳转")
+                }
+
+                row {
+                    checkBox("HTML/JS: URL跳转Controller")
+                        .bindSelected(
+                            { settings.state.enableHtmlUrlToController},
+                            { settings.state.enableHtmlUrlToController = it})
+
+                    contextHelp("若担心影响性能，则可取消勾选。修改后需重启项目生效。", "添加URL到Controller的跳转图标")
+                }
+            }
             group("资源串翻译设置") {
                 row {
                     checkBox("无需确认直接复用Key")

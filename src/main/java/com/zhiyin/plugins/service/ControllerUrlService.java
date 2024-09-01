@@ -6,9 +6,7 @@ import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.progress.Task;
 import com.intellij.openapi.progress.impl.BackgroundableProcessIndicator;
-import com.intellij.openapi.project.DumbService;
-import com.intellij.openapi.project.NoAccessDuringPsiEvents;
-import com.intellij.openapi.project.Project;
+import com.intellij.openapi.project.*;
 import com.intellij.openapi.vfs.*;
 import com.intellij.openapi.vfs.newvfs.BulkFileListener;
 import com.intellij.openapi.vfs.newvfs.events.VFileCreateEvent;
@@ -22,10 +20,13 @@ import com.intellij.psi.impl.java.stubs.index.JavaAnnotationIndex;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.PsiUtil;
 import com.zhiyin.plugins.notification.MyPluginMessages;
+import com.zhiyin.plugins.settings.TranslateSettingsComponent;
+import com.zhiyin.plugins.settings.TranslateSettingsState;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
@@ -46,8 +47,8 @@ public final class ControllerUrlService {
             "org.springframework.web.bind.annotation.DeleteMapping"
     };
 
-    private final Map<PsiClass, Set<String>> controllerUrlsCache = new HashMap<>();
-    private final Map<String, List<PsiMethod>> urlMethodCache = new HashMap<>();
+    private final Map<PsiClass, Set<String>> controllerUrlsCache = new ConcurrentHashMap<>();
+    private final Map<String, List<PsiMethod>> urlMethodCache = new ConcurrentHashMap<>();
     /**
      * rest controller url (feign client url) -> rest controller method
      */
@@ -57,12 +58,16 @@ public final class ControllerUrlService {
 
     public ControllerUrlService(Project project) {
         this.project = project;
-        initControllerUrlsCache();
 
-        registerPsiTreeChangeListener(project);
+        TranslateSettingsState state = TranslateSettingsComponent.Companion.getInstance().getState();
+        if (state.getEnableFeignToRestController() || state.getEnableHtmlUrlToController()) {
+            initControllerUrlsCache();
+        }
+
+//        registerPsiTreeChangeListener(project);
 
         // 添加文件系统监听器
-        registerVFSChangeListener(project);
+//        registerVFSChangeListener(project);
     }
 
     private void registerVFSChangeListener(Project project) {
@@ -141,6 +146,8 @@ public final class ControllerUrlService {
                             PsiTreeChangeEventImpl impl = (PsiTreeChangeEventImpl) event;
                             PsiElement element = impl.getParent();
 
+                            DumbService.getInstance(project).runWhenSmart(() -> {
+                                        ApplicationManager.getApplication().runReadAction(() -> {
                             // Check if the element is a PsiClass or PsiMethod
                             if (element instanceof PsiClass || element instanceof PsiMethod) {
                                 PsiClass psiClass = element instanceof PsiClass ? (PsiClass) element : ((PsiMethod) element).getContainingClass();
@@ -156,6 +163,8 @@ public final class ControllerUrlService {
                             } else {
                                 // TODO 删除方法在撤销导致消失问题
                             }
+                                        });
+                            });
                         }
                     }
 
@@ -220,7 +229,18 @@ public final class ControllerUrlService {
                     public void run(@NotNull ProgressIndicator indicator) {
                         try {
                             indicator.setIndeterminate(false);
-                            collectControllerUrls(scope, indicator);
+                            System.out.println("collectControllerUrls: isDumb: " + DumbService.isDumb(project));
+//                            while (true) {
+//                                if (!DumbService.isDumb(project)) {
+//                                    System.out.println("collectControllerUrls: isDumb: " + DumbService.isDumb(project));
+                                    collectControllerUrls(scope, indicator);
+//                                    break;
+//                                }
+//                                if (indicator.isCanceled()) {
+//                                    MyPluginMessages.showInfo("OneClickNavigation", "已取消加载: " + controllerUrlsCache.size() + " Controllers, " + urlMethodCache.size() + " API urls", project);
+//                                    break;
+//                                }
+//                            }
                         } finally {
                             isCollecting.set(false);
                             if (onComplete != null) {
@@ -262,8 +282,9 @@ public final class ControllerUrlService {
 
             indicator.setFraction((double) i / totalControllers);
 
-            ApplicationManager.getApplication().runReadAction(() -> {
-                ApplicationManager.getApplication().assertReadAccessAllowed();
+//            ApplicationManager.getApplication().runReadAction(() -> {
+            DumbService.getInstance(project).runReadActionInSmartMode(() -> {
+//                ApplicationManager.getApplication().assertReadAccessAllowed();
 
                 indicator.setText("Processing controller: " + controller.getName());
 
@@ -273,7 +294,17 @@ public final class ControllerUrlService {
 
                 PsiMethod[] methods = controller.getMethods();
                 for (PsiMethod method : methods) {
-                    String methodUrl = getMappingUrl(method);
+                    String methodUrl;
+//                    while(true){
+//                        if(!DumbService.isDumb(project)){
+                            methodUrl = getMappingUrl(method);
+//                            break;
+//                        }
+//                        System.out.println("collectControllerUrls: isDumb: " + DumbService.isDumb(project));
+//                        if(indicator.isCanceled()){
+//                            return;
+//                        }
+//                    }
                     if (methodUrl != null && !methodUrl.isEmpty()) {
                         String fullUrl = classUrl + methodUrl;
                         fullUrl = fullUrl.startsWith("/") ? fullUrl : "/" + fullUrl;
@@ -281,7 +312,7 @@ public final class ControllerUrlService {
                         if (!(scope.equals(GlobalSearchScope.allScope(project)) || scope.equals(GlobalSearchScope.projectScope(project)))){
                             List<PsiMethod> methodForUrl = getMethodForUrl(fullUrl);
                             tempUrlMethodCache.put(fullUrl, methodForUrl);
-                            System.out.println("collectControllerUrls: methodForUrl: " + methodForUrl + ", fullUrl: " + fullUrl);
+//                            System.out.println("collectControllerUrls: methodForUrl: " + methodForUrl + ", fullUrl: " + fullUrl);
                         }
                         List<PsiMethod> psiMethods = tempUrlMethodCache.computeIfAbsent(fullUrl, k -> new ArrayList<>());
                         if (!psiMethods.contains(method)){
@@ -312,11 +343,11 @@ public final class ControllerUrlService {
         }
     }
 
-    public synchronized Set<String> getUrlsForController(PsiClass controller) {
+    public Set<String> getUrlsForController(PsiClass controller) {
         return new HashSet<>(controllerUrlsCache.getOrDefault(controller, Collections.emptySet()));
     }
 
-    public synchronized void removeUrlsNullMethod(PsiMethod method) {
+    public void removeUrlsNullMethod(PsiMethod method) {
 //        MyPluginMessages.showInfo("removeUrlsNullMethod", "remove method: " + method);
         urlMethodCache.forEach((key, psiMethods) -> {
             // Define your condition
@@ -336,7 +367,7 @@ public final class ControllerUrlService {
         return new ArrayList<>();
     }
 
-    public synchronized Map<PsiClass, Set<String>> getAllControllerUrls() {
+    public Map<PsiClass, Set<String>> getAllControllerUrls() {
         return new HashMap<>(controllerUrlsCache);
     }
 
@@ -435,6 +466,12 @@ public final class ControllerUrlService {
             return ((PsiMethod) element).getAnnotation(annotationFQN);
         }
         return null;
+    }
+
+    public void clearCache(){
+        urlMethodCache.clear();
+        controllerUrlsCache.clear();
+        System.out.println("ControllerUrlService clear cache");
     }
 
 }

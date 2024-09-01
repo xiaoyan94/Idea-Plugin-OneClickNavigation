@@ -111,7 +111,7 @@ public class InsertFreeMarkerI18nDirectiveAction extends AnAction {
             isAvailable = isAvailable || "ftl".equalsIgnoreCase(virtualFile.getExtension());
             isAvailable = isAvailable || "jsp".equalsIgnoreCase(virtualFile.getExtension());
         }
-        e.getPresentation().setEnabled(isAvailable);
+        e.getPresentation().setEnabledAndVisible(isAvailable);
     }
 
     private static @NotNull MyTranslateDialogWrapper createMyTranslateDialogWrapper(@NotNull Project project, Module module, String text) {
