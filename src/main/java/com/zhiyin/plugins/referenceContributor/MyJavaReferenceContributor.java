@@ -32,6 +32,9 @@ public class MyJavaReferenceContributor extends PsiReferenceContributor {
                     return new PsiReference[0];
                 }
                 PsiReferenceExpression methodExpression = psiMethodCallExpression.getMethodExpression();
+                if (Constants.BIZ_COMMON_SERVICE_METHODS.contains(methodExpression.getCanonicalText())) {
+                    return new PsiReference[]{new MyMocReference(literalExpression, true)};
+                }
                 if (!methodExpression.getCanonicalText().endsWith(Constants.QUERY_DAO_METHOD_EXPRESSION)) {
                     return new PsiReference[0];
                 }

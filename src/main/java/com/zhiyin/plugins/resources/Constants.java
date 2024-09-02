@@ -1,5 +1,8 @@
 package com.zhiyin.plugins.resources;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * 
  */
@@ -15,6 +18,25 @@ public class Constants {
     public static final String I18N_METHOD_EXPRESSION_GET_SYS_I18N_RESOURCE = "getSysI18nResource";
     public static final String I18N_METHOD_EXPRESSION_GET_MESSAGE_BY_FACTORY = "I18nUtil.getMessageByFactory";
     public static final String QUERY_DAO_METHOD_EXPRESSION = "queryDaoDataT";
+
+    public static final List<String> BIZ_COMMON_SERVICE_METHODS = Arrays.asList(
+            "bizCommonService.queryMocDaoData",
+            "bizCommonService.queryMocDaoRawData",
+            "bizCommonService.insertMocData",
+            "bizCommonService.insertMocDataAndExtend",
+            "bizCommonService.insertMocExtendData",
+            "bizCommonService.updateMocData",
+            "bizCommonService.updateMocDataAndExtend",
+            "bizCommonService.findMocById",
+            "bizCommonService.findMocExtendById",
+            "bizCommonService.findMocDataById",
+            "bizCommonService.findMocDataAndExtendById",
+            "bizCommonService.deleteSoftMocData",
+            "bizCommonService.deleteMocData",
+            "bizCommonService.deleteMocDataAndExtend",
+            "bizCommonService.queryMocDaoRawDataAndExtend",
+            "bizCommonService.queryMocDaoDataAndExtend"
+    );
 
     public static final String FOLDING_GROUP = "i18n_key";
     public static final String I18N_KEY_PREFIX = "com.zhiyin.";
