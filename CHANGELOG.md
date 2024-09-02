@@ -6,6 +6,22 @@
 
 ## [Unreleased]
 
+## [1.0.20] - 2024-09-02
+
+### Added
+
+- [x] 实现对Moc名称引用的解析与代码补全;
+
+### Improved
+
+- [x] 使用体验优化，增加功能启用开关；
+
+## [1.0.19] - 2024-08-14
+
+### Improved
+
+- 使用体验优化
+
 ## [1.0.18] - 2024-08-13
 
 ### Added
@@ -179,6 +195,8 @@
 - 支持JavaScript代码中折叠显示I18n中文资源串;
 
 [Unreleased]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-Unreleased.zip
+[1.0.20]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.20.zip
+[1.0.19]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.19.zip
 [1.0.18]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.18.zip
 [1.0.17]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.17.zip
 [1.0.16]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.16.zip
