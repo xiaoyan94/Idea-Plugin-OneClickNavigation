@@ -1,5 +1,6 @@
 package com.zhiyin.plugins.intention;
 
+import com.intellij.codeInsight.intention.HighPriorityAction;
 import com.intellij.codeInsight.intention.PsiElementBaseIntentionAction;
 import com.intellij.codeInspection.util.IntentionFamilyName;
 import com.intellij.codeInspection.util.IntentionName;
@@ -27,7 +28,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public class JavaScriptI18nTranslateIntentionAction extends PsiElementBaseIntentionAction {
+public class JavaScriptI18nTranslateIntentionAction extends PsiElementBaseIntentionAction implements HighPriorityAction {
     /**
      * Invokes intention action for the element under caret.
      *

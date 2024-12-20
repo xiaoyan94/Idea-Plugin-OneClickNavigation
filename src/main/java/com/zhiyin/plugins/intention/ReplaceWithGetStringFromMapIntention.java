@@ -1,5 +1,6 @@
 package com.zhiyin.plugins.intention;
 
+import com.intellij.codeInsight.intention.HighPriorityAction;
 import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
@@ -9,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * 替换 StringUtils.objToString 为 StringUtils.getStringFromMap
  */
-public class ReplaceWithGetStringFromMapIntention implements IntentionAction {
+public class ReplaceWithGetStringFromMapIntention implements IntentionAction, HighPriorityAction {
 
     @SafeFieldForPreview
     private final SmartPsiElementPointer<PsiMethodCallExpression> methodCallPointer;

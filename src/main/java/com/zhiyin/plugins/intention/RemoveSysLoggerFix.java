@@ -1,5 +1,6 @@
 package com.zhiyin.plugins.intention;
 
+import com.intellij.codeInsight.intention.HighPriorityAction;
 import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
@@ -11,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * 移除 @SysLogger 注解
  */
-public class RemoveSysLoggerFix implements IntentionAction {
+public class RemoveSysLoggerFix implements IntentionAction, HighPriorityAction {
 
     @SafeFieldForPreview
     private final PsiElement element;

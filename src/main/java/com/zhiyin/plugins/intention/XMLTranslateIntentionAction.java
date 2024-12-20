@@ -1,5 +1,6 @@
 package com.zhiyin.plugins.intention;
 
+import com.intellij.codeInsight.intention.HighPriorityAction;
 import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.codeInsight.intention.PsiElementBaseIntentionAction;
 import com.intellij.codeInspection.util.IntentionFamilyName;
@@ -27,7 +28,7 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-public class XMLTranslateIntentionAction extends PsiElementBaseIntentionAction implements IntentionAction {
+public class XMLTranslateIntentionAction extends PsiElementBaseIntentionAction implements IntentionAction, HighPriorityAction {
     private final Logger logger = Logger.getInstance(XMLTranslateIntentionAction.class);
 
 

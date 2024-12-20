@@ -1,5 +1,6 @@
 package com.zhiyin.plugins.intention;
 
+import com.intellij.codeInsight.intention.HighPriorityAction;
 import com.intellij.codeInsight.intention.PsiElementBaseIntentionAction;
 import com.intellij.codeInspection.util.IntentionFamilyName;
 import com.intellij.codeInspection.util.IntentionName;
@@ -18,7 +19,7 @@ import com.zhiyin.plugins.utils.MyPropertiesUtil;
 import com.zhiyin.plugins.utils.MyPsiUtil;
 import org.jetbrains.annotations.NotNull;
 
-public class FreemarkerI18nTranslateIntentionAction extends PsiElementBaseIntentionAction {
+public class FreemarkerI18nTranslateIntentionAction extends PsiElementBaseIntentionAction implements HighPriorityAction {
     @Override
     public @IntentionName @NotNull String getText() {
         return this.getFamilyName();

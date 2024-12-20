@@ -6,6 +6,12 @@
 
 ## [Unreleased]
 
+## [1.0.22] - 2024-12-20
+
+### Improved
+
+- [x] 提升IntentionAction优先级
+
 ## [1.0.21] - 2024-12-20
 
 ### Improved
@@ -202,6 +208,7 @@
 - 支持JavaScript代码中折叠显示I18n中文资源串;
 
 [Unreleased]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-Unreleased.zip
+[1.0.22]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.22.zip
 [1.0.21]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.21.zip
 [1.0.20]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.20.zip
 [1.0.19]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.19.zip

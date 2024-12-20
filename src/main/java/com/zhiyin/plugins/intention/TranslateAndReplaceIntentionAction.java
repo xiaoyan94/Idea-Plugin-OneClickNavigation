@@ -1,5 +1,6 @@
 package com.zhiyin.plugins.intention;
 
+import com.intellij.codeInsight.intention.HighPriorityAction;
 import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.codeInsight.intention.PsiElementBaseIntentionAction;
 import com.intellij.codeInspection.util.IntentionFamilyName;
@@ -22,7 +23,7 @@ import com.zhiyin.plugins.utils.MyPsiUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class TranslateAndReplaceIntentionAction extends PsiElementBaseIntentionAction implements IntentionAction {
+public class TranslateAndReplaceIntentionAction extends PsiElementBaseIntentionAction implements IntentionAction, HighPriorityAction {
 
     private final Logger logger = Logger.getInstance(TranslateAndReplaceIntentionAction.class);
 
