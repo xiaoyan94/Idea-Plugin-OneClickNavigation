@@ -13,6 +13,8 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.encoding.EncodingManager;
 import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.util.PsiTreeUtil;
+import com.intellij.psi.xml.XmlAttribute;
 import com.intellij.psi.xml.XmlTag;
 import com.intellij.util.IncorrectOperationException;
 import com.zhiyin.plugins.resources.Constants;
@@ -46,7 +48,11 @@ public class XMLTranslateIntentionAction extends PsiElementBaseIntentionAction i
 
         if (parentXmlTag != null && "Title".equals(parentXmlTag.getName())) {
             ApplicationManager.getApplication().invokeLater(() -> {
-                String sourceText = parentXmlTag.getAttributeValue("value");
+                XmlAttribute xmlAttrEl = (XmlAttribute) PsiTreeUtil.getParentOfType(element, XmlAttribute.class);
+                String sourceText = null;
+                if (xmlAttrEl != null && xmlAttrEl.getName().equals("value")) {
+                    sourceText = parentXmlTag.getAttributeValue("value");
+                }
                 if (sourceText == null) {
                     sourceText = parentXmlTag.getAttributeValue("chs");
                 }
