@@ -72,7 +72,7 @@ public class MyJavaScriptBlockAnnotator implements Annotator {
                     } else{
                         holder.newAnnotation(HighlightSeverity.WEAK_WARNING, Constants.INVALID_I18N_KEY)
                                 .highlightType(ProblemHighlightType.LIKE_UNKNOWN_SYMBOL)
-                                .gutterIconRenderer(new MyJavaAnnotator.MyRenderer(element, MyIcons.pandaIcon16, Constants.INVALID_I18N_KEY))
+//                                .gutterIconRenderer(new MyJavaAnnotator.MyRenderer(element, MyIcons.pandaIcon16, Constants.INVALID_I18N_KEY))
                                 .tooltip(Constants.INVALID_I18N_KEY).needsUpdateOnTyping(true)
                                 .withFix(new JavaScriptI18nTranslateIntentionAction())
                                 .create();

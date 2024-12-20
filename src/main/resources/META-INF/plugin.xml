@@ -56,9 +56,9 @@
 
         <annotator language="XML" implementationClass="com.zhiyin.plugins.annotator.MyLayoutXMLAnnotator"/>
 
-        <annotator language="HTML" implementationClass="com.zhiyin.plugins.annotator.MyHTMLAnnotator"/>
+<!--        <annotator language="HTML" implementationClass="com.zhiyin.plugins.annotator.MyHTMLAnnotator"/>-->
 
-        <annotator language="JavaScript" implementationClass="com.zhiyin.plugins.annotator.MyJavaScriptBlockAnnotator"/>
+<!--        <annotator language="JavaScript" implementationClass="com.zhiyin.plugins.annotator.MyJavaScriptBlockAnnotator"/>-->
 
 <!--        <annotator language="HTML" implementationClass="com.zhiyin.plugins.annotator.MyFreemarkerHTMLAnnotator"/>-->
 

@@ -25,7 +25,7 @@ public class HtmlI18nCompletionProvider extends BaseCompletionProvider {
         PsiFile originalFile = parameters.getOriginalFile();
         Module module = MyPsiUtil.getModuleByPsiElement(originalFile);
         List<IProperty> properties = MyPropertiesUtil.getModuleI18nPropertiesCN(originalFile.getProject(), module);
-        properties.stream().filter(Objects::nonNull).filter(property -> property.getKey() != null && property.getValue() != null && property.getValue().startsWith(prefix)).forEach(property -> {
+        properties.stream().filter(Objects::nonNull).filter(property -> property.getKey() != null && property.getValue() != null && property.getValue().contains(prefix)).forEach(property -> {
             String key = property.getKey();
             String value = property.getValue();
             String unescapedValue = property.getUnescapedValue();

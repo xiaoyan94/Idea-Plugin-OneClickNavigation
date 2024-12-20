@@ -6,6 +6,13 @@
 
 ## [Unreleased]
 
+## [1.0.21] - 2024-12-20
+
+### Improved
+
+- [x] fix:优化资源串翻译插件在layout中的使用体验
+  - 优化了 XML 文件中 Title标签下 value 属性的获取逻辑
+
 ## [1.0.20] - 2024-09-02
 
 ### Added
@@ -195,6 +202,7 @@
 - 支持JavaScript代码中折叠显示I18n中文资源串;
 
 [Unreleased]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-Unreleased.zip
+[1.0.21]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.21.zip
 [1.0.20]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.20.zip
 [1.0.19]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.19.zip
 [1.0.18]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.18.zip

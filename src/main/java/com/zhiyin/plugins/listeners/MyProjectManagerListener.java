@@ -3,6 +3,8 @@ package com.zhiyin.plugins.listeners;
 import com.intellij.codeInsight.daemon.LineMarkerProvider;
 import com.intellij.codeInsight.daemon.LineMarkerProviders;
 import com.intellij.lang.Language;
+import com.intellij.lang.LanguageAnnotators;
+import com.intellij.lang.html.HTMLLanguage;
 import com.intellij.openapi.actionSystem.ActionManager;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.extensions.PluginId;
@@ -11,6 +13,8 @@ import com.intellij.openapi.project.NoAccessDuringPsiEvents;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ProjectManagerListener;
 import com.zhiyin.plugins.actions.GoToLayoutXmlAction;
+import com.zhiyin.plugins.annotator.MyHTMLAnnotator;
+import com.zhiyin.plugins.annotator.MyJavaScriptBlockAnnotator;
 import com.zhiyin.plugins.provider.lineMarkers.FeignClientRelatedItemLineMarkerProvider;
 import com.zhiyin.plugins.provider.lineMarkers.JSUrlRelatedItemLineMarkerProvider;
 import com.zhiyin.plugins.service.ControllerUrlService;
@@ -124,6 +128,16 @@ public class MyProjectManagerListener implements ProjectManagerListener {
                     lineMarkerProviders.add(jsUrlRelatedItemLineMarkerProvider);
                     System.out.println("JSUrlRelatedItemLineMarkerProvider registered for language: " + javascript.getDisplayName());
                 }
+            }
+        }
+
+        if (state.getEnableHtmlAnnotator()){
+            LOG.info("enableHtmlAnnotator");
+            // Registering the Annotator TODO 取消注册
+            LanguageAnnotators.INSTANCE.addExplicitExtension(HTMLLanguage.INSTANCE, new MyHTMLAnnotator());
+            Language javascript = Language.findLanguageByID("JavaScript");
+            if (javascript != null) {
+                LanguageAnnotators.INSTANCE.addExplicitExtension(javascript, new MyJavaScriptBlockAnnotator());
             }
         }
     }

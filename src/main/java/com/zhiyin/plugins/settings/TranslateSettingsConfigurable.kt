@@ -35,6 +35,15 @@ class TranslateSettingsConfigurable :
 
                     contextHelp("若担心影响性能，则可取消勾选。修改后需重启项目生效。", "添加URL到Controller的跳转图标")
                 }
+
+                row {
+                    checkBox("HTML/JS: i18n key值检查")
+                        .bindSelected(
+                            { settings.state.enableHtmlAnnotator},
+                            { settings.state.enableHtmlAnnotator = it})
+
+                    contextHelp("若担心影响性能，则可取消勾选。修改后需重启项目生效。", "Html 添加i18n Annotator")
+                }
             }
             group("资源串翻译设置") {
                 row {

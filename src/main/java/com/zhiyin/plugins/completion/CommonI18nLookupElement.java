@@ -9,6 +9,7 @@ import com.intellij.lang.Language;
 import com.intellij.lang.html.HTMLLanguage;
 import com.intellij.lang.java.JavaLanguage;
 import com.intellij.lang.javascript.JavascriptLanguage;
+import com.intellij.lang.javascript.psi.JSCallExpression;
 import com.intellij.lang.xml.XMLLanguage;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
@@ -17,6 +18,7 @@ import com.intellij.psi.impl.source.tree.LeafPsiElement;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.xml.XmlTag;
 import com.zhiyin.plugins.resources.MyIcons;
+import com.zhiyin.plugins.utils.MyPsiUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -63,9 +65,20 @@ public class CommonI18nLookupElement extends LookupElement {
             if (element instanceof LeafPsiElement) {
                 String elementType = ((LeafPsiElement) element).getElementType().toString();
                 if (elementType.equals("JS:STRING_LITERAL")) {
-                    newValue = String.format("<@message key=\"%s\"/>", key);
+                    // TODO js 方法套方法会取最外层方法！！
+                    PsiElement jsCallExpression = PsiTreeUtil.getParentOfType(element, JSCallExpression.class);
+                    if (jsCallExpression != null && jsCallExpression.getText().startsWith("zhiyin.i18n.translate")){
+                        newValue = key;
+                    } else {
+                        newValue = String.format("<@message key=\"%s\"/>", key);
+                    }
                 } else if (elementType.equals("JS:IDENTIFIER")) {
-                    newValue = String.format("zhiyin.i18n.translate(\"%s\")", key);
+                    PsiElement jsCallExpression = PsiTreeUtil.getParentOfType(element, JSCallExpression.class);
+                    if (jsCallExpression != null && jsCallExpression.getText().startsWith("zhiyin.i18n.translate")){
+                        newValue = key;
+                    } else {
+                        newValue = String.format("zhiyin.i18n.translate(\"%s\")", key);
+                    }
                 }
             }
             context.getDocument().replaceString(context.getStartOffset(), context.getTailOffset(), newValue);

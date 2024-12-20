@@ -31,4 +31,5 @@ data class TranslateSettingsState (
 
     var enableFeignToRestController: Boolean = false,
     var enableHtmlUrlToController: Boolean = false,
+    var enableHtmlAnnotator: Boolean = false
 )

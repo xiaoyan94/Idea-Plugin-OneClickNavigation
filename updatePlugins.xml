@@ -1,13 +1,9 @@
 
 <plugins>
-    <plugin id="com.zhiyin.plugins.OneClickNavigation" url="https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.20.zip" version="1.0.20">
-        <change-notes>&lt;h3&gt;Added&lt;/h3&gt;&#13;
+    <plugin id="com.zhiyin.plugins.OneClickNavigation" url="https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.21.zip" version="1.0.21">
+        <change-notes>&lt;h3&gt;Improved&lt;/h3&gt;&#13;
 &#13;
-&lt;ul&gt;&lt;li class="task-list-item"&gt;&lt;input type="checkbox" class="task-list-item-checkbox" checked disabled /&gt;实现对Moc名称引用的解析与代码补全;&lt;/li&gt;&lt;/ul&gt;&#13;
-&#13;
-&lt;h3&gt;Improved&lt;/h3&gt;&#13;
-&#13;
-&lt;ul&gt;&lt;li class="task-list-item"&gt;&lt;input type="checkbox" class="task-list-item-checkbox" checked disabled /&gt;使用体验优化，增加功能启用开关；&lt;/li&gt;&lt;/ul&gt;&#13;
+&lt;ul&gt;&lt;li class="task-list-item"&gt;&lt;input type="checkbox" class="task-list-item-checkbox" checked disabled /&gt;fix:优化资源串翻译插件在layout中的使用体验&lt;ul&gt;&lt;li&gt;优化了 XML 文件中 Title标签下 value 属性的获取逻辑&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;&lt;/ul&gt;&#13;
 &#13;
 &#13;
 </change-notes>
