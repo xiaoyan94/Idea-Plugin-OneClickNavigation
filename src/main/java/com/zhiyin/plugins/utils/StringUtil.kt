@@ -56,5 +56,11 @@ class StringUtil {
             }
         }
 
+        @JvmStatic
+        fun firstLetterToLowerCase(str: String): String {
+            return str.replaceFirstChar {
+                if (it.isUpperCase()) it.lowercase() else it.toString()
+            }
+        }
     }
 }

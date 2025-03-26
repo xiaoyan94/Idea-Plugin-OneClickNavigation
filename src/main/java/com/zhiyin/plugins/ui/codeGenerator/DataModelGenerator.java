@@ -3,9 +3,12 @@ package com.zhiyin.plugins.ui.codeGenerator;
 //import com.intellij.ui.table.JBTable;
 
 import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.components.Service;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.ui.InputValidatorEx;
 import com.intellij.openapi.ui.Messages;
+import com.intellij.openapi.util.NlsContexts;
 import com.intellij.ui.Gray;
 import com.intellij.ui.JBColor;
 import com.intellij.ui.components.JBLabel;
@@ -15,7 +18,9 @@ import com.zhiyin.plugins.resources.MyIcons;
 import com.zhiyin.plugins.service.CodeGenerateService;
 import com.zhiyin.plugins.utils.*;
 import org.apache.commons.lang.StringUtils;
+import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -28,6 +33,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+//@Service(Service.Level.PROJECT)
 public class DataModelGenerator {
     private final JFrame frame;
     private final JTable table;
@@ -40,6 +46,7 @@ public class DataModelGenerator {
     private final ButtonGroup pageTypeButtonGroup;
 
     private String tableName;
+    private String sql;
     private JCheckBox mocCheckBox;
     private JCheckBox layoutCheckBox;
     private JCheckBox htmlCheckBox;
@@ -47,11 +54,13 @@ public class DataModelGenerator {
     private JCheckBox serviceCheckBox;
     private JCheckBox daoCheckBox;
     private JCheckBox myBatisMapperCheckBox;
+    private JRadioButton dataMaintenanceRadioButton;
+    private JRadioButton dataQueryRadioButton;
 
     public DataModelGenerator(Project project, Module module) {
         this.project = project;
         this.module = module;
-        frame = new JFrame("页面代码生成工具");
+        frame = new JFrame("Module: " + module.getName() + " - " + project.getName() + " - DataModelGenerator");
         frame.setIconImage(MyIcons.appIcon.getImage());
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setSize(1200, 600);
@@ -59,13 +68,15 @@ public class DataModelGenerator {
 
         JButton queryButton = new JButton("从数据库读取表字段");
         queryButton.addActionListener(e -> fetchFieldsFromDatabase());
+        queryButton.setEnabled(false);
 
         JButton parseCreateSQLButton = new JButton("从建表DDL解析字段");
         parseCreateSQLButton.addActionListener(e -> fetchFieldsFromTableSQL());
+        parseCreateSQLButton.setEnabled(false);
 
         // TODO
         JButton parseSelectSQLButton = new JButton("从查询SQL解析字段");
-        parseSelectSQLButton.addActionListener(e -> fetchFieldsFromTableSQL());
+        parseSelectSQLButton.addActionListener(e -> fetchFieldsFromQuerySQL());
 
         // TODO
         COLUMNS_NAME = new String[]{"name", "type", "length", "comment", "isColumnField", "isQueryField", "isDialogField", "isRequired", "isEditHidden", "easyuiClass"};
@@ -159,12 +170,14 @@ public class DataModelGenerator {
         // 添加多选框，可选择 Moc、Layout、Service、Controller、Service、Dao、MyBatisMapper
 
         // 创建一组单选框，表示“页面功能类型”，两个的单选框可选择 数据维护、记录查询
-        JRadioButton dataMaintenanceRadioButton = new JRadioButton("数据维护");
-        JRadioButton dataQueryRadioButton = new JRadioButton("记录查询");
+        dataMaintenanceRadioButton = new JRadioButton("数据维护");
+        dataQueryRadioButton = new JRadioButton("记录查询");
         pageTypeButtonGroup = new ButtonGroup();
         pageTypeButtonGroup.add(dataMaintenanceRadioButton);
         pageTypeButtonGroup.add(dataQueryRadioButton);
-        dataMaintenanceRadioButton.setSelected(true);
+        dataMaintenanceRadioButton.setEnabled(false);
+        dataMaintenanceRadioButton.setSelected(false);
+        dataQueryRadioButton.setSelected(true);
         JPanel pageTypePanel = new JPanel();
         pageTypePanel.setLayout(new BoxLayout(pageTypePanel, BoxLayout.Y_AXIS));
         pageTypePanel.add(dataMaintenanceRadioButton);
@@ -191,13 +204,13 @@ public class DataModelGenerator {
         checkBoxPanel.setLayout(new BoxLayout(checkBoxPanel, BoxLayout.X_AXIS));
         JLabel checkBoxLabel = new JLabel("文件类型：");
         checkBoxPanel.add(checkBoxLabel);
-        mocCheckBox = new JCheckBox("Moc", true);
+        mocCheckBox = new JCheckBox("Moc", false);
         layoutCheckBox = new JCheckBox("Layout", true);
         htmlCheckBox = new JCheckBox("Html", true);
-        controllerCheckBox = new JCheckBox("Controller", false);
-        serviceCheckBox = new JCheckBox("Service", false);
-        daoCheckBox = new JCheckBox("Dao", false);
-        myBatisMapperCheckBox = new JCheckBox("MyBatisMapper", false);
+        controllerCheckBox = new JCheckBox("Controller", true);
+        serviceCheckBox = new JCheckBox("Service", true);
+        daoCheckBox = new JCheckBox("Dao", true);
+        myBatisMapperCheckBox = new JCheckBox("MyBatisMapper", true);
 
         checkBoxPanel.add(mocCheckBox);
         checkBoxPanel.add(layoutCheckBox);
@@ -268,6 +281,39 @@ public class DataModelGenerator {
                 updateTableModel();
             } else {
                 MyPluginMessages.showError("操作失败", "请输入有效的 SQL 语句（暂只支持解析MySQL DDL）。", project);
+            }
+        });
+    }
+
+    private void fetchFieldsFromQuerySQL() {
+        ApplicationManager.getApplication().invokeLater(() -> {
+            // IDEA 插件开发 获取弹窗输入的SQL语句
+            String input = Messages.showInputDialog(
+                    project,
+                    "Enter your create table DQL sql:",
+                    "从DQL提取字段信息",
+                    Messages.getQuestionIcon(),
+                    "select a.code, a.name from sys_user a",
+                    new InputValidatorEx() {
+                        @Override
+                        public @NlsContexts.DetailedDescription @Nullable String getErrorText(@NonNls String inputString) {
+                            if (StringUtils.isBlank(inputString) || !inputString.toLowerCase().contains("select")) {
+                                return "请输入有效的 SQL 语句";
+                            }
+                            return null;
+                        }
+                    }
+            );
+            // 从SQL语句中提取表信息
+            if (input != null && !input.isEmpty()) {
+                this.tableName = "UNNECESSARY";
+                this.sql = input;
+                List<Map<String, Object>> fieldsFromSQL = TableParser.parseDQL(input);
+                fields.clear();
+                fields.addAll(fieldsFromSQL);
+                updateTableModel();
+            } else {
+                MyPluginMessages.showError("操作失败", "请输入有效的 SQL 语句", project);
             }
         });
     }
@@ -390,7 +436,7 @@ public class DataModelGenerator {
             return;
         }
 
-        if (! this.fields.isEmpty() && StringUtils.isBlank(this.tableName)){
+        if (dataMaintenanceRadioButton.isSelected() && !this.fields.isEmpty() && StringUtils.isBlank(this.tableName)){
             this.tableName = Messages.showInputDialog(
                     project,
                     "请输入表名：",
@@ -408,16 +454,52 @@ public class DataModelGenerator {
         String folder = StringUtil.capitalize(moduleName);
         String modelName = Messages.showInputDialog(
                 project,
-                "请输入mocName：",
+                "请输入GridName（不用以Grid结尾）：",
                 "代码生成",
-                Messages.getQuestionIcon()
+                Messages.getQuestionIcon(),
+                "",
+                new InputValidatorEx() {
+                    @Override
+                    public @NlsContexts.DetailedDescription @Nullable String getErrorText(@NonNls String inputString) {
+                        if (inputString.contains(" ")) {
+                            return "GridName不能包含空格";
+                        }
+                        if (inputString.length() > 64) {
+                            return "GridName不能超过64个字符";
+                        }
+                        return StringUtils.isBlank(inputString) ? "GridName不能为空" : null;
+                    }
+                }
+        );
+        String fileName = Messages.showInputDialog(
+                project,
+                "请输入页面名称：",
+                "代码生成",
+                Messages.getQuestionIcon(),
+                modelName,
+                new InputValidatorEx() {
+                    @Override
+                    public @NlsContexts.DetailedDescription @Nullable String getErrorText(@NonNls String inputString) {
+                        if (inputString.contains(" ")) {
+                            return "不能包含空格";
+                        }
+                        if (inputString.length() > 64) {
+                            return "不能超过64个字符";
+                        }
+                        return StringUtils.isBlank(inputString) ? "页面名称不能为空" : null;
+                    }
+                }
         );
 //        service.generateModelByFields(this.module, folder, modelName, this.tableName, this.fields);
-        if(mocCheckBox.isSelected()){
+        /*if(mocCheckBox.isSelected()){
             service.generateMocFile(this.module, folder, modelName, this.tableName, this.fields);
         }
         if(layoutCheckBox.isSelected()){
             service.generateLayoutFile(this.module, folder, modelName, this.tableName, this.fields);
+        }*/
+
+        if (dataQueryRadioButton.isSelected()) {
+            service.generateBaseQueryTypeFile(this.module, folder, modelName, fileName, this.sql, this.fields);
         }
 
         // 关闭窗口

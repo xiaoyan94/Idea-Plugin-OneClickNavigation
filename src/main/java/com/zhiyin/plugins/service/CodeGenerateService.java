@@ -20,6 +20,7 @@ import com.zhiyin.plugins.utils.StringUtil;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -67,9 +68,9 @@ public final class CodeGenerateService {
             List<Property> properties = MyPropertiesUtil.findModuleDataGridI18nPropertiesByValue(project, module, field.get("comment").toString());
             if (!properties.isEmpty()) {
                 field.put("i18nKey", properties.get(0).getKey());
-                field.put("chs", properties.get(0).getValue());
+                field.put("chs", StringUtil.unicodeToString(properties.get(0).getValue()));
                 if (properties.size() > 2) {
-                    field.put("cht", properties.get(1).getValue());
+                    field.put("cht", StringUtil.unicodeToString(properties.get(1).getValue()));
                     field.put("eng", properties.get(2).getValue());
                 }
             }
@@ -259,6 +260,124 @@ public final class CodeGenerateService {
                 outputSourceContentRootPath = "src/main/resources/META-INF/resources/WEB-INF/etc/business/layout/" + folder;
             }
             generateXmlFile(project, module, dmLayout, "layout.ftl", outputSourceContentRootPath, dmLayout.get("layoutName") + ".xml");
+        } catch (Exception ex) {
+            Messages.showErrorDialog("无法生成件，异常： " + ex.getMessage(), "操作失败");
+        }
+    }
+
+    public void generateBaseQueryTypeFile(Module module, String folder, String modelName, String fileName, String sql, List<Map<String, Object>> fields) {
+        if (project == null) {
+            Messages.showErrorDialog("Project is not available", "Error");
+            return;
+        }
+
+        if (module == null) {
+            Messages.showErrorDialog("Module is not available", "Error");
+            return;
+        }
+
+        if (folder == null || folder.isEmpty() || "web".equalsIgnoreCase(folder)) {
+            String moduleName = MyPropertiesUtil.getSimpleModuleName(module);
+            if (ProjectTypeChecker.isTraditionalJavaWebProject(project, module)) {
+                if ("web".equals(moduleName)) {
+                    moduleName = "Basic";
+                }
+            }
+            folder = StringUtil.capitalize(moduleName);
+        }
+
+        Map<String, Object> dmLayout = new HashMap<>();
+        dmLayout.put("layoutName", modelName);
+        Map<String, Object> dataGrid1 = new HashMap<>();
+        dataGrid1.put("dataGridName", modelName);
+        dataGrid1.put("ObjectName", modelName);
+        // dataGrid1.put("objectName", modelName.replaceFirst(modelName.substring(0, 1), modelName.substring(0, 1).toLowerCase()));
+        dataGrid1.put("objectName", StringUtil.firstLetterToLowerCase(modelName));
+        dataGrid1.put("fileName", fileName);
+        dataGrid1.put("sql", sql.replace(" from ", " \nfrom ").replace(" where", " \nwhere "));
+        dataGrid1.put("ckDummyColumn", "true");
+        List<Map<String, Object>> columns = new ArrayList<>(fields);
+        columns.forEach(field -> {
+            field.put("chs", field.get("comment"));
+            List<Property> properties = MyPropertiesUtil.findModuleDataGridI18nPropertiesByValue(project, module, field.get("comment").toString());
+            if (!properties.isEmpty()) {
+                field.put("i18nKey", properties.get(0).getKey());
+                field.put("chs", properties.get(0).getValue());
+                if (properties.size() > 2) {
+                    field.put("cht", properties.get(1).getValue());
+                    field.put("eng", properties.get(2).getValue());
+                }
+            }
+        });
+        dataGrid1.put("columns", columns);
+        List<Map<String, Object>> queryFields = new ArrayList<>(fields);
+        queryFields.forEach(field -> field.put("ref", field.get("name")));
+        queryFields.forEach(field -> {
+            if ((field.get("isQueryField") instanceof Boolean)) {
+                field.put("isQueryField", String.valueOf(field.get("isQueryField")));
+                // field.put("isQueryField", "true");
+            }
+        });
+        dataGrid1.put("queryFields", queryFields);
+
+        /*List<Map<String, Object>> dialogFields = new ArrayList<>(fields);
+        int colEachRow = 2;
+        int currentRow = 2;
+        int i = 0;
+        List<String> ignoreFields = List.of("id", "factoryid", "factoryname", "maintainer", "maintaintime");
+        List<String> removeFields = List.of("factoryname", "maintainer", "maintaintime");
+        removeFields.forEach(field -> {
+            dialogFields.removeIf(f -> String.valueOf(f.get("name")).equals(field));
+            queryFields.removeIf(f -> String.valueOf(f.get("name")).equals(field));
+        });
+        dialogFields.forEach(field -> {
+            if ((field.get("isRequired") instanceof Boolean)) {
+                field.put("required", String.valueOf(field.get("isRequired")));
+            }
+            field.put("editable", "true");
+        });
+        for (Map<String, Object> field : dialogFields) {
+            if (!ignoreFields.contains(String.valueOf(field.get("name")))){
+                i++;
+                int curCol = i % colEachRow;
+                if (curCol != 0) {
+                    field.put("layout", currentRow + ":" + curCol);
+                } else {
+                    field.put("layout", currentRow + ":" + colEachRow);
+                    currentRow++;
+                }
+            }
+            field.put("easyuiClass", "easyui-textbox");
+            field.put("ref", field.get("name"));
+        }
+        dataGrid1.put("dialogFields", dialogFields);*/
+        String moduleName = MyPropertiesUtil.getSimpleModuleName(module);
+        dmLayout.put("moduleName", StringUtil.capitalize(moduleName));
+        dmLayout.put("dataGrids", List.of(dataGrid1));
+
+        // Generate the XML file
+        try {
+            String outputSourceContentRootPath = "src/main/webapp/WEB-INF/etc/business/layout/" + folder;
+            String outputSourceContentHtmlPath = "src/main/webapp/WEB-INF/view/MesRoot/" + folder;
+            String folderLowerCase = folder.toLowerCase();
+            String outputSourceContentControllerPath = "src/main/java/com/zhiyin/controller/mes/" + folderLowerCase + "/";
+            if ("basic".equals(folderLowerCase)) {
+                outputSourceContentControllerPath = "src/main/java/com/zhiyin/controller/" + folderLowerCase + "/";
+            }
+            String outputSourceContentServicePath = "src/main/java/com/zhiyin/service/" + folderLowerCase + "/";
+            String outputSourceContentDaoPath = "src/main/java/com/zhiyin/dao/" + folderLowerCase + "/";
+            String outputSourceContentMapperPath = "src/main/java/com/zhiyin/maps/" + folderLowerCase + "/";
+
+            if (ProjectTypeChecker.isTraditionalJavaWebProject(project, module)){
+                outputSourceContentRootPath = "src/main/resources/META-INF/resources/WEB-INF/etc/business/layout/" + folder;
+            }
+            Object outputFileName = dmLayout.get("layoutName");
+            generateXmlFile(project, module, dmLayout, "BaseQueryTypeLayout.ftl", outputSourceContentRootPath, outputFileName + ".xml");
+            generateXmlFile(project, module, dmLayout, "BaseQueryTypeHtml.ftl", outputSourceContentHtmlPath, outputFileName + ".html");
+            generateXmlFile(project, module, dmLayout, "BaseQueryTypeController.ftl", outputSourceContentControllerPath, outputFileName + "Controller.java");
+            generateXmlFile(project, module, dmLayout, "BaseQueryTypeService.ftl", outputSourceContentServicePath, outputFileName + "Service.java");
+            generateXmlFile(project, module, dmLayout, "BaseQueryTypeDao.ftl", outputSourceContentDaoPath, "I" + outputFileName + "Dao.java");
+            generateXmlFile(project, module, dmLayout, "BaseQueryTypeMapper.ftl", outputSourceContentMapperPath, outputFileName + "Mapper.xml");
         } catch (Exception ex) {
             Messages.showErrorDialog("无法生成件，异常： " + ex.getMessage(), "操作失败");
         }

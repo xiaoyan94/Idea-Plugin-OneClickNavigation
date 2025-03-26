@@ -7,6 +7,7 @@ import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Messages;
+import com.intellij.psi.search.ProjectScope;
 import com.zhiyin.plugins.ui.codeGenerator.DataModelGenerator;
 import org.jetbrains.annotations.NotNull;
 
@@ -24,6 +25,7 @@ public class DataModelGeneratorAction extends AnAction {
             return;
         }
         ApplicationManager.getApplication().invokeLater(() -> {
+            // DataModelGenerator dataModelGenerator = project.getService(DataModelGenerator.class);
             DataModelGenerator dataModelGenerator = new DataModelGenerator(project, module);
             dataModelGenerator.show();
         });

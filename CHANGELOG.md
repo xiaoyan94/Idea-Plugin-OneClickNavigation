@@ -6,6 +6,12 @@
 
 ## [Unreleased]
 
+## [1.0.23] - 2025-01-20
+
+### Added
+
+- [x] 记录查询类页面代码自动生成功能（1.0版，支持 6 种文件一键生成，减小工作量）
+
 ## [1.0.22] - 2024-12-20
 
 ### Improved
@@ -208,6 +214,7 @@
 - 支持JavaScript代码中折叠显示I18n中文资源串;
 
 [Unreleased]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-Unreleased.zip
+[1.0.23]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.23.zip
 [1.0.22]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.22.zip
 [1.0.21]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.21.zip
 [1.0.20]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.20.zip

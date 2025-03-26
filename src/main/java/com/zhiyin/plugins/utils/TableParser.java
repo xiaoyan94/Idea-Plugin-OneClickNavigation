@@ -1,5 +1,9 @@
 package com.zhiyin.plugins.utils;
 
+import com.zhiyin.plugins.translator.TranslateException;
+import com.zhiyin.plugins.translator.baidu.BaiduTranslator;
+import com.zhiyin.plugins.translator.youdao.YouDaoTranslate;
+
 import java.util.*;
 import java.util.regex.*;
 
@@ -87,6 +91,111 @@ public class TableParser {
         }
     }
 
+    /**
+     * 解析DQL
+     * @param createTableSql
+     * @return
+     */
+    public static List<Map<String, Object>> parseDQL(String sql) {
+        List<Map<String, Object>> columns = new ArrayList<>();
+
+        // 提取SELECT和FROM之间的部分
+        Pattern selectPattern = Pattern.compile("select\\s+(.+?)\\s+from",
+                Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
+        Matcher selectMatcher = selectPattern.matcher(sql);
+
+        if (!selectMatcher.find()) {
+            throw new IllegalArgumentException("Invalid SQL: Cannot find SELECT clause");
+        }
+
+        String selectClause = selectMatcher.group(1);
+
+        // 分割字段（考虑函数中的逗号）
+        List<String> fieldExpressions = splitFields(selectClause);
+
+        // YouDaoTranslate translator = new YouDaoTranslate();
+        BaiduTranslator translator = new BaiduTranslator();
+
+        for (String expr : fieldExpressions) {
+            expr = expr.trim();
+
+            // 检查是否有AS关键字（大小写不敏感）
+            Pattern asPattern = Pattern.compile("(.+?)\\s+as\\s+([\\w]+)$",
+                    Pattern.CASE_INSENSITIVE);
+            Matcher asMatcher = asPattern.matcher(expr);
+
+            String field;
+            String alias;
+
+            if (asMatcher.find()) {
+                // 有AS的情况
+                field = asMatcher.group(1).trim();
+                alias = asMatcher.group(2).trim();
+            } else {
+                // 没有AS的情况，检查是否有简单别名
+                Pattern simpleAliasPattern = Pattern.compile("(.+?)\\s+([\\w]+)$");
+                Matcher simpleAliasMatcher = simpleAliasPattern.matcher(expr);
+
+                if (simpleAliasMatcher.find()) {
+                    field = simpleAliasMatcher.group(1).trim();
+                    alias = simpleAliasMatcher.group(2).trim();
+                } else {
+                    // 没有别名，a.field --> 只保留field
+                    field = expr.replaceAll("`", "").replaceAll("^\\s*\\w+\\.", "").trim();
+                    alias = null;
+                }
+            }
+
+            Map<String, Object> columnInfo = new HashMap<>();
+            columnInfo.put("name", alias == null ? field : alias);
+            columnInfo.put("alias", alias);
+            columnInfo.put("type", "string");
+            columnInfo.put("isRequired", "true");
+            columnInfo.put("isQueryField" , "true");
+            columnInfo.put("isDialogField" , "false");
+            try {
+                // columnInfo.put("comment", translator.translate(columnInfo.get("name").toString()));
+                columnInfo.put("comment", translator.translate(columnInfo.get("name").toString(), "en", "zh"));
+            } catch (TranslateException e) {
+                columnInfo.put("comment", columnInfo.get("name"));
+                e.printStackTrace();
+            }
+            columnInfo.put("nullable", "true");
+            columnInfo.put("length", "120");
+            columns.add(columnInfo);
+        }
+
+        return columns;
+    }
+
+    private static List<String> splitFields(String selectClause) {
+        List<String> fields = new ArrayList<>();
+        StringBuilder currentField = new StringBuilder();
+        int parenthesesCount = 0;
+
+        for (char c : selectClause.toCharArray()) {
+            if (c == '(') {
+                parenthesesCount++;
+            } else if (c == ')') {
+                parenthesesCount--;
+            }
+
+            if (c == ',' && parenthesesCount == 0) {
+                fields.add(currentField.toString().trim());
+                currentField = new StringBuilder();
+            } else {
+                currentField.append(c);
+            }
+        }
+
+        // 添加最后一个字段
+        if (currentField.length() > 0) {
+            fields.add(currentField.toString().trim());
+        }
+
+        return fields;
+    }
+
     @SuppressWarnings("SpellCheckingInspection")
     public static void main(String[] args) {
         String createTableSql = "CREATE TABLE `biz_product` (\n" +
@@ -134,6 +243,22 @@ public class TableParser {
         List<Map<String, Object>> columns = parseCreateTable(createTableSql);
         for (Map<String, Object> column : columns) {
             System.out.println(column);
+        }
+
+        System.out.println("----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+
+        String sql = "select 'sotMaterialReciept' as operatetype, " +
+                "date(a.maintaintime) as date, " +
+                "substring_index(substring_index(maintainer, '(', -1), ')', 1) as warehousemanager, " +
+                "count(1) as times " +
+                "from biz_wms_material_receipt_barcode a " +
+                "where a.maintaintime > '2024-11-01 00:00:00' " +
+                "and a.maintaintime < '2024-11-01 23:59:59' " +
+                "group by 'sotMaterialReciept', date(a.maintaintime), a.maintainer";
+
+        List<Map<String, Object>> parsedDQL = parseDQL(sql);
+        for (Map<String, Object> map : parsedDQL) {
+            System.out.println(map);
         }
     }
 }
