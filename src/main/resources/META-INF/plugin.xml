@@ -194,7 +194,7 @@
                 icon="com.zhiyin.plugins.resources.MyIcons.baiduIcon"
                 text="百度搜索" description="Baidu:百度一下">
             <add-to-group group-id="com.zhiyin.plugins.EditorPopupMenu" anchor="first"/>
-            <add-to-group group-id="ConsoleView.PopupMenu" anchor="first" relative-to-action="$SearchWeb"/>
+            <add-to-group group-id="ConsoleView.PopupMenu" anchor="first"/>
         </action>
         <action id="com.zhiyin.plugins.actions.ProjectTypeCheckAction"
                 class="com.zhiyin.plugins.actions.ProjectTypeCheckAction" text="当前项目类型"
@@ -217,9 +217,12 @@
         </action>
         <action id="com.zhiyin.plugins.actions.EfficientSearchXmlTagAction"
                 class="com.zhiyin.plugins.actions.EfficientSearchXmlTagAction" text="TestAction"
-                description="To Test Sth.">
+                description="To test sth.">
             <add-to-group group-id="com.zhiyin.plugins.ToolsMenuGroup" anchor="after"
                           relative-to-action="com.zhiyin.plugins.actions.CollectUrlsAction"/>
+        </action>
+        <action id="com.zhiyin.plugins.actions.MybatisLogSQLAction" class="com.zhiyin.plugins.actions.MybatisLogSQLAction" text="提取SQL语句" description="Sql from Mybatis log" icon="com.zhiyin.plugins.resources.MyIcons.pandaIconSVG16_2">
+            <add-to-group group-id="ConsoleView.PopupMenu" anchor="first"/>
         </action>
     </actions>
 

@@ -31,7 +31,7 @@ buildscript {
 
 plugins {
     id("java")
-    id("org.jetbrains.intellij") version "1.17.1"
+    id("org.jetbrains.intellij") version "1.17.4"
     id("org.jetbrains.kotlin.jvm") version "1.9.23"
 
     id("org.jetbrains.changelog") version "2.2.0" // Gradle Changelog Plugin
@@ -261,6 +261,8 @@ task<dev.bmac.gradle.intellij.UpdateXmlTask>("updateLocalPluginXml"){
         val start = "<!-- Plugin description -->"
         val end = "<!-- Plugin description end -->"
 
+        println("Raw README.md Content: $it") // 打印原始内容
+
         with(it.lines()) {
             if (!containsAll(listOf(start, end))) {
                 throw GradleException("Plugin description section not found in README.md:\n$start ... $end")
@@ -278,7 +280,7 @@ task<dev.bmac.gradle.intellij.UpdateXmlTask>("updateLocalPluginXml"){
                 .withHeader(false)
                 .withEmptySections(false),
             Changelog.OutputType.HTML,
-        )
+        ).toByteArray(Charsets.UTF_8).toString(Charsets.UTF_8)
     })
 }
 

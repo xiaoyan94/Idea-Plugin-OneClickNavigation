@@ -6,6 +6,12 @@
 
 ## [Unreleased]
 
+## [1.0.24] - 2025-03-26
+
+### Added
+
+- [x] 增加从控制台Mybatis输出log中提取SQL语句功能
+
 ## [1.0.23] - 2025-01-20
 
 ### Added
@@ -214,6 +220,7 @@
 - 支持JavaScript代码中折叠显示I18n中文资源串;
 
 [Unreleased]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-Unreleased.zip
+[1.0.24]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.24.zip
 [1.0.23]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.23.zip
 [1.0.22]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.22.zip
 [1.0.21]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.21.zip

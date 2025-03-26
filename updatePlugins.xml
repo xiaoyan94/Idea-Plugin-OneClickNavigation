@@ -1,9 +1,9 @@
 
 <plugins>
-    <plugin id="com.zhiyin.plugins.OneClickNavigation" url="https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.23.zip" version="1.0.23">
+    <plugin id="com.zhiyin.plugins.OneClickNavigation" url="https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.24.zip" version="1.0.24">
         <change-notes>&lt;h3&gt;Added&lt;/h3&gt;&#13;
 &#13;
-&lt;ul&gt;&lt;li class="task-list-item"&gt;&lt;input type="checkbox" class="task-list-item-checkbox" checked disabled /&gt;记录查询类页面代码自动生成功能（1.0版，支持 6 种文件一键生成，减小工作量）&lt;/li&gt;&lt;/ul&gt;&#13;
+&lt;ul&gt;&lt;li class="task-list-item"&gt;&lt;input type="checkbox" class="task-list-item-checkbox" checked disabled /&gt;增加从控制台Mybatis输出log中提取SQL语句功能&lt;/li&gt;&lt;/ul&gt;&#13;
 &#13;
 &#13;
 </change-notes>
