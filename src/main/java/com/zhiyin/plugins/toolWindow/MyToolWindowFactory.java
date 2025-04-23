@@ -1,6 +1,7 @@
 package com.zhiyin.plugins.toolWindow;
 
 import com.intellij.codeInsight.navigation.NavigationUtil;
+import com.intellij.icons.AllIcons;
 import com.intellij.openapi.ui.SimpleToolWindowPanel;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowFactory;
@@ -14,6 +15,7 @@ import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.ui.components.JBList;
 import com.intellij.ui.components.JBScrollPane;
 import com.zhiyin.plugins.service.ControllerUrlService;
+import com.zhiyin.plugins.service.MyProjectService;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
@@ -36,7 +38,12 @@ public class MyToolWindowFactory implements ToolWindowFactory {
 
         JLabel urlLabel = new JLabel("Url:");
         JTextField urlField = new JTextField(20);
-        JButton jumpButton = new JButton("Find Controller");
+        JButton jumpButton = new JButton("Find");
+        JButton reloadButton = new JButton("Reset");
+        jumpButton.setIcon(AllIcons.Actions.Find);
+        jumpButton.setToolTipText("查询接口URL对应的Controller");
+        reloadButton.setIcon(AllIcons.Actions.Refresh);
+        reloadButton.setToolTipText("重置数据缓存");
         // 让 JTextField 占据剩余空间
         urlField.setMaximumSize(new Dimension(Integer.MAX_VALUE, urlField.getPreferredSize().height));
 
@@ -45,6 +52,7 @@ public class MyToolWindowFactory implements ToolWindowFactory {
         inputPanel.add(urlField);
         inputPanel.add(Box.createHorizontalGlue());  // 占据剩余空间
         inputPanel.add(jumpButton);
+        inputPanel.add(reloadButton);
 
         // 设置 JTextField 和 JButton 的固定高度
         inputPanel.setMaximumSize(new java.awt.Dimension(Integer.MAX_VALUE, 30));  // 设定最大高度
@@ -65,6 +73,11 @@ public class MyToolWindowFactory implements ToolWindowFactory {
             navigateToControllerForCustomRender(project, url, listModel);  // 查找并显示方法
 
             autoNavigationAfterSearchAction(listModel, methodsList);
+        });
+
+        reloadButton.addActionListener(e -> {
+            project.getService(MyProjectService.class).reInitXmlFileMap();
+            project.getService(ControllerUrlService.class).initControllerUrlsCache();
         });
 
         // 回车事件

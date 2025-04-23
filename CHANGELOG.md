@@ -6,6 +6,25 @@
 
 ## [Unreleased]
 
+## [1.0.27] - 2025-04-23
+
+### Added
+
+- [x] 添加 OneClickNavigation 工具窗口功能
+- [x] 实现了基于 URL 模糊匹配的控制器方法查找和跳转功能
+- [x] 新增工具窗口界面，支持输入接口 URL 并展示匹配的控制器方法列表
+- [x] 添加了自定义列表渲染器，优化了方法列表的显示效果
+- [x] 实现了自动导航和手动选择导航的功能
+
+### Improved
+
+- [x] OneClickNavigation 工具窗口：增加缓存初始化按钮
+- [x] 限制查询结果最多50条
+
+### Fixed
+
+- [x] 修复已知问题
+
 ## [1.0.26] - 2025-04-23
 
 ### Added
@@ -245,6 +264,7 @@
 - 支持JavaScript代码中折叠显示I18n中文资源串;
 
 [Unreleased]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-Unreleased.zip
+[1.0.27]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.27.zip
 [1.0.26]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.26.zip
 [1.0.25]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.25.zip
 [1.0.24]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.24.zip

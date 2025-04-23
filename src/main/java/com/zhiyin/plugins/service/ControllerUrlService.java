@@ -214,6 +214,7 @@ public final class ControllerUrlService {
         long currentTime = System.currentTimeMillis();
         if (currentTime - lastExecutionTime < MIN_INTERVAL_MS) {
             System.out.println("Skipped execution to respect the time interval.");
+            MyPluginMessages.showInfo("Reload Caches Ignored", "Skipped execution to respect the time interval.");
 //            isCollecting.set(false);
             return;
         } else {
@@ -411,12 +412,13 @@ public final class ControllerUrlService {
             // If the URL matches the pattern (fuzzy match)
             if (pattern.matcher(cacheUrl).matches()) {
                 matchingMethods.addAll(entry.getValue());  // Add all the methods for this URL
+
+                matchingMethodsMap.put(cacheUrl, matchingMethods);
+                if (matchingMethodsMap.size() > MAX_SIZE) {
+                    break;
+                }
             }
 
-            matchingMethodsMap.put(cacheUrl, matchingMethods);
-            if (matchingMethodsMap.size() > MAX_SIZE) {
-                break;
-            }
         }
 
         return matchingMethodsMap;
