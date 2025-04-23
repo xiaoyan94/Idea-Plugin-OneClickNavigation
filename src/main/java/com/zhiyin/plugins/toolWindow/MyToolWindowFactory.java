@@ -2,6 +2,8 @@ package com.zhiyin.plugins.toolWindow;
 
 import com.intellij.codeInsight.navigation.NavigationUtil;
 import com.intellij.icons.AllIcons;
+import com.intellij.openapi.module.Module;
+import com.intellij.openapi.module.ModuleManager;
 import com.intellij.openapi.ui.SimpleToolWindowPanel;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowFactory;
@@ -257,19 +259,25 @@ public class MyToolWindowFactory implements ToolWindowFactory {
 
         // 获取类对象并查找方法
         JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(project);
-        PsiClass psiClass = psiFacade.findClass(className, GlobalSearchScope.allScope(project));
 
-        if (psiClass != null) {
-            // 查找方法
-            PsiMethod selectedMethod = findMethodInClass(psiClass, methodName);
-            if (selectedMethod != null) {
-                // 使用NavigationUtil进行跳转
-                NavigationUtil.activateFileWithPsiElement(selectedMethod);
-            } else {
-                Messages.showErrorDialog(project, "Method not found: " + methodName, "Navigation Error");
+        // 遍历所有模块，确保方法来自正确的模块
+        PsiClass psiClass;
+        for (Module module : ModuleManager.getInstance(project).getModules()) {
+            // 获取模块的类搜索范围
+            GlobalSearchScope moduleScope = GlobalSearchScope.moduleScope(module);
+            psiClass = psiFacade.findClass(className, moduleScope);
+            if (psiClass != null) {
+                // break; // 找到第一个符合条件的类
+                // 查找方法
+                PsiMethod selectedMethod = findMethodInClass(psiClass, methodName);
+                if (selectedMethod != null) {
+                    // 使用NavigationUtil进行跳转
+                    NavigationUtil.activateFileWithPsiElement(selectedMethod);
+                    System.out.println("Found in Module: " + module.getName());
+                } else {
+                    System.out.println("Not found in Module: " + module.getName());
+                }
             }
-        } else {
-            Messages.showErrorDialog(project, "Class not found: " + className, "Navigation Error");
         }
     }
 
