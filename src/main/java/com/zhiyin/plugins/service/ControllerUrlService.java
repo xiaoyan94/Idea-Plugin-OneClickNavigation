@@ -30,6 +30,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.regex.Pattern;
 
 import static com.zhiyin.plugins.utils.MyPsiUtil.*;
 
@@ -365,6 +366,52 @@ public final class ControllerUrlService {
 //        }
 //        return Collections.synchronizedList(new ArrayList<>());
         return new ArrayList<>();
+    }
+
+    // Fuzzy match against the urlMethodCache keys
+    public List<PsiMethod> getMethodsForUrlFuzzy(String url) {
+        // List to hold the matching methods
+        List<PsiMethod> matchingMethods = new ArrayList<>();
+
+        // Compile a case-insensitive regex for fuzzy matching
+        Pattern pattern = Pattern.compile(".*" + Pattern.quote(url) + ".*", Pattern.CASE_INSENSITIVE);
+
+        // Search through the cache keys for fuzzy matches
+        for (Map.Entry<String, List<PsiMethod>> entry : urlMethodCache.entrySet()) {
+            String cacheUrl = entry.getKey();
+
+            // If the URL matches the pattern (fuzzy match)
+            if (pattern.matcher(cacheUrl).matches()) {
+                matchingMethods.addAll(entry.getValue());  // Add all the methods for this URL
+            }
+        }
+
+        return matchingMethods;
+    }
+
+    // 与getMethodsForUrlFuzzy相比，放到Map中
+    public Map<String, List<PsiMethod>> getMethodsMapForUrlFuzzy(String url) {
+        Map<String, List<PsiMethod>> matchingMethodsMap = new HashMap<>();
+
+        // Compile a case-insensitive regex for fuzzy matching
+        Pattern pattern = Pattern.compile(".*" + Pattern.quote(url) + ".*", Pattern.CASE_INSENSITIVE);
+
+        // Search through the cache keys for fuzzy matches
+        for (Map.Entry<String, List<PsiMethod>> entry : urlMethodCache.entrySet()) {
+            String cacheUrl = entry.getKey();
+
+            // List to hold the matching methods
+            List<PsiMethod> matchingMethods = new ArrayList<>();
+
+            // If the URL matches the pattern (fuzzy match)
+            if (pattern.matcher(cacheUrl).matches()) {
+                matchingMethods.addAll(entry.getValue());  // Add all the methods for this URL
+            }
+
+            matchingMethodsMap.put(cacheUrl, matchingMethods);
+        }
+
+        return matchingMethodsMap;
     }
 
     public Map<PsiClass, Set<String>> getAllControllerUrls() {
