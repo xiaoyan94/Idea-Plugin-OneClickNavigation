@@ -121,6 +121,8 @@
         <!--TODO：改为Action：GoToLayout-->
 <!--        <codeInsight.lineMarkerProvider language="HTML" implementationClass="com.zhiyin.plugins.provider.lineMarkers.JSLayoutRelatedItemLineMarkerProvider"/>-->
         <completion.contributor language="XML" order="first" implementationClass="com.zhiyin.plugins.completion.XmlLayoutComboboxCompletionContributor"/>
+        <toolWindow id="OneClickNavigationToolWindow" factoryClass="com.zhiyin.plugins.toolWindow.MyToolWindowFactory" anchor="right" icon="com.zhiyin.plugins.resources.MyIcons.pandaIconSVG16_2">
+        </toolWindow>
     </extensions>
     <actions>
         <group id="com.zhiyin.plugins.ToolsMenuGroup" text="OneClickNavigation插件" popup="true"
