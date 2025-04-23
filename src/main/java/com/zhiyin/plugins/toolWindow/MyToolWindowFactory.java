@@ -112,6 +112,9 @@ public class MyToolWindowFactory implements ToolWindowFactory {
         panel.add(Box.createVerticalGlue());
         panel.add(listScrollPane);
 
+        // panel设置最小宽度
+        panel.setMinimumSize(new Dimension(300, 0));
+
         // 创建并设置ToolWindow的面板
         SimpleToolWindowPanel simpleToolWindowPanel = new SimpleToolWindowPanel(true, false);
         simpleToolWindowPanel.setContent(panel);

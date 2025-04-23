@@ -63,6 +63,9 @@ public final class ControllerUrlService {
         TranslateSettingsState state = TranslateSettingsComponent.Companion.getInstance().getState();
         if (state.getEnableFeignToRestController() || state.getEnableHtmlUrlToController()) {
             initControllerUrlsCache();
+        } else {
+            // 一键跳转到Controller工具窗口功能：需要初始化
+            initControllerUrlsCache();
         }
 
 //        registerPsiTreeChangeListener(project);
@@ -396,6 +399,8 @@ public final class ControllerUrlService {
         // Compile a case-insensitive regex for fuzzy matching
         Pattern pattern = Pattern.compile(".*" + Pattern.quote(url) + ".*", Pattern.CASE_INSENSITIVE);
 
+        int MAX_SIZE = 50;
+
         // Search through the cache keys for fuzzy matches
         for (Map.Entry<String, List<PsiMethod>> entry : urlMethodCache.entrySet()) {
             String cacheUrl = entry.getKey();
@@ -409,6 +414,9 @@ public final class ControllerUrlService {
             }
 
             matchingMethodsMap.put(cacheUrl, matchingMethods);
+            if (matchingMethodsMap.size() > MAX_SIZE) {
+                break;
+            }
         }
 
         return matchingMethodsMap;

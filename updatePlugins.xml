@@ -1,9 +1,13 @@
 
 <plugins>
-    <plugin id="com.zhiyin.plugins.OneClickNavigation" url="https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.25.zip" version="1.0.25">
+    <plugin id="com.zhiyin.plugins.OneClickNavigation" url="https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.26.zip" version="1.0.26">
         <change-notes>&lt;h3&gt;Added&lt;/h3&gt;&#13;
 &#13;
 &lt;ul&gt;&lt;li class="task-list-item"&gt;&lt;input type="checkbox" class="task-list-item-checkbox" checked disabled /&gt;添加 OneClickNavigation 工具窗口功能&lt;/li&gt;&lt;li class="task-list-item"&gt;&lt;input type="checkbox" class="task-list-item-checkbox" checked disabled /&gt;实现了基于 URL 模糊匹配的控制器方法查找和跳转功能&lt;/li&gt;&lt;li class="task-list-item"&gt;&lt;input type="checkbox" class="task-list-item-checkbox" checked disabled /&gt;新增工具窗口界面，支持输入接口 URL 并展示匹配的控制器方法列表&lt;/li&gt;&lt;li class="task-list-item"&gt;&lt;input type="checkbox" class="task-list-item-checkbox" checked disabled /&gt;添加了自定义列表渲染器，优化了方法列表的显示效果&lt;/li&gt;&lt;li class="task-list-item"&gt;&lt;input type="checkbox" class="task-list-item-checkbox" checked disabled /&gt;实现了自动导航和手动选择导航的功能&lt;/li&gt;&lt;/ul&gt;&#13;
+&#13;
+&lt;h3&gt;Improved&lt;/h3&gt;&#13;
+&#13;
+&lt;ul&gt;&lt;li class="task-list-item"&gt;&lt;input type="checkbox" class="task-list-item-checkbox" checked disabled /&gt;OneClickNavigation 工具窗口：增加缓存初始化&lt;/li&gt;&lt;li class="task-list-item"&gt;&lt;input type="checkbox" class="task-list-item-checkbox" checked disabled /&gt;限制查询结果最多50条&lt;/li&gt;&lt;/ul&gt;&#13;
 &#13;
 &#13;
 </change-notes>
