@@ -445,6 +445,10 @@ public class MyPropertiesUtil {
         String simpleModuleName = moduleName.substring(moduleName.lastIndexOf('.') + 1);
         if ("system".equalsIgnoreCase(simpleModuleName)){
             return "sysadm";
+        } else if ("wms2".equalsIgnoreCase(simpleModuleName)){
+            return "wms";
+        } else if ("technics2".equalsIgnoreCase(simpleModuleName)){
+            return "technics";
         }
         return simpleModuleName;
     }
