@@ -6,6 +6,12 @@
 
 ## [Unreleased]
 
+## [1.0.29] - 2025-07-09
+
+### Improved
+
+- [x] 资源串适配智塑云新增的wms2、technics2模块
+
 ## [1.0.28] - 2025-04-23
 
 ### Added
@@ -283,6 +289,7 @@
 - 支持JavaScript代码中折叠显示I18n中文资源串;
 
 [Unreleased]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-Unreleased.zip
+[1.0.29]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.29.zip
 [1.0.28]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.28.zip
 [1.0.27]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.27.zip
 [1.0.26]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.26.zip

@@ -71,10 +71,10 @@ public class MyToolWindowFactory implements ToolWindowFactory {
 
         // 按钮点击事件：查找并显示匹配的控制器方法
         jumpButton.addActionListener(e -> {
-            String url = urlField.getText();
+            String url = urlField.getText().trim();
             navigateToControllerForCustomRender(project, url, listModel);  // 查找并显示方法
 
-            autoNavigationAfterSearchAction(listModel, methodsList);
+            autoNavigationAfterSearchAction(listModel, methodsList, toolWindow);
         });
 
         reloadButton.addActionListener(e -> {
@@ -87,7 +87,7 @@ public class MyToolWindowFactory implements ToolWindowFactory {
             String url = urlField.getText();
             navigateToControllerForCustomRender(project, url, listModel);  // 查找并显示方法
 
-            autoNavigationAfterSearchAction(listModel, methodsList);
+            autoNavigationAfterSearchAction(listModel, methodsList, toolWindow);
         });
 
         // 选择方法后跳转
@@ -136,15 +136,17 @@ public class MyToolWindowFactory implements ToolWindowFactory {
         toolWindow.getComponent().add(simpleToolWindowPanel);
     }
 
-    private static void autoNavigationAfterSearchAction(DefaultListModel<String> listModel, JList<String> methodsList) {
+    private static void autoNavigationAfterSearchAction(DefaultListModel<String> listModel, JList<String> methodsList, @NotNull ToolWindow toolWindow) {
         if (listModel.size() == 1) {
             methodsList.setSelectedIndex(0);
+            toolWindow.hide(null);
         }
 
         // 如果2个且第一个包含RestController 且第二个包含FeignService子串，则选中第一个
         if (listModel.size() >= 2 && listModel.size() < 10) {
             if (listModel.getElementAt(0).contains("RestController") && listModel.getElementAt(1).contains("FeignService")) {
                 methodsList.setSelectedIndex(0);
+                toolWindow.hide(null);
             }
         }
     }
