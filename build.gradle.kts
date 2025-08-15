@@ -54,6 +54,8 @@ dependencies {
     // https://mvnrepository.com/artifact/mysql/mysql-connector-java
     implementation("mysql:mysql-connector-java:8.0.33")
 
+    implementation("org.apache.poi:poi-ooxml:5.2.5")
+
 }
 
 // Configure Gradle IntelliJ Plugin

@@ -226,6 +226,14 @@
         <action id="com.zhiyin.plugins.actions.MybatisLogSQLAction" class="com.zhiyin.plugins.actions.MybatisLogSQLAction" text="提取SQL语句" description="Sql from Mybatis log" icon="com.zhiyin.plugins.resources.MyIcons.pandaIconSVG16_2">
             <add-to-group group-id="ConsoleView.PopupMenu" anchor="first"/>
         </action>
+
+        <action id="GenerateExcelHeader"
+                class="com.zhiyin.plugins.actions.GenerateExcelHeaderAction"
+                text="一键生成导入模板 Excel"
+                icon="com.zhiyin.plugins.resources.MyIcons.pandaIconSVG16_2"
+                description="根据 column 标签生成 Excel ">
+            <add-to-group group-id="EditorPopupMenu" anchor="first"/>
+        </action>
     </actions>
 
     <projectListeners>

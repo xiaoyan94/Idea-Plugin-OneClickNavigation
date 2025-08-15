@@ -6,6 +6,12 @@
 
 ## [Unreleased]
 
+## [1.0.30] - 2025-07-28
+
+### Added
+
+- [x] 添加 Excel 多语言导入模板一键生成功能：根据 Imp**Mapper 文件自动生成多语言版本 Excel 导入模板
+
 ## [1.0.29] - 2025-07-09
 
 ### Improved
@@ -289,6 +295,7 @@
 - 支持JavaScript代码中折叠显示I18n中文资源串;
 
 [Unreleased]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-Unreleased.zip
+[1.0.30]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.30.zip
 [1.0.29]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.29.zip
 [1.0.28]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.28.zip
 [1.0.27]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.27.zip

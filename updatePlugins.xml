@@ -1,9 +1,9 @@
 
 <plugins>
-    <plugin id="com.zhiyin.plugins.OneClickNavigation" url="https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.29.zip" version="1.0.29">
-        <change-notes>&lt;h3&gt;Improved&lt;/h3&gt;&#13;
+    <plugin id="com.zhiyin.plugins.OneClickNavigation" url="https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.30.zip" version="1.0.30">
+        <change-notes>&lt;h3&gt;Added&lt;/h3&gt;&#13;
 &#13;
-&lt;ul&gt;&lt;li class="task-list-item"&gt;&lt;input type="checkbox" class="task-list-item-checkbox" checked disabled /&gt;资源串适配智塑云新增的wms2、technics2模块&lt;/li&gt;&lt;/ul&gt;&#13;
+&lt;ul&gt;&lt;li class="task-list-item"&gt;&lt;input type="checkbox" class="task-list-item-checkbox" checked disabled /&gt;添加 Excel 多语言导入模板一键生成功能：根据 Imp**Mapper 文件自动生成多语言版本 Excel 导入模板&lt;/li&gt;&lt;/ul&gt;&#13;
 &#13;
 &#13;
 </change-notes>
