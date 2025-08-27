@@ -51,6 +51,33 @@
             <#list grid.queryFields as field>
             <#if field.name?lowerCase == "factoryid">
             <#elseIf field.name?lowerCase == "id">
+            <#elseIf field.name?lowerCase == "orderid">
+            <#elseIf field.name?lowerCase == "orderflowid">
+            <#elseIf field.name?lowerCase == "orderchildid">
+            <#elseIf field.name?lowerCase == "productid">
+            <#elseIf field.name?lowerCase == "materialid">
+            <#elseIf field.name?lowerCase == "moldid">
+            <#elseIf field.isQueryField?? && field.isQueryField == "true" && field.name?lowerCase?endsWith("id")>
+            <Field id="${field.name}" ref="${field.name}" easyuiClass="easyui-combobox">
+                <Combobox>
+                    <ComboxUrl value="../Basic/Factory/getFactoryViewList"/>
+                    <ComboxValueField value="id"/>
+                    <ComboxTextField value="name"/>
+                    <ComboxMultipleSel value="false"/>
+                </Combobox>
+            </Field>
+            <#elseIf field.isQueryField?? && field.isQueryField == "true" && field.easyuiClass?? && field.easyuiClass == "easyui-combobox">
+            <Field id="${field.name}" ref="${field.name}" easyuiClass="easyui-combobox">
+                <Combobox>
+                    <ComboxUrl value="../Basic/Factory/getFactoryViewList"/>
+                    <ComboxValueField value="id"/>
+                    <ComboxTextField value="name"/>
+                    <ComboxMultipleSel value="false"/>
+                </Combobox>
+            </Field>
+            <#elseIf field.isQueryField?? && field.isQueryField == "true" && field.easyuiClass?? && field.easyuiClass?contains("date")>
+            <Field id="${field.name?lowerCase}from" name="${field.name?lowerCase}from" label="${field.name?lowerCase}从" easyuiClass="${field.easyuiClass!"easyui-datebox"}"/>
+            <Field id="${field.name?lowerCase}to" name="${field.name?lowerCase}to" label="到" easyuiClass="${field.easyuiClass!"easyui-datebox"}"/>
             <#elseIf field.isQueryField?? && field.isQueryField == "true">
             <Field id="${field.name}" name="${field.name?lowerCase}"<#if field.ref??> ref="${field.ref}"</#if><#if field.label??> label="${field.label}" easyuiClass="${field.easyuiClass!"easyui-textbox"}"</#if>/>
             <#else>

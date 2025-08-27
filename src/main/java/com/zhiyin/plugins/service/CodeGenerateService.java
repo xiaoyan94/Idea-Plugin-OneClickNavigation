@@ -265,7 +265,7 @@ public final class CodeGenerateService {
         }
     }
 
-    public void generateBaseQueryTypeFile(Module module, String folder, String modelName, String fileName, String sql, List<Map<String, Object>> fields) {
+    public void generateBaseQueryTypeFile(Module module, String folder, String modelName, String fileName, String sql, List<Map<String, Object>> fields, Map<String, Object> paramsMap) {
         if (project == null) {
             Messages.showErrorDialog("Project is not available", "Error");
             return;
@@ -294,7 +294,9 @@ public final class CodeGenerateService {
         // dataGrid1.put("objectName", modelName.replaceFirst(modelName.substring(0, 1), modelName.substring(0, 1).toLowerCase()));
         dataGrid1.put("objectName", StringUtil.firstLetterToLowerCase(modelName));
         dataGrid1.put("fileName", fileName);
-        dataGrid1.put("sql", sql.replace(" from ", " \nfrom ").replace(" where", " \nwhere "));
+        dataGrid1.put("tableName", paramsMap.get("tableName"));
+        // dataGrid1.put("sql", sql.replace(" from ", " \nfrom ").replace(" where", " \nwhere "));
+        dataGrid1.put("sql", formatSql(sql));
         dataGrid1.put("ckDummyColumn", "true");
         List<Map<String, Object>> columns = new ArrayList<>(fields);
         columns.forEach(field -> {
@@ -368,16 +370,33 @@ public final class CodeGenerateService {
             String outputSourceContentDaoPath = "src/main/java/com/zhiyin/dao/" + folderLowerCase + "/";
             String outputSourceContentMapperPath = "src/main/java/com/zhiyin/maps/" + folderLowerCase + "/";
 
-            if (ProjectTypeChecker.isTraditionalJavaWebProject(project, module)){
-                outputSourceContentRootPath = "src/main/resources/META-INF/resources/WEB-INF/etc/business/layout/" + folder;
-            }
             Object outputFileName = dmLayout.get("layoutName");
-            generateXmlFile(project, module, dmLayout, "BaseQueryTypeLayout.ftl", outputSourceContentRootPath, outputFileName + ".xml");
-            generateXmlFile(project, module, dmLayout, "BaseQueryTypeHtml.ftl", outputSourceContentHtmlPath, outputFileName + ".html");
-            generateXmlFile(project, module, dmLayout, "BaseQueryTypeController.ftl", outputSourceContentControllerPath, outputFileName + "Controller.java");
-            generateXmlFile(project, module, dmLayout, "BaseQueryTypeService.ftl", outputSourceContentServicePath, outputFileName + "Service.java");
-            generateXmlFile(project, module, dmLayout, "BaseQueryTypeDao.ftl", outputSourceContentDaoPath, "I" + outputFileName + "Dao.java");
-            generateXmlFile(project, module, dmLayout, "BaseQueryTypeMapper.ftl", outputSourceContentMapperPath, outputFileName + "Mapper.xml");
+            if (ProjectTypeChecker.isTraditionalJavaWebProject(project, module)){
+                // TODO isTraditionalJavaWebProject方法优化
+                // 先尝试生成一遍SpringBoot项目目录架构的
+                if ((Boolean) paramsMap.get("layoutCheckBox")) {
+                    generateXmlFile(project, module, dmLayout, "BaseQueryTypeLayout.ftl", outputSourceContentRootPath, outputFileName + ".xml");
+                    outputSourceContentRootPath = "src/main/resources/META-INF/resources/WEB-INF/etc/business/layout/" + folder;
+                }
+            }
+            if ((Boolean) paramsMap.get("layoutCheckBox")) {
+                generateXmlFile(project, module, dmLayout, "BaseQueryTypeLayout.ftl", outputSourceContentRootPath, outputFileName + ".xml");
+            }
+            if ((Boolean) paramsMap.get("htmlCheckBox")) {
+                generateXmlFile(project, module, dmLayout, "BaseQueryTypeHtml.ftl", outputSourceContentHtmlPath, outputFileName + ".html");
+            }
+            if ((Boolean) paramsMap.get("controllerCheckBox")) {
+                generateXmlFile(project, module, dmLayout, "BaseQueryTypeController.ftl", outputSourceContentControllerPath, outputFileName + "Controller.java");
+            }
+            if ((Boolean) paramsMap.get("serviceCheckBox")) {
+                generateXmlFile(project, module, dmLayout, "BaseQueryTypeService.ftl", outputSourceContentServicePath, outputFileName + "Service.java");
+            }
+            if ((Boolean) paramsMap.get("daoCheckBox")) {
+                generateXmlFile(project, module, dmLayout, "BaseQueryTypeDao.ftl", outputSourceContentDaoPath, "I" + outputFileName + "Dao.java");
+            }
+            if ((Boolean) paramsMap.get("myBatisMapperCheckBox")) {
+                generateXmlFile(project, module, dmLayout, "BaseQueryTypeMapper.ftl", outputSourceContentMapperPath, outputFileName + "Mapper.xml");
+            }
         } catch (Exception ex) {
             Messages.showErrorDialog("无法生成件，异常： " + ex.getMessage(), "操作失败");
         }
@@ -394,21 +413,25 @@ public final class CodeGenerateService {
         }
 
         // Build the output file path
-        VirtualFile outputDir = contentRoot.findFileByRelativePath(outputSourceContentRootPath);
-        if (outputDir == null) {
+        VirtualFile outputDirVariable = contentRoot.findFileByRelativePath(outputSourceContentRootPath);
+        if (outputDirVariable == null) {
 //            outputDir = contentRoot.createChildDirectory(this, "src/main/webapp/WEB-INF/etc/business/layout/Basic");
-            Messages.showErrorDialog("未找到目录", "操作失败");
-            return;
+            Messages.showErrorDialog("未找到目录。已放到根目录：" + contentRoot.getPresentableUrl(), "操作失败");
+            outputDirVariable = contentRoot;
+//            return;
         }
+
 
         // Create the output file
-        final VirtualFile outputFile = outputDir.findChild(outputFileName);
+        final VirtualFile outputFile = outputDirVariable.findChild(outputFileName);
 
         if (outputFile != null) {
-            Messages.showErrorDialog("文件已存在", "操作失败");
-            return;
+            Messages.showErrorDialog("文件已存在：" + outputFile.getPresentableUrl() + "。已放到根目录：" + contentRoot.getPresentableUrl(), "操作失败");
+            outputDirVariable = contentRoot;
+//            return;
         }
 
+        VirtualFile outputDir = outputDirVariable;
         WriteCommandAction.runWriteCommandAction(project, () -> {
             try {
                 VirtualFile virtualFile = outputDir.createChildData(this, outputFileName);
@@ -446,5 +469,48 @@ public final class CodeGenerateService {
     private VirtualFile findModuleContentRoot(Module module) {
         VirtualFile[] contentRoots = ModuleRootManager.getInstance(module).getContentRoots();
         return contentRoots.length > 0 ? contentRoots[0] : null;
+    }
+
+    private String formatSql(String sql) {
+        // 1. 检查输入是否为空，如果为空则直接返回空字符串
+        if (StringUtils.isBlank(sql)) {
+            return "";
+        }
+
+        String formattedSql = sql.trim();
+
+        // 2. 将 SELECT, FROM, WHERE, JOIN 等关键字前面加上换行符
+        // `(?i)`: 开启不区分大小写模式
+        // `\\b` : 匹配单词边界，确保只匹配完整的关键字，例如不匹配 `SELECTIVE` 中的 `SELECT`
+        // `\\s*` : 匹配关键字后可能存在的任意数量的空格
+        String[] keywords = {"SELECT", "FROM", "WHERE", "GROUP BY", "ORDER BY", "HAVING", "LEFT JOIN", "INNER JOIN", "RIGHT JOIN", "ON"};
+        for (String keyword : keywords) {
+            formattedSql = formattedSql.replaceAll("(?i)\\b" + keyword + "\\b\\s*", "\n" + keyword + " ");
+        }
+
+        // 3. 将 WHERE 条件中的 AND 和 OR 放在新的一行并进行缩进
+        // `$1` 是一个反向引用，它会保留匹配到的 `AND` 或 `OR`
+        formattedSql = formattedSql.replaceAll("(?i)\\b(AND|OR)\\b\\s*", "\n  $1 ");
+
+        // 4. 将 SELECT 语句中的逗号和函数参数外的逗号进行换行和缩进
+        // `,\\s*`: 匹配逗号及后面的所有空格
+        // `(?![^()]*\\))`: 这是一个负向先行断言，它确保我们匹配的逗号后面不跟着非括号字符和右括号。
+        //                  这样可以防止匹配到函数参数内部的逗号，例如 `COUNT(col1, col2)`
+        formattedSql = formattedSql.replaceAll(",\\s*(?![^()]*\\))", ",\n  ");
+
+        // 5. 清理多余的换行符和空格，确保格式整洁
+        formattedSql = formattedSql.replaceAll("\\s*\\n\\s*", "\n").trim(); // 将多余的换行符和空格合并
+        formattedSql = formattedSql.replaceAll("\\s{2,}", " "); // 将多个空格替换为单个空格
+        formattedSql = formattedSql.replaceAll("\n ", "\n"); // 清除换行符后的多余空格
+
+        // 6. 针对特定关键字添加缩进，以提高可读性
+        formattedSql = formattedSql.replace("SELECT \n", "SELECT\n  ");
+        formattedSql = formattedSql.replace("FROM \n", "FROM\n");
+        formattedSql = formattedSql.replace("WHERE \n", "WHERE\n  ");
+
+        // 7. 每行前添加两个tab即8个空格
+        // `(?m)^`: 这是一个多行模式匹配，表示匹配每行开头的位置。
+        formattedSql = formattedSql.replaceAll("(?m)^", "\t\t");
+        return formattedSql;
     }
 }

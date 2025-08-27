@@ -150,13 +150,21 @@ public class TableParser {
             columnInfo.put("name", alias == null ? field : alias);
             columnInfo.put("alias", alias);
             columnInfo.put("type", "string");
+            if (field != null && field.contains("date")) {
+                columnInfo.put("type", "date");
+            }
+            if (field != null && field.contains("time")) {
+                columnInfo.put("type", "datetime");
+            }
             columnInfo.put("isRequired", "true");
             columnInfo.put("isQueryField" , "true");
             columnInfo.put("isDialogField" , "false");
             try {
                 // columnInfo.put("comment", translator.translate(columnInfo.get("name").toString()));
-                columnInfo.put("comment", translator.translate(columnInfo.get("name").toString(), "en", "zh"));
-            } catch (TranslateException e) {
+                // TODO 默认中文配置
+                // columnInfo.put("comment", translator.translate(columnInfo.get("name").toString(), "en", "zh"));
+                columnInfo.put("comment", columnInfo.get("name"));
+            } catch (Exception e) {
                 columnInfo.put("comment", columnInfo.get("name"));
                 e.printStackTrace();
             }

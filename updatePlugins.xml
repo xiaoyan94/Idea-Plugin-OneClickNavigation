@@ -1,9 +1,13 @@
 
 <plugins>
-    <plugin id="com.zhiyin.plugins.OneClickNavigation" url="https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.30.zip" version="1.0.30">
+    <plugin id="com.zhiyin.plugins.OneClickNavigation" url="https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.31.zip" version="1.0.31">
         <change-notes>&lt;h3&gt;Added&lt;/h3&gt;&#13;
 &#13;
-&lt;ul&gt;&lt;li class="task-list-item"&gt;&lt;input type="checkbox" class="task-list-item-checkbox" checked disabled /&gt;添加 Excel 多语言导入模板一键生成功能：根据 Imp**Mapper 文件自动生成多语言版本 Excel 导入模板&lt;/li&gt;&lt;/ul&gt;&#13;
+&lt;ul&gt;&lt;li class="task-list-item"&gt;&lt;input type="checkbox" class="task-list-item-checkbox" checked disabled /&gt;添加 JavaScript 国际化函数插入功能&lt;/li&gt;&lt;/ul&gt;&#13;
+&#13;
+&lt;h3&gt;Improved&lt;/h3&gt;&#13;
+&#13;
+&lt;ul&gt;&lt;li class="task-list-item"&gt;&lt;input type="checkbox" class="task-list-item-checkbox" checked disabled /&gt;增加 Spring Cloud MES 项目检查逻辑&lt;/li&gt;&lt;li class="task-list-item"&gt;&lt;input type="checkbox" class="task-list-item-checkbox" checked disabled /&gt;优化 SQL 格式化和表单字段类型识别&lt;/li&gt;&lt;li class="task-list-item"&gt;&lt;input type="checkbox" class="task-list-item-checkbox" checked disabled /&gt;添加 JavaScript 国际化函数插入功能&lt;/li&gt;&lt;li class="task-list-item"&gt;&lt;input type="checkbox" class="task-list-item-checkbox" checked disabled /&gt;改进 Layout 和 HTML 文件互跳&lt;/li&gt;&lt;li class="task-list-item"&gt;&lt;input type="checkbox" class="task-list-item-checkbox" checked disabled /&gt;修复 GenerateExcelHeaderAction 中的错误提示&lt;/li&gt;&lt;/ul&gt;&#13;
 &#13;
 &#13;
 </change-notes>
@@ -18,6 +22,6 @@
 
 </description>
         <name>OneClickNavigation</name>
-        <idea-version since-build="221.0"/>
+        <idea-version since-build="221.0" until-build="241.*"/>
     </plugin>
 </plugins>

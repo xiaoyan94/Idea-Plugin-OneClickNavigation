@@ -373,6 +373,8 @@ public class DataModelGenerator {
                         return "";
                     } else if (type.equals("string")) {
                         return "easyui-textbox";
+                    } else if (type.equals("date")) {
+                        return "easyui-datebox";
                     } else if (type.equals("datetime")) {
                         return "easyui-datetimebox";
                     } else if (type.equals("number") || type.equals("int")) {
@@ -498,8 +500,21 @@ public class DataModelGenerator {
             service.generateLayoutFile(this.module, folder, modelName, this.tableName, this.fields);
         }*/
 
+        Map<String, Object> paramsMap = new HashMap<>();
+        paramsMap.put("tableName", tableName);
+        paramsMap.put("sql", sql);
+        paramsMap.put("mocCheckBox", mocCheckBox.isSelected());
+        paramsMap.put("layoutCheckBox", layoutCheckBox.isSelected());
+        paramsMap.put("htmlCheckBox", htmlCheckBox.isSelected());
+        paramsMap.put("controllerCheckBox", controllerCheckBox.isSelected());
+        paramsMap.put("serviceCheckBox", serviceCheckBox.isSelected());
+        paramsMap.put("daoCheckBox", daoCheckBox.isSelected());
+        paramsMap.put("myBatisMapperCheckBox", myBatisMapperCheckBox.isSelected());
+        paramsMap.put("dataMaintenanceRadioButton", dataMaintenanceRadioButton.isSelected());
+        paramsMap.put("dataQueryRadioButton", dataQueryRadioButton.isSelected());
+
         if (dataQueryRadioButton.isSelected()) {
-            service.generateBaseQueryTypeFile(this.module, folder, modelName, fileName, this.sql, this.fields);
+            service.generateBaseQueryTypeFile(this.module, folder, modelName, fileName, this.sql, this.fields, paramsMap);
         }
 
         // 关闭窗口

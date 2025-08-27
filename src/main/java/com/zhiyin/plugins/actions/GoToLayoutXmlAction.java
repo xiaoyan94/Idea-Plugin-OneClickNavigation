@@ -22,7 +22,7 @@ public class GoToLayoutXmlAction extends AnAction {
     @Override
     public void update(@NotNull AnActionEvent event) {
         PsiFile file = event.getData(CommonDataKeys.PSI_FILE);
-        event.getPresentation().setEnabledAndVisible(file != null && "HTML".equalsIgnoreCase(file.getVirtualFile().getExtension()));
+        event.getPresentation().setEnabledAndVisible(file != null && ("HTML".equalsIgnoreCase(file.getVirtualFile().getExtension()) || "XML".equalsIgnoreCase(file.getVirtualFile().getExtension())));
     }
 
     @Override
@@ -55,6 +55,10 @@ public class GoToLayoutXmlAction extends AnAction {
     private void navigateToLayoutXml(@NotNull PsiElement element, String gridName) {
         // Get the file path of the current element
         String filePath = element.getContainingFile().getVirtualFile().getPath();
+
+        if (filePath.contains("layout")) {
+            navigateToLayoutHTML(element.getContainingFile(), null);
+        }
 
         // Replace the path to find the corresponding layout XML file
         filePath = filePath.replace("WEB-INF/view/MesRoot/", "WEB-INF/etc/business/layout/");
@@ -93,6 +97,35 @@ public class GoToLayoutXmlAction extends AnAction {
 
         // Navigate to the layout XML file
         psiFile.navigate(true);
+    }
+
+    private void navigateToLayoutHTML(@NotNull PsiFile psiFile, String gridName) {
+        // Get the file path of the current element
+        String filePath = psiFile.getVirtualFile().getPath();
+
+        // Replace the path to find the corresponding layout XML file
+        filePath = filePath.replace("WEB-INF/etc/business/layout/", "WEB-INF/view/MesRoot/");
+        filePath = filePath.replace(".xml", ".html");
+
+        // Find the layout XML file
+        VirtualFile virtualFile = VirtualFileManager.getInstance().findFileByUrl("file://" + filePath);
+        if (virtualFile == null) {
+            // 提示用户: 未找到对应的layout xml文件
+            MyPluginMessages.showInfo("[VirtualFile]未找到对应的layout html文件", psiFile.getProject());
+            return;
+        }
+        PsiFile htmlPsiFile = PsiManager.getInstance(psiFile.getProject()).findFile(virtualFile);
+        if (htmlPsiFile == null) {
+            MyPluginMessages.showInfo("[PsiFile]未找到对应的layout html文件", psiFile.getProject());
+            return;
+        }
+
+        /*if (gridName != null) {
+
+        }*/
+
+        // Navigate to the layout XML file
+        htmlPsiFile.navigate(true);
     }
 
 }

@@ -178,9 +178,16 @@
 
             <action id="com.zhiyin.plugins.actions.GoToLayoutXmlAction"
                     class="com.zhiyin.plugins.actions.GoToLayoutXmlAction"
-                    text="打开Layout文件"
+                    text="Layout &lt;--> HTML"
                     icon="com.zhiyin.plugins.resources.MyIcons.pandaIconSVG16_2"
                     description="Guess layout file">
+            </action>
+
+            <action id="com.zhiyin.plugins.actions.InsertJSI18nFuncAction"
+                    class="com.zhiyin.plugins.actions.InsertJSI18nFuncAction"
+                    text="JavaScript: 自动翻译并插入资源串函数"
+                    icon="com.zhiyin.plugins.resources.MyIcons.pandaIconSVG16_2"
+                    description="JavaScript中插入zhiyin.i18n.translate函数;">
             </action>
 
             <action id="com.zhiyin.plugins.actions.InsertFreeMarkerI18nDirectiveAction"

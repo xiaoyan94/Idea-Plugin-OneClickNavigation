@@ -97,7 +97,7 @@ tasks {
 
     patchPluginXml {
         sinceBuild.set(properties("pluginSinceBuild"))
-//        untilBuild.set(properties("pluginUntilBuild"))
+        untilBuild.set(properties("pluginUntilBuild"))
 
         changeNotes.set(
             """
@@ -215,6 +215,7 @@ tasks {
         pluginId.set("${properties("pluginGroup")}.${properties("pluginName")}")
         version.set(properties("pluginVersion"))
         sinceBuild.set(properties("pluginSinceBuild"))
+        untilBuild.set(properties("pluginUntilBuild"))
 //        pluginDescription.set(file("README.md").readText())
 //        changeNotes.set(file("CHANGELOG.md").readText())
         // Extract the <!-- Plugin description --> section from README.md and provide for the plugin's manifest
@@ -258,6 +259,7 @@ task<dev.bmac.gradle.intellij.UpdateXmlTask>("updateLocalPluginXml"){
     downloadUrl.set("${properties("pluginRepositoryUrl")}${pluginName.get()}-${version.get()}.zip")
     pluginId.set("${properties("pluginGroup")}.${pluginName.get()}")
     sinceBuild.set(properties("pluginSinceBuild"))
+    untilBuild.set(properties("pluginUntilBuild"))
     // Extract the <!-- Plugin description --> section from README.md and provide for the plugin's manifest
     val pluginDescriptionProvider = providers.fileContents(layout.projectDirectory.file("README.md")).asText.map {
         val start = "<!-- Plugin description -->"

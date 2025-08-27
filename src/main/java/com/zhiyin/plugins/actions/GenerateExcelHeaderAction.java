@@ -47,7 +47,10 @@ public class GenerateExcelHeaderAction extends AnAction {
                 .filter(tag -> "table".equals(tag.getName()))
                 .findFirst().orElse(null);
 
-        if (tableTag == null) return;
+        if (tableTag == null) {
+            MyPluginMessages.showError("未找到 table 标签", "请检查 XML 文件是否正确", project);
+            return;
+        }
 
         // 添加代码补全建议项
         boolean needTransUnicode = !MyPropertiesUtil.isNative2AsciiForPropertiesFiles();
