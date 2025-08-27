@@ -190,6 +190,13 @@
                     description="JavaScript中插入zhiyin.i18n.translate函数;">
             </action>
 
+            <action id="com.zhiyin.plugins.actions.InsertJavaI18nFuncAction"
+                    class="com.zhiyin.plugins.actions.InsertJavaI18nFuncAction"
+                    text="Java: 自动翻译并插入资源串函数"
+                    icon="com.zhiyin.plugins.resources.MyIcons.pandaIconSVG16_2"
+                    description="Java中插入I18n函数;">
+            </action>
+
             <action id="com.zhiyin.plugins.actions.InsertFreeMarkerI18nDirectiveAction"
                     class="com.zhiyin.plugins.actions.InsertFreeMarkerI18nDirectiveAction"
                     text="FreeMarker/JSP: 插入I18n Message指令/标签"

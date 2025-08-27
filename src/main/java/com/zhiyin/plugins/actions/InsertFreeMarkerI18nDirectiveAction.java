@@ -13,6 +13,7 @@ import com.intellij.openapi.editor.EditorModificationUtil;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.zhiyin.plugins.notification.MyPluginMessages;
 import com.zhiyin.plugins.resources.Constants;
 import com.zhiyin.plugins.ui.MyTranslateDialogWrapper;
 import com.zhiyin.plugins.utils.MyPropertiesUtil;
@@ -69,6 +70,7 @@ public class InsertFreeMarkerI18nDirectiveAction extends AnAction {
                         currentCaret.moveToOffset(caretOffset + finalToInsertText.length());
                     }
 
+                    MyPluginMessages.showInfo("操作成功", "资源串已替换成功，请检查", project);
                 });
                 // 确保光标可见
                 EditorModificationUtil.scrollToCaret(editor);

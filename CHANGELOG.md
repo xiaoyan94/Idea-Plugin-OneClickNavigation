@@ -6,6 +6,23 @@
 
 ## [Unreleased]
 
+## [1.0.32] - 2025-08-27
+
+### Added
+
+- [x] 添加 Java 代码中右键直接插入 I18n 资源串翻译方法的功能
+- [x] 添加 JS 代码中右键直接插入 I18n 资源串翻译函数的功能
+- [x] 添加 代码生成根据所勾选的文件类型进行指定生成 功能
+
+### Improved
+
+- [x] 增加 Spring Cloud MES 项目检查逻辑
+- [x] 优化 SQL 格式化和表单字段类型识别
+- [x] 添加 JavaScript 国际化函数插入功能
+- [x] 优化 代码一键生成功能；
+- [x] 改进 Layout 和 HTML 文件互跳
+- [x] 修复 GenerateExcelHeaderAction 中的错误提示
+
 ## [1.0.31] - 2025-08-27
 
 ### Added
@@ -310,6 +327,7 @@
 - 支持JavaScript代码中折叠显示I18n中文资源串;
 
 [Unreleased]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-Unreleased.zip
+[1.0.32]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.32.zip
 [1.0.31]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.31.zip
 [1.0.30]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.30.zip
 [1.0.29]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.29.zip

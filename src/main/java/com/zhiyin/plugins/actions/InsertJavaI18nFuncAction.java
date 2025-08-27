@@ -13,15 +13,22 @@ import com.intellij.openapi.editor.EditorModificationUtil;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.psi.*;
+import com.intellij.psi.util.PsiTreeUtil;
 import com.zhiyin.plugins.notification.MyPluginMessages;
 import com.zhiyin.plugins.resources.Constants;
 import com.zhiyin.plugins.ui.MyTranslateDialogWrapper;
 import com.zhiyin.plugins.utils.MyPropertiesUtil;
 import org.jetbrains.annotations.NotNull;
 
-public class InsertJSI18nFuncAction extends AnAction {
+import java.util.Objects;
 
-    private final static String toInsertTextFormat = "zhiyin.i18n.translate('%s')";
+public class InsertJavaI18nFuncAction extends AnAction {
+
+    private final static String toInsertTextFormat = "I18nUtil.getMessage(%s, \"%s\")";
+    private final static String TARGET_VARIABLE_NAME = "userCode";
+    private final static String TARGET_VARIABLE_NAME_LOWER_CASE = "usercode";
+    private final static String VARIABLE_STATEMENT_TEXT = "String userCode = params.get(\"usercode\").toString();";
 
     @Override
     public boolean isDumbAware() {
@@ -65,12 +72,73 @@ public class InsertJSI18nFuncAction extends AnAction {
         int startOffset = selectionStart;
         int endOffset = selectionEnd;
 
+        PsiFile psiFile = e.getRequiredData(CommonDataKeys.PSI_FILE);
+        PsiElement element = psiFile.findElementAt(caretOffset);
+        PsiMethod psiMethod = PsiTreeUtil.getParentOfType(element, PsiMethod.class);
+        if (psiMethod == null) {
+            MyPluginMessages.showInfo("提示", "这个地方不能调用资源串方法啊喂。");
+            return;
+        }
+
         MyTranslateDialogWrapper myTranslateDialogWrapper = createMyTranslateDialogWrapper(project, module, selectedText);
         ApplicationManager.getApplication().invokeLater(() -> {
             if (myTranslateDialogWrapper.showAndGet()) {
                 MyTranslateDialogWrapper.InputModel inputModel = myTranslateDialogWrapper.getInputModel();
                 String key = inputModel.getPropertyKey();
-                String toInsertText = String.format(toInsertTextFormat, key);
+                String toInsertText = String.format(toInsertTextFormat, "userCode", key);
+
+                // 检查方法内部是否包含指定名称的变量
+                boolean hasVariable = hasVariableInMethod(psiMethod, TARGET_VARIABLE_NAME);
+                if (hasVariable) {
+                    toInsertText = String.format(toInsertTextFormat, TARGET_VARIABLE_NAME, key);
+                } else {
+                    hasVariable = hasVariableInMethod(psiMethod, TARGET_VARIABLE_NAME_LOWER_CASE);
+                    if (hasVariable) {
+                        toInsertText = String.format(toInsertTextFormat, TARGET_VARIABLE_NAME_LOWER_CASE, key);
+                    }
+                }
+
+                if (!hasVariable) {
+                    // 变量不存在，执行写操作来插入代码
+                    // WriteCommandAction 是一个推荐的写操作封装类
+                    WriteCommandAction.runWriteCommandAction(project, () -> {
+                        try {
+                            // 获取方法体
+                            PsiCodeBlock body = psiMethod.getBody();
+                            if (body == null) {
+                                return;
+                            }
+
+                            // 1. 创建新的语句元素
+                            PsiElementFactory factory = PsiElementFactory.getInstance(project);
+                            PsiStatement newStatement = factory.createStatementFromText(VARIABLE_STATEMENT_TEXT, null);
+
+                            // 2. 找到插入点（方法体的开括号）
+                            PsiElement firstStatement = body.getLBrace();
+                            if (firstStatement == null) {
+                                return;
+                            }
+
+                            // 3. 在开括号后插入新语句
+                            // body.addAfter(newStatement, firstStatement);
+                            // 添加一个换行，让代码格式更美观
+
+                            // 创建一个包含换行符的空白元素
+                            PsiParserFacade parserFacade = PsiParserFacade.SERVICE.getInstance(project);
+                            PsiElement newLine = parserFacade.createWhiteSpaceFromText("\n");
+                            // 在开括号后插入新语句和换行符
+                            body.addAfter(newLine, firstStatement);
+                            body.addAfter(newStatement, firstStatement);
+
+                            MyPluginMessages.showInfo("操作提示", "缺少userCode变量，需在方法中添加userCode变量声明。请重新操作翻译资源串。", project);
+
+                        } catch (Exception ex) {
+                            MyPluginMessages.showError("错误", "插入代码时出错: " + ex.getMessage(), project);
+                        }
+                    });
+
+                    return;
+                }
 
                 // 支持 jsp
                 /*VirtualFile virtualFile = e.getRequiredData(CommonDataKeys.VIRTUAL_FILE);
@@ -134,9 +202,7 @@ public class InsertJSI18nFuncAction extends AnAction {
         if (e.getData(CommonDataKeys.EDITOR) != null && e.getData(CommonDataKeys.VIRTUAL_FILE) != null
                 && e.getData(PlatformDataKeys.MODULE) != null && e.getData(PlatformDataKeys.PROJECT) != null) {
             VirtualFile virtualFile = e.getRequiredData(CommonDataKeys.VIRTUAL_FILE);
-            isAvailable = "html".equalsIgnoreCase(virtualFile.getExtension());
-            isAvailable = isAvailable || "ftl".equalsIgnoreCase(virtualFile.getExtension());
-            isAvailable = isAvailable || "jsp".equalsIgnoreCase(virtualFile.getExtension());
+            isAvailable = "JAVA".equalsIgnoreCase(virtualFile.getExtension());
         }
         e.getPresentation().setEnabledAndVisible(isAvailable);
     }
@@ -153,5 +219,58 @@ public class InsertJSI18nFuncAction extends AnAction {
                 key -> !MyPropertiesUtil.findModuleI18nProperties(project, module, key).isEmpty()
         );
         return myTranslateDialogWrapper;
+    }
+
+    /**
+     * 检查给定的方法内部是否包含指定名称的变量（包括参数和本地变量）。
+     *
+     * @param method 要检查的 PsiMethod 对象
+     * @param variableName 目标变量名
+     * @return 如果找到则返回 true，否则返回 false
+     */
+    private boolean hasVariableInMethod(PsiMethod method, String variableName) {
+        // 1. 检查方法参数
+        for (PsiParameter parameter : method.getParameterList().getParameters()) {
+            if (Objects.equals(parameter.getName(), variableName)) {
+                return true;
+            }
+        }
+
+        // 2. 检查方法体内的本地变量
+        PsiCodeBlock body = method.getBody();
+        if (body == null) {
+            return false;
+        }
+
+        // 使用 PsiRecursiveElementVisitor 遍历方法体中的所有元素
+        // 这种方法可以处理嵌套的代码块，更可靠
+        PsiLocalVariableVisitor visitor = new PsiLocalVariableVisitor(variableName);
+        body.accept(visitor);
+
+        return visitor.isVariableFound();
+    }
+
+    /**
+     * 自定义的 PSI 访问者，用于查找特定名称的本地变量。
+     */
+    private static class PsiLocalVariableVisitor extends JavaRecursiveElementVisitor {
+        private final String targetName;
+        private boolean found = false;
+
+        public PsiLocalVariableVisitor(String targetName) {
+            this.targetName = targetName;
+        }
+
+        @Override
+        public void visitLocalVariable(PsiLocalVariable variable) {
+            super.visitLocalVariable(variable); // ⚠️ 这里在 JavaRecursiveElementVisitor 里是合法的
+            if (Objects.equals(variable.getName(), targetName)) {
+                found = true;
+            }
+        }
+
+        public boolean isVariableFound() {
+            return found;
+        }
     }
 }

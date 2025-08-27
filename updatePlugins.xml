@@ -1,13 +1,13 @@
 
 <plugins>
-    <plugin id="com.zhiyin.plugins.OneClickNavigation" url="https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.31.zip" version="1.0.31">
+    <plugin id="com.zhiyin.plugins.OneClickNavigation" url="https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.32.zip" version="1.0.32">
         <change-notes>&lt;h3&gt;Added&lt;/h3&gt;&#13;
 &#13;
-&lt;ul&gt;&lt;li class="task-list-item"&gt;&lt;input type="checkbox" class="task-list-item-checkbox" checked disabled /&gt;添加 JavaScript 国际化函数插入功能&lt;/li&gt;&lt;/ul&gt;&#13;
+&lt;ul&gt;&lt;li class="task-list-item"&gt;&lt;input type="checkbox" class="task-list-item-checkbox" checked disabled /&gt;添加 Java 代码中右键直接插入 I18n 资源串翻译方法的功能&lt;/li&gt;&lt;li class="task-list-item"&gt;&lt;input type="checkbox" class="task-list-item-checkbox" checked disabled /&gt;添加 JS 代码中右键直接插入 I18n 资源串翻译函数的功能&lt;/li&gt;&lt;li class="task-list-item"&gt;&lt;input type="checkbox" class="task-list-item-checkbox" checked disabled /&gt;添加 代码生成根据所勾选的文件类型进行指定生成 功能&lt;/li&gt;&lt;/ul&gt;&#13;
 &#13;
 &lt;h3&gt;Improved&lt;/h3&gt;&#13;
 &#13;
-&lt;ul&gt;&lt;li class="task-list-item"&gt;&lt;input type="checkbox" class="task-list-item-checkbox" checked disabled /&gt;增加 Spring Cloud MES 项目检查逻辑&lt;/li&gt;&lt;li class="task-list-item"&gt;&lt;input type="checkbox" class="task-list-item-checkbox" checked disabled /&gt;优化 SQL 格式化和表单字段类型识别&lt;/li&gt;&lt;li class="task-list-item"&gt;&lt;input type="checkbox" class="task-list-item-checkbox" checked disabled /&gt;添加 JavaScript 国际化函数插入功能&lt;/li&gt;&lt;li class="task-list-item"&gt;&lt;input type="checkbox" class="task-list-item-checkbox" checked disabled /&gt;改进 Layout 和 HTML 文件互跳&lt;/li&gt;&lt;li class="task-list-item"&gt;&lt;input type="checkbox" class="task-list-item-checkbox" checked disabled /&gt;修复 GenerateExcelHeaderAction 中的错误提示&lt;/li&gt;&lt;/ul&gt;&#13;
+&lt;ul&gt;&lt;li class="task-list-item"&gt;&lt;input type="checkbox" class="task-list-item-checkbox" checked disabled /&gt;增加 Spring Cloud MES 项目检查逻辑&lt;/li&gt;&lt;li class="task-list-item"&gt;&lt;input type="checkbox" class="task-list-item-checkbox" checked disabled /&gt;优化 SQL 格式化和表单字段类型识别&lt;/li&gt;&lt;li class="task-list-item"&gt;&lt;input type="checkbox" class="task-list-item-checkbox" checked disabled /&gt;添加 JavaScript 国际化函数插入功能&lt;/li&gt;&lt;li class="task-list-item"&gt;&lt;input type="checkbox" class="task-list-item-checkbox" checked disabled /&gt;优化 代码一键生成功能；&lt;/li&gt;&lt;li class="task-list-item"&gt;&lt;input type="checkbox" class="task-list-item-checkbox" checked disabled /&gt;改进 Layout 和 HTML 文件互跳&lt;/li&gt;&lt;li class="task-list-item"&gt;&lt;input type="checkbox" class="task-list-item-checkbox" checked disabled /&gt;修复 GenerateExcelHeaderAction 中的错误提示&lt;/li&gt;&lt;/ul&gt;&#13;
 &#13;
 &#13;
 </change-notes>
