@@ -58,6 +58,7 @@ public class GoToLayoutXmlAction extends AnAction {
 
         if (filePath.contains("layout")) {
             navigateToLayoutHTML(element.getContainingFile(), null);
+            return;
         }
 
         // Replace the path to find the corresponding layout XML file

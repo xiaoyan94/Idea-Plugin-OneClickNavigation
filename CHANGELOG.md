@@ -17,6 +17,7 @@
 - [x] 增加 Spring Cloud MES 项目检查逻辑
 - [x] 优化 SQL 格式化和表单字段类型识别
 - [x] 添加 JavaScript 国际化函数插入功能
+- [x] 优化 代码一键生成功能；
 - [x] 改进 Layout 和 HTML 文件互跳
 - [x] 修复 GenerateExcelHeaderAction 中的错误提示
 
