@@ -251,24 +251,15 @@
 
 <div id="DivError" class="easyui-dialog" style="width:700px;height:250px;"
      closed="true" resizable="true" modal="true">
-    <div id="divError" class="easyui-layout" data-options="fit:true,title:''">
-        <table width="100%" height="100%" id="tblError" class="view">
-            <tr>
-                <td colspan="6">
-                    <input id="textError" class="easyui-textbox" data-options="multiline:true,readonly:true"
-                           style="width:100%;height:100%">
-                </td>
-            </tr>
-            <tr>
-                <td colspan="6"
-                    style="text-align:right;padding-top:10px;border-bottom-style:none;border-right-style:none;border-left-style:none;">
-                    <a href="javascript:void(0)" class="easyui-linkbutton" id="btnConfirmMsg" iconcls="icon-ok"><@message
-                        key="com.zhiyin.mes.app.web.product_close_btn"/></a>
-                    <!-- <a href="javascript:void(0)" class="easyui-linkbutton" id="btnConfirmMsgWitUrl" iconcls="icon-ok" style="display:true;">确定</a> -->
-                    <!--<a href="javascript:void(0)" class="easyui-linkbutton" id="btnCancelMsg" iconcls="icon-cancel">取消</a>-->
-                </td>
-            </tr>
-        </table>
+    <div style="display: flex; flex-direction: column; height: 100%;">
+        <div style="flex: 1; padding: 10px; overflow: hidden;">
+            <input id="textError" class="easyui-textbox"
+                   data-options="multiline:true,readonly:true"
+                   style="width:100%;height:100%;box-sizing:border-box;">
+        </div>
+        <div style="text-align: right; padding: 10px; border-top: 1px solid #ddd;">
+            <a href="javascript:void(0)" class="easyui-linkbutton" id="btnConfirmMsg" iconcls="icon-ok"><@message key="com.zhiyin.mes.app.web.product_close_btn"/></a>
+        </div>
     </div>
 </div>
 </#noparse>
