@@ -78,6 +78,7 @@ public class ${ObjectName}Controller extends BaseController {
             List<Map> rows = (List<Map>) recordMap.get("rows");
             String fileName = I18nUtil.getMessage(userCode, "${fileName}");
             EasyExcelUtils.writeExportExcel(response, DateUtils.formatDate(new Date()), (Object[]) columnMap.get("header"), (String[]) columnMap.get("field"), (String[]) columnMap.get("fieldtype"), rows, fileName, params);
+            // 之前的写法
             // EasyExcelUtils.writeExportExcel(response, DateUtils.formatDate(new Date()), (Object[]) columnMap.get("header"), (String[]) columnMap.get("field"), rows, fileName, params);
         } catch (Exception e) {
             logger.error("${ObjectName}Controller::export${ObjectName} catch exception:", e);
@@ -104,7 +105,7 @@ public class ${ObjectName}Controller extends BaseController {
                 retMap.put("error", I18nUtil.getMessage(userCode,"com.zhiyin.mes.app.web.uploadFile_isEmpty"));
                 return wrapperSuccess(retMap, json);
             }
-            retMap = ${ObjectName}Service.import${ObjectName}(inputStream,clientIp,params);
+            retMap = ${objectName}Service.import${ObjectName}(inputStream,clientIp,params);
             return wrapperSuccess(retMap, json);
         } catch (Exception e) {
             logger.error("${ObjectName}Controller::import${ObjectName} catch exception:", e);

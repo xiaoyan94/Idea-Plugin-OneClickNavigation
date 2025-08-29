@@ -60,7 +60,9 @@
     <script>
         var _MainModel = "${ObjectName}";
         var _MainGrid = "${ObjectName}Grid";
+        <#noparse>
         var _factoryId = '${factoryId}';
+        </#noparse>
         $(function () {
             var today = getToday();
             var beforeDate = getBeforeDate(7);

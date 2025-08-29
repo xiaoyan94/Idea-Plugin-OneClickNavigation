@@ -2,6 +2,7 @@
 package com.zhiyin.service.${packageName};
 
 // import com.zhiyin.aop.DataSetType;
+import com.zhiyin.dao.DaoResultBuilder;
 import com.zhiyin.dao.${packageName}.I${ObjectName}Dao;
 import com.zhiyin.i18n.I18nUtil;
 import com.zhiyin.service.BaseService;
@@ -85,9 +86,10 @@ public class ${ObjectName}Service extends BaseService {
         dataResult.getRows().removeAll(filterList);
         excelImportService.insertTempDataByExcel(dataResult);
 
-        // ${objectName}Dao.import${objectName}Dao(params);
+        // 插入业务表
+        // ${objectName}Dao.import${objectName}(params);
         bizCommonService.resetSeq("${tableName}");
-        Map<String, Object> retMap;
+        Map retMap;
         if (!errorMessages.isEmpty()) {
             DaoResultBuilder resultBuilder = new DaoResultBuilder();
             resultBuilder.setError(String.join("\n", errorMessages));

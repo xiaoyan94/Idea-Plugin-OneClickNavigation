@@ -176,6 +176,16 @@ public class TableParser {
         return columns;
     }
 
+    public static String extractTableNameFromDQL(String dql) {
+        Pattern pattern = Pattern.compile("from\\s+(\\w+)", Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(dql);
+        if (matcher.find()) {
+            return matcher.group(1);
+        } else {
+            return "null";
+        }
+    }
+
     private static List<String> splitFields(String selectClause) {
         List<String> fields = new ArrayList<>();
         StringBuilder currentField = new StringBuilder();

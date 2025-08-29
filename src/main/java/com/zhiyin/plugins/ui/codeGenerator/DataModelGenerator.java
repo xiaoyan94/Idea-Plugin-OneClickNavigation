@@ -68,11 +68,11 @@ public class DataModelGenerator {
 
         JButton queryButton = new JButton("从数据库读取表字段");
         queryButton.addActionListener(e -> fetchFieldsFromDatabase());
-        queryButton.setEnabled(false);
+//        queryButton.setEnabled(false);
 
         JButton parseCreateSQLButton = new JButton("从建表DDL解析字段");
         parseCreateSQLButton.addActionListener(e -> fetchFieldsFromTableSQL());
-        parseCreateSQLButton.setEnabled(false);
+//        parseCreateSQLButton.setEnabled(false);
 
         // TODO
         JButton parseSelectSQLButton = new JButton("从查询SQL解析字段");
@@ -204,7 +204,7 @@ public class DataModelGenerator {
         checkBoxPanel.setLayout(new BoxLayout(checkBoxPanel, BoxLayout.X_AXIS));
         JLabel checkBoxLabel = new JLabel("文件类型：");
         checkBoxPanel.add(checkBoxLabel);
-        mocCheckBox = new JCheckBox("Moc", false);
+        mocCheckBox = new JCheckBox("Moc", true);
         layoutCheckBox = new JCheckBox("Layout", true);
         htmlCheckBox = new JCheckBox("Html", true);
         controllerCheckBox = new JCheckBox("Controller", true);
@@ -255,6 +255,18 @@ public class DataModelGenerator {
                 fields.clear();
                 fields.addAll(tableMetadata);
 
+                StringBuilder sqlBuilder = new StringBuilder("select ");
+                for (int i = 0; i < fields.size(); i++) {
+                    sqlBuilder.append("a.")
+                              .append(fields.get(i).get("name"))
+                              .append(",");
+                }
+                sqlBuilder.deleteCharAt(sqlBuilder.length() - 1);
+                sqlBuilder.append(" \nfrom ")
+                          .append(tableName)
+                          .append(" a");
+                this.sql = sqlBuilder.toString();
+
                 // Optionally, update your UI component with the new fields data
                 updateTableModel();
             }
@@ -278,6 +290,19 @@ public class DataModelGenerator {
                 List<Map<String, Object>> fieldsFromSQL = TableParser.parseCreateTable(input);
                 fields.clear();
                 fields.addAll(fieldsFromSQL);
+
+                StringBuilder sqlBuilder = new StringBuilder("select ");
+                for (int i = 0; i < fields.size(); i++) {
+                    sqlBuilder.append("a.")
+                              .append(fields.get(i).get("name"))
+                              .append(",");
+                }
+                sqlBuilder.deleteCharAt(sqlBuilder.length() - 1);
+                sqlBuilder.append(" \nfrom ")
+                          .append(tableName)
+                          .append(" a");
+                this.sql = sqlBuilder.toString();
+
                 updateTableModel();
             } else {
                 MyPluginMessages.showError("操作失败", "请输入有效的 SQL 语句（暂只支持解析MySQL DDL）。", project);
@@ -306,7 +331,7 @@ public class DataModelGenerator {
             );
             // 从SQL语句中提取表信息
             if (input != null && !input.isEmpty()) {
-                this.tableName = "UNNECESSARY";
+                this.tableName = TableParser.extractTableNameFromDQL(input);
                 this.sql = input;
                 List<Map<String, Object>> fieldsFromSQL = TableParser.parseDQL(input);
                 fields.clear();
@@ -515,6 +540,10 @@ public class DataModelGenerator {
 
         if (dataQueryRadioButton.isSelected()) {
             service.generateBaseQueryTypeFile(this.module, folder, modelName, fileName, this.sql, this.fields, paramsMap);
+        }
+
+        if (mocCheckBox.isSelected()) {
+            service.generateMocFile(this.module, folder, modelName, this.tableName, this.fields);
         }
 
         // 关闭窗口
