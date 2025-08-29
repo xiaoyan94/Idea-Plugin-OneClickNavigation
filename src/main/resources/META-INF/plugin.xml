@@ -162,6 +162,14 @@
                     text="转换为CDATA块"
                     description="XML：将所选文本转换为 CDATA 块"/>
 
+            <action id="com.zhiyin.plugins.actions.CopySelectedSqlAction"
+                    class="com.zhiyin.plugins.actions.CopySelectedSqlAction"
+                    icon="com.zhiyin.plugins.resources.MyIcons.pandaIconSVG16_2"
+                    text="复制格式化后的SQL"
+                    description="复制可执行SQL（自动替换language、移除标签、移除行首空白）">
+                <add-to-group group-id="EditorPopupMenu" anchor="after" relative-to-action="Copy"/>
+            </action>
+
             <action id="com.zhiyin.plugins.actions.ImportMapperXMLSortColumnAction"
                     icon="com.zhiyin.plugins.resources.MyIcons.pandaIconSVG16_2"
                     class="com.zhiyin.plugins.actions.ImportMapperXMLSortColumnAction"
