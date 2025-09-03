@@ -2,6 +2,7 @@ package com.zhiyin.plugins.service;
 
 import com.intellij.ide.highlighter.XmlFileType;
 import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.components.Service;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.progress.ProgressIndicator;
@@ -17,6 +18,8 @@ import com.intellij.psi.search.FileTypeIndex;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.xml.XmlFile;
 import com.intellij.psi.xml.XmlTag;
+import com.intellij.spellchecker.SpellCheckerManager;
+import com.intellij.spellchecker.settings.SpellCheckerSettings;
 import com.intellij.util.xml.DomElement;
 import com.intellij.util.xml.DomFileElement;
 import com.intellij.util.xml.DomManager;
@@ -25,8 +28,14 @@ import com.zhiyin.plugins.listeners.MyXmlFileListener;
 import com.zhiyin.plugins.notification.MyPluginMessages;
 import com.zhiyin.plugins.oneClickNavigation.xml.domElements.Mapper;
 import com.zhiyin.plugins.oneClickNavigation.xml.domElements.Moc;
+import com.zhiyin.plugins.utils.DatabaseConnectionFinder;
+import com.zhiyin.plugins.utils.DatabaseMetadataUtil;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -41,6 +50,8 @@ import static com.zhiyin.plugins.utils.MyPsiUtil.isFileInOutputPaths;
 @Service(Service.Level.PROJECT)
 public final class MyProjectService {
     private final Project project;
+
+    private Set<String> words;
 
     public @NotNull Map<String, List<Mapper>> getXmlFileMap() {
         return xmlFileMap;
@@ -135,7 +146,7 @@ public final class MyProjectService {
         for (VirtualFile virtualFile : virtualFiles.get()) {
 //            ApplicationManager.getApplication().invokeLater(() -> {
                 indicator.checkCanceled();
-//                indicator.setText(String.format("正在加载文件: %s", virtualFile.getName()));
+                // indicator.setText(String.format("正在加载文件: %s", virtualFile.getName()));
                 double fraction = processedFiles.incrementAndGet() * 1d / totalFiles;
                 indicator.setFraction(fraction);
 
@@ -150,6 +161,12 @@ public final class MyProjectService {
         if (processedFiles.get() == totalFiles) {
             String content = String.format("成功加载%d条Mapper, %d条Moc", xmlFileMap.size(), mocFileMap.size());
             MyPluginMessages.showInfo("OneClickNavigation", content, project);
+
+            // indicator.setText("OneClickNavigation loading data completed");
+
+            ApplicationManager.getApplication().invokeLater(() -> {
+                createDictionaryFile(project); // 创建字典文件
+            });
         }
 //        });
 
@@ -229,4 +246,117 @@ public final class MyProjectService {
             }
         }
     }
+
+    /**
+     * 创建用户字典文件，用于拼写检查
+     * @param project 项目
+     * @param words 字典
+     */
+    private void createDictionaryFile(Project project, Set<String> words) {
+
+        // 定位.idea/dictionaries目录
+        VirtualFile projectFile = project.getProjectFile();
+        if (projectFile == null) {
+            return;
+        }
+        VirtualFile projectDir = projectFile.getParent();
+        AtomicReference<VirtualFile> dictionariesDir = new AtomicReference<>(projectDir.findChild("dictionaries"));
+
+        // 创建目录（如果不存在）
+        if (dictionariesDir.get() == null || !dictionariesDir.get().exists()) {
+            try {
+                WriteCommandAction.writeCommandAction(project).run(() -> dictionariesDir.set(projectDir.createChildDirectory(this, "dictionaries")));
+            } catch (IOException ex) {
+                LOG.error("Error creating dictionary file: " + ex.getMessage());
+            }
+        }
+
+        VirtualFile finalDictionariesDir = dictionariesDir.get();
+        ApplicationManager.getApplication().executeOnPooledThread(() -> {
+            // 创建字典文件
+            AtomicReference<VirtualFile> dictFile = new AtomicReference<>();
+            try {
+                WriteCommandAction.writeCommandAction(project)
+                                  .run(() -> dictFile.set(Objects.requireNonNull(finalDictionariesDir)
+                                                                 .findOrCreateChildData(this,
+                                                                                        "OneClickNavigation.dic"
+                                                                 )));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            WriteCommandAction.writeCommandAction(project).run(() -> {
+
+                // 写入列名
+                try (OutputStream os = dictFile.get().getOutputStream(this); BufferedWriter writer = new BufferedWriter(
+                        new OutputStreamWriter(os))) {
+                    for (String word : words) {
+                        writer.write(word);
+                        writer.newLine();
+                    }
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                SpellCheckerManager spellCheckerManager = SpellCheckerManager.getInstance(project);
+                SpellCheckerSettings spellCheckerSettings = SpellCheckerSettings.getInstance(project);
+
+                List<String> customDictionariesPaths = spellCheckerSettings.getCustomDictionariesPaths();
+                if (!customDictionariesPaths.contains(dictFile.get().getPath())) {
+                    customDictionariesPaths.add(dictFile.get().getPath());
+                }
+                spellCheckerSettings.setCustomDictionariesPaths(customDictionariesPaths);
+                spellCheckerManager.fullConfigurationReload();
+
+                MyPluginMessages.showInfo("拼写检查词典", "成功加载 " + words.size() + " 条", project);
+            });
+
+        });
+    }
+
+    public void createDictionaryFile(Project project) {
+
+        List<Map<String, String>> connections = new ArrayList<>();
+        DatabaseConnectionFinder connectionFinder = project.getService(DatabaseConnectionFinder.class);
+        if (connectionFinder != null) {
+            connections.addAll(connectionFinder.findDatabaseConnections(project));
+        }
+
+        Optional<Map<String, String>> first = connections.stream()
+                                                         .filter(connection -> "app-dev.properties".equalsIgnoreCase(
+                                                                 connection.get("fileName")))
+                                                         .findFirst()
+                ;
+        if (first.isPresent()) {
+            Map<String, String> info = first.get();
+            String jdbcUrl = info.get("url");
+            String username = info.get("username");
+            String password = info.get("password");
+
+            ApplicationManager.getApplication().executeOnPooledThread(() -> {
+
+                Map<String, List<Map<String, Object>>> result = DatabaseMetadataUtil.getTablesMetadataByNotStartPrefix(
+                        jdbcUrl, username, password, "act_");
+
+
+                words = new HashSet<>(result.keySet());
+                words.addAll(mocFileMap.keySet());
+                String projectFilePath = project.getBasePath();
+                if (projectFilePath != null) {
+                    String[] splitProjectPath = projectFilePath.substring(projectFilePath.lastIndexOf("/") + 1).split("\\.");
+                    words.addAll(Arrays.asList(splitProjectPath));
+                }
+                for (List<Map<String, Object>> tableData : result.values()) {
+                    for (Map<String, Object> row : tableData) {
+                        words.add(row.getOrDefault("name", "").toString());
+                    }
+                }
+
+                createDictionaryFile(project, words);
+            });
+        }
+    }
+
+    public Set<String> getWords() {
+        return words;
+    }
+
 }

@@ -108,6 +108,8 @@
             <category>OneClickNavigation intentions</category>
         </intentionAction>-->
         <completion.contributor language="JAVA" order="first" implementationClass="com.zhiyin.plugins.completion.JavaI18nCompletionContributor"/>
+        <completion.contributor language="JAVA" order="last" implementationClass="com.zhiyin.plugins.completion.DictCompletionContributor"/>
+        <completion.contributor language="XML" order="last" implementationClass="com.zhiyin.plugins.completion.DictCompletionContributor"/>
         <completion.contributor language="XML" order="first" implementationClass="com.zhiyin.plugins.completion.XmlI18nCompletionContributor"/>
         <completion.contributor language="HTML" order="first" implementationClass="com.zhiyin.plugins.completion.HtmlI18nCompletionContributor"/>
         <completion.contributor language="JavaScript" order="first" implementationClass="com.zhiyin.plugins.completion.HtmlI18nCompletionContributor"/>
@@ -148,6 +150,13 @@
                 icon="com.zhiyin.plugins.resources.MyIcons.pandaIconSVG16_2"
                 class="com.zhiyin.plugins.actions.ReloadXmlFileCacheMapAction" text="刷新数据"
                 description="Refresh cache map">
+            <add-to-group group-id="com.zhiyin.plugins.ToolsMenuGroup" anchor="first"/>
+        </action>
+
+        <action id="com.zhiyin.plugins.actions.GenerateDictAction"
+                icon="com.zhiyin.plugins.resources.MyIcons.pandaIconSVG16_2"
+                class="com.zhiyin.plugins.actions.GenerateDictAction" text="生成用户字典"
+                description="Generate Dict">
             <add-to-group group-id="com.zhiyin.plugins.ToolsMenuGroup" anchor="first"/>
         </action>
 

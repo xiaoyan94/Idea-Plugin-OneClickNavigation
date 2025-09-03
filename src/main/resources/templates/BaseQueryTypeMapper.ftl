@@ -14,10 +14,10 @@ ${dataGrids[0].sql}
             </if>
         <#elseIf field.name?lowerCase?endsWith("time") || field.name?lowerCase?endsWith("date")>
             <if test="${field.name?lowerCase}from != null and ${field.name?lowerCase}from != ''">
-                and a.${field.name} >= <#noParse>#{</#noParse>${field.name?lowerCase}from}
+                and a.${field.name} >= <#noParse>concat(#{</#noParse>${field.name?lowerCase}from}, ' 00:00:00')
             </if>
             <if test="${field.name?lowerCase}to != null and ${field.name?lowerCase}to != ''">
-                and a.${field.name} <![CDATA[ <= ]]> <#noParse>#{</#noParse>${field.name?lowerCase}to}
+                and a.${field.name} <![CDATA[ <= ]]> <#noParse>concat(#{</#noParse>${field.name?lowerCase}to}, ' 23:59:59')
             </if>
         <#else>
             <if test="${field.name?lowerCase} != null and ${field.name?lowerCase} != ''">

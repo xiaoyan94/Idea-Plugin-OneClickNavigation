@@ -6,6 +6,20 @@
 
 ## [Unreleased]
 
+## [1.0.34] - 2025-09-03
+
+### Added
+
+- [x] 拼写检查：自动加载数据库表及字段信息、MocName等生成词典，并自动完成自定义词典配置；
+- [x] 代码提示：将数据库表及字段信息、MocName等上述信息加入字面量的代码提示中，`Ctrl`+`空格` 触发代码提示。
+
+## [1.0.33] - 2025-09-02
+
+### Improved
+
+- [x] 优化 一键生成基础代码功能
+- [x] 添加 添加复制格式化后的SQL 功能，包括自动移除动态标签、替换占位符、去除多余空白等
+
 ## [1.0.32] - 2025-08-27
 
 ### Added
@@ -327,6 +341,8 @@
 - 支持JavaScript代码中折叠显示I18n中文资源串;
 
 [Unreleased]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-Unreleased.zip
+[1.0.34]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.34.zip
+[1.0.33]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.33.zip
 [1.0.32]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.32.zip
 [1.0.31]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.31.zip
 [1.0.30]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.30.zip

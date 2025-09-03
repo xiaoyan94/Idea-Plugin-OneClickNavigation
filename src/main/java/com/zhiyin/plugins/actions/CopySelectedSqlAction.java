@@ -91,6 +91,8 @@ public class CopySelectedSqlAction extends AnAction {
      * 移除动态标签
      */
     private String removeDynamicTags(String sql) {
+        // 替换 `<where>` 为 WHERE，忽略大小写
+        sql = sql.replaceAll("<where>", "WHERE 1=1");
         Matcher matcher = DYNAMIC_TAG_PATTERN.matcher(sql);
         return matcher.replaceAll("");
     }
@@ -106,6 +108,10 @@ public class CopySelectedSqlAction extends AnAction {
         String result = sql.replaceAll("#\\{.*?\\}", "'?'");
         // 替换 ${...} 为 '?'
         result = result.replaceAll("\\$\\{.*?\\}", "'?'");
+        /*// 替换 <![CDATA[ ... ]]> 为 '...'
+        result = result.replaceAll("<!\\[CDATA\\[(.*?)\\]\\]>", "$1");*/
+        // 替换单行或多行CDATA标签（支持换行）。(?s) 开启 DOTALL 模式
+        result = result.replaceAll("(?s)<!\\[CDATA\\[(.*?)\\]\\]>", "$1");
         return result;
     }
 }

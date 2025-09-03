@@ -78,6 +78,9 @@
             <#elseIf field.isQueryField?? && field.isQueryField == "true" && field.easyuiClass?? && field.easyuiClass?contains("date")>
             <Field id="${field.name?lowerCase}from" name="${field.name?lowerCase}from" label="${field.name?lowerCase}从" easyuiClass="${field.easyuiClass!"easyui-datebox"}"/>
             <Field id="${field.name?lowerCase}to" name="${field.name?lowerCase}to" label="到" easyuiClass="${field.easyuiClass!"easyui-datebox"}"/>
+            <#elseIf field.isQueryField?? && field.isQueryField == "true" && field.easyuiClass?? && field.easyuiClass?contains("time")>
+            <Field id="${field.name?lowerCase}from" name="${field.name?lowerCase}from" label="${field.name?lowerCase}从" easyuiClass="${field.easyuiClass!"easyui-datebox"}"/>
+            <Field id="${field.name?lowerCase}to" name="${field.name?lowerCase}to" label="到" easyuiClass="${field.easyuiClass!"easyui-datebox"}"/>
             <#elseIf field.isQueryField?? && field.isQueryField == "true">
             <Field id="${field.name}" name="${field.name?lowerCase}"<#if field.ref??> ref="${field.ref}"</#if><#if field.label??> label="${field.label}" easyuiClass="${field.easyuiClass!"easyui-textbox"}"</#if>/>
             <#else>
