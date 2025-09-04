@@ -69,8 +69,7 @@ public class ${ObjectName}Controller extends BaseController {
         Map<String, Object> params = getParameterMap(request);
         try {
             String paraStr = params.get("para").toString();
-            JSONObject jsonObject = JSONObject.parseObject(paraStr);
-            Map<String, Object> paramap = jsonObject;
+            Map<String, Object> paramap = JSONObject.parseObject(paraStr);
             params.putAll(paramap);
             String userCode = StringUtils.getStringFromMap(params, "usercode");
             Map<String, Object> recordMap = ${objectName}Service.query${ObjectName}List(params);
