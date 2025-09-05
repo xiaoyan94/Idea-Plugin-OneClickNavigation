@@ -6,6 +6,17 @@
 
 ## [Unreleased]
 
+## [1.0.35] - 2025-09-05
+
+### Improved
+
+- [x] 优化 JS I18n 辅助功能使用体验
+- [x] 优化 Layout Combobox Url 代码提示加载速度
+
+### Fixed
+
+- [x] 修复已知问题
+
 ## [1.0.34] - 2025-09-03
 
 ### Added
@@ -341,6 +352,7 @@
 - 支持JavaScript代码中折叠显示I18n中文资源串;
 
 [Unreleased]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-Unreleased.zip
+[1.0.35]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.35.zip
 [1.0.34]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.34.zip
 [1.0.33]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.33.zip
 [1.0.32]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.32.zip

@@ -11,6 +11,7 @@ import com.intellij.lang.java.JavaLanguage;
 import com.intellij.lang.javascript.JavascriptLanguage;
 import com.intellij.lang.javascript.psi.JSCallExpression;
 import com.intellij.lang.xml.XMLLanguage;
+import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.impl.source.html.HtmlFileImpl;
@@ -30,15 +31,15 @@ public class CommonI18nLookupElement extends LookupElement {
     public CommonI18nLookupElement(@NotNull String key, @NotNull String chs, @NotNull String eng) {
         super();
         this.key = key;
-        this.chs = chs;
+        this.chs = chs.trim();
         this.eng = eng;
     }
 
     public CommonI18nLookupElement(@NotNull String key, @NotNull String chs) {
         super();
         this.key = key;
-        this.chs = chs;
-        this.eng = chs;
+        this.chs = chs.trim();
+        this.eng = chs.trim();
     }
 
     /**
@@ -60,6 +61,8 @@ public class CommonI18nLookupElement extends LookupElement {
 
         Language language = element.getLanguage();
         PsiFile psiFile = element.getContainingFile();
+        int replaceStartOffSet = context.getStartOffset();
+        int replaceEndOffSet = context.getTailOffset();
         if (language instanceof JavascriptLanguage) {
             CharSequence newValue = chs;
             if (element instanceof LeafPsiElement) {
@@ -68,23 +71,44 @@ public class CommonI18nLookupElement extends LookupElement {
                     // TODO js 方法套方法会取最外层方法！！
                     PsiElement jsCallExpression = PsiTreeUtil.getParentOfType(element, JSCallExpression.class);
                     if (jsCallExpression != null && jsCallExpression.getText().startsWith("zhiyin.i18n.translate")){
-                        newValue = key;
+                        replaceStartOffSet = jsCallExpression.getTextOffset();
+                        replaceEndOffSet = jsCallExpression.getTextOffset() + jsCallExpression.getTextLength();
+                        newValue = "zhiyin.i18n.translate('" + key + "')";
                     } else {
-                        newValue = String.format("<@message key=\"%s\"/>", key);
+                        // 如果前一位是'或"
+                        /*String oldText = context.getDocument()
+                                                .getText(new TextRange(context.getStartOffset(),
+                                                                       context.getTailOffset()
+                                                ));
+                        replaceStartOffSet = context.getStartOffset() - 1;
+                        replaceEndOffSet = context.getTailOffset() + 1;*/
+
+                        replaceStartOffSet = ((LeafPsiElement) element).getStartOffset();
+                        replaceEndOffSet = ((LeafPsiElement) element).getTextRange().getEndOffset();
+
+                        /*newValue = String.format("<@message key=\"%s\"/>", key);*/
+                        newValue = String.format("zhiyin.i18n.translate(\"%s\")", key);
+
                     }
                 } else if (elementType.equals("JS:IDENTIFIER")) {
                     PsiElement jsCallExpression = PsiTreeUtil.getParentOfType(element, JSCallExpression.class);
                     if (jsCallExpression != null && jsCallExpression.getText().startsWith("zhiyin.i18n.translate")){
-                        newValue = key;
+                        replaceStartOffSet = jsCallExpression.getTextOffset();
+                        replaceEndOffSet = jsCallExpression.getTextOffset() + jsCallExpression.getTextLength();
+                        newValue = "zhiyin.i18n.translate('" + key + "')";
                     } else {
+                        replaceStartOffSet = context.getStartOffset();
                         newValue = String.format("zhiyin.i18n.translate(\"%s\")", key);
                     }
                 }
             }
-            context.getDocument().replaceString(context.getStartOffset(), context.getTailOffset(), newValue);
+            context.getDocument().replaceString(replaceStartOffSet, replaceEndOffSet, newValue);
+            context.getEditor().getCaretModel().moveToOffset(replaceStartOffSet + newValue.length());
         } else if (language instanceof HTMLLanguage || psiFile instanceof HtmlFileImpl) {
-            CharSequence i18nFreeMarkerDirective = String.format("<@message key=\"%s\"/>", key);
-            context.getDocument().replaceString(context.getStartOffset(), context.getTailOffset(), i18nFreeMarkerDirective);
+//            replaceStartOffSet = ((LeafPsiElement) element).getStartOffset();
+//            replaceEndOffSet = ((LeafPsiElement) element).getTextRange().getEndOffset();
+            CharSequence i18nFreeMarkerDirective = String.format("<@message key=\'%s\'/>", key);
+            context.getDocument().replaceString(replaceStartOffSet, replaceEndOffSet, i18nFreeMarkerDirective);
         } else if (language instanceof XMLLanguage) {
             // Html 也会进来
             // Find the XmlTag parent

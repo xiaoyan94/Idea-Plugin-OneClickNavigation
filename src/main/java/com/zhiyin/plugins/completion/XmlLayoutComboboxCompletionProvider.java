@@ -21,7 +21,7 @@ public class XmlLayoutComboboxCompletionProvider extends BaseCompletionProvider 
     @Override
     protected void performCompletion(@NotNull CompletionParameters parameters, @NotNull ProcessingContext context, @NotNull CompletionResultSet result, @NotNull String prefix) {
         Project project = parameters.getOriginalFile().getProject();
-        ComboboxUrlService service = new ComboboxUrlService(project);
+        ComboboxUrlService service = project.getService(ComboboxUrlService.class);
         List<String> cachedResults = service.getCachedResults();
 
         for (String value : cachedResults) {

@@ -29,6 +29,9 @@ public final class ComboboxUrlService {
     }
 
     public List<String> getCachedResults() {
+        if (cachedResults.isEmpty()) {
+            searchAndCacheXmlTags("ComboxUrl", "value");
+        }
         return new ArrayList<>(cachedResults);  // Return a copy to ensure encapsulation
     }
 

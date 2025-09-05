@@ -1,9 +1,13 @@
 
 <plugins>
-    <plugin id="com.zhiyin.plugins.OneClickNavigation" url="https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.34.zip" version="1.0.34">
-        <change-notes>&lt;h3&gt;Added&lt;/h3&gt;&#13;
+    <plugin id="com.zhiyin.plugins.OneClickNavigation" url="https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.35.zip" version="1.0.35">
+        <change-notes>&lt;h3&gt;Improved&lt;/h3&gt;&#13;
 &#13;
-&lt;ul&gt;&lt;li class="task-list-item"&gt;&lt;input type="checkbox" class="task-list-item-checkbox" checked disabled /&gt;拼写检查：自动加载数据库表及字段信息、MocName等生成词典，并自动完成自定义词典配置；&lt;/li&gt;&lt;li class="task-list-item"&gt;&lt;input type="checkbox" class="task-list-item-checkbox" checked disabled /&gt;代码提示：将数据库表及字段信息、MocName等上述信息加入字面量的代码提示中，&lt;code&gt;Ctrl&lt;/code&gt;+&lt;code&gt;空格&lt;/code&gt; 触发代码提示。&lt;/li&gt;&lt;/ul&gt;&#13;
+&lt;ul&gt;&lt;li class="task-list-item"&gt;&lt;input type="checkbox" class="task-list-item-checkbox" checked disabled /&gt;优化 JS I18n 辅助功能使用体验&lt;/li&gt;&lt;li class="task-list-item"&gt;&lt;input type="checkbox" class="task-list-item-checkbox" checked disabled /&gt;优化 Layout Combobox Url 代码提示加载速度&lt;/li&gt;&lt;/ul&gt;&#13;
+&#13;
+&lt;h3&gt;Fixed&lt;/h3&gt;&#13;
+&#13;
+&lt;ul&gt;&lt;li class="task-list-item"&gt;&lt;input type="checkbox" class="task-list-item-checkbox" checked disabled /&gt;修复已知问题&lt;/li&gt;&lt;/ul&gt;&#13;
 &#13;
 &#13;
 </change-notes>
