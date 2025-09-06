@@ -31,6 +31,9 @@ public final class AppSettingsState implements PersistentStateComponent<AppSetti
    */
   public String mapperToDaoModuleScope = Constants.SCOPE_NAME_MODULE;
 
+  // Add the new field for the commit template
+  public String commitMessageTemplate = "";
+
   public static AppSettingsState getInstance() {
     return ApplicationManager.getApplication().getService(AppSettingsState.class);
   }

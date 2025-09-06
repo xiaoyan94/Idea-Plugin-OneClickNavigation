@@ -6,6 +6,11 @@
 
 ## [Unreleased]
 
+## [1.0.36] - 2025-09-06
+
+- [x] 在主工具栏添加构建模块按钮
+- [x] 添加自定义提交日志模板前缀
+
 ## [1.0.35] - 2025-09-05
 
 ### Improved
@@ -352,6 +357,7 @@
 - 支持JavaScript代码中折叠显示I18n中文资源串;
 
 [Unreleased]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-Unreleased.zip
+[1.0.36]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.36.zip
 [1.0.35]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.35.zip
 [1.0.34]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.34.zip
 [1.0.33]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.33.zip

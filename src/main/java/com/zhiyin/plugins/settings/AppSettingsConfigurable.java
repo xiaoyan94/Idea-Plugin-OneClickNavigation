@@ -41,6 +41,8 @@ final class AppSettingsConfigurable implements Configurable {
         AppSettingsState settings = AppSettingsState.getInstance();
         boolean isModified = mySettingsComponent.getDefaultCollapseI18nStatus() != settings.defaultCollapseI18nStatus;
         isModified |= !mySettingsComponent.getMapperToDaoSearchScope().getValue().equals(settings.mapperToDaoModuleScope);
+        // Add the new field to the modification check
+        isModified |= !mySettingsComponent.getCommitTemplateText().equals(settings.commitMessageTemplate);
         return isModified;
     }
 
@@ -49,6 +51,8 @@ final class AppSettingsConfigurable implements Configurable {
         AppSettingsState settings = AppSettingsState.getInstance();
         settings.defaultCollapseI18nStatus = mySettingsComponent.getDefaultCollapseI18nStatus();
         settings.mapperToDaoModuleScope = mySettingsComponent.getMapperToDaoSearchScope().getValue();
+        // Save the new field's value
+        settings.commitMessageTemplate = mySettingsComponent.getCommitTemplateText();
     }
 
     @Override
@@ -61,6 +65,8 @@ final class AppSettingsConfigurable implements Configurable {
         } else {
             mySettingsComponent.setMapperToDaoSearchScope(MySearchScopeItem.MODULE);
         }
+        // Load the saved value into the text field
+        mySettingsComponent.setCommitTemplateText(settings.commitMessageTemplate);
     }
 
     @Override

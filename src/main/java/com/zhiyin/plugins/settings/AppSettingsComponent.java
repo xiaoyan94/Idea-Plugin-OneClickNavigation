@@ -2,7 +2,7 @@ package com.zhiyin.plugins.settings;
 
 import com.intellij.openapi.ui.ComboBox;
 import com.intellij.ui.components.JBCheckBox;
-import com.intellij.ui.components.panels.RowGridLayout;
+import com.intellij.ui.components.JBTextArea;
 import com.intellij.util.ui.FormBuilder;
 import com.zhiyin.plugins.settings.ui.MySearchScopeItem;
 
@@ -20,15 +20,27 @@ public class AppSettingsComponent {
 
     private final ComboBox<MySearchScopeItem> mapperToDaoSearchScope = new ComboBox<>();
 
+    // Add a new text field for the commit template
+    private final JBTextArea commitTemplateText = new JBTextArea();
+
     public AppSettingsComponent() {
         mapperToDaoSearchScope.addItem(MySearchScopeItem.MODULE);
         mapperToDaoSearchScope.addItem(MySearchScopeItem.PROJECT);
+        commitTemplateText.setRows(5);
+        commitTemplateText.setLineWrap(true);
+        commitTemplateText.setWrapStyleWord(true);
+        commitTemplateText.setBorder(BorderFactory.createTitledBorder("Commit message template"));
+        // 设置为微软雅黑
+        commitTemplateText.setFont(new Font("Microsoft YaHei", Font.BOLD, 12));
         myMainPanel = FormBuilder.createFormBuilder()
                 .addLabeledComponent("I18n", new JSeparator())
                 .addComponent(defaultCollapseI18nStatus)
                 .addVerticalGap(20)
                 .addLabeledComponent("Search scope", new JSeparator())
                 .addLabeledComponent("Mapper to dao scope", mapperToDaoSearchScope)
+                .addVerticalGap(20)
+                // Add the new text field with a label
+                .addLabeledComponent("SVN提交模板自定义前缀", commitTemplateText)
                 .addComponentFillVertically(new JPanel(), 0)
                 .getPanel();
     }
@@ -55,6 +67,18 @@ public class AppSettingsComponent {
 
     public void setMapperToDaoSearchScope(MySearchScopeItem newScope) {
         mapperToDaoSearchScope.setItem(newScope);
+    }
+
+    // Add getter and setter for the new text field
+    public String getCommitTemplateText() {
+        if (commitTemplateText.getText() == null || commitTemplateText.getText().isEmpty()) {
+            setCommitTemplateText("问题单号：DTS20151135000\n修改人：\n修改描述：\n");
+        }
+        return commitTemplateText.getText();
+    }
+
+    public void setCommitTemplateText(String newText) {
+        commitTemplateText.setText(newText);
     }
 
 }

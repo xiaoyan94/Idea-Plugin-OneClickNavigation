@@ -31,6 +31,7 @@
     <depends>JavaScript</depends>
     <depends>com.intellij.modules.jsp.base</depends>
     <depends>com.intellij.jsp</depends>
+    <depends>com.intellij.modules.vcs</depends>
 
     <!-- Extension points defined by the plugin.
          Read more: https://plugins.jetbrains.com/docs/intellij/plugin-extension-points.html -->
@@ -264,6 +265,21 @@
                 icon="com.zhiyin.plugins.resources.MyIcons.pandaIconSVG16_2"
                 description="根据 column 标签生成 Excel ">
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
+        </action>
+
+        <action id="TestCommitAction"
+                class="com.zhiyin.plugins.actions.TestCommitAction"
+                text="TEST模板"
+                description="测试添加TEST前缀">
+            <add-to-group group-id="Vcs.MessageActionGroup" anchor="first"/>
+        </action>
+
+        <action id="com.zhiyin.plugins.actions.MyBuildModuleAction"
+                class="com.zhiyin.plugins.actions.MyBuildModuleAction"
+                text="Build Module"
+                description="Builds the current module, calling the built-in action"
+                icon="AllIcons.Actions.Compile">
+            <add-to-group group-id="MainToolBar" anchor="after" relative-to-action="RunConfigurationActions"/>
         </action>
     </actions>
 
