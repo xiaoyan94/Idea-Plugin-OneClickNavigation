@@ -65,8 +65,27 @@ public class MybatisLogSQLAction extends AnAction {
         // Replace placeholders with actual parameter values
         String finalSql = replaceSqlPlaceholders(sqlTemplate, parameters);
 
+        // Format SQL
+        finalSql = formatSql(finalSql);
+
         return finalSql + ";";
     }
+
+    private String formatSql(String sql) {
+        if (sql == null || sql.isBlank()) {
+            return "";
+        }
+
+        // 1. 压缩多余空格并去除首尾空白
+        String compressed = sql.replaceAll("\\s+", " ").trim();
+
+        // 2. 在关键字前添加换行（不区分大小写）
+        String formatted = compressed.replaceAll("(?i)\\b(FROM|WHERE|HAVING|GROUP BY|ORDER BY|LEFT JOIN|INNER JOIN|RIGHT JOIN)\\b", "\n$1");
+
+        // 3. 移除开头的多余换行（若关键字是首单词）
+        return formatted.replaceFirst("^\n", "");
+    }
+
 
     private String replaceSqlPlaceholders(String sqlTemplate, String[] parameters) {
         if (parameters == null || parameters.length == 0) {

@@ -163,7 +163,7 @@ public class MyPsiUtil {
         }
         XmlFile psiFile = (XmlFile) element.getContainingFile();
         XmlTag rootTag = psiFile.getRootTag();
-        return rootTag != null && rootTag.getName().equals("ViewDefine");
+        return rootTag != null && (rootTag.getName().equals("ViewDefine") || rootTag.getName().equals("DataGrid"));
     }
 
     /**

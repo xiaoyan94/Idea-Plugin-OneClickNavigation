@@ -170,4 +170,27 @@
         </context>
     </template>
 
+    <template
+            name="col"
+            value="&lt;Column name=&quot;$NAME$&quot; type=&quot;string&quot;&gt;&#10;    &lt;Field value=&quot;$NAME$&quot;/&gt;&#10;    &lt;Title value=&quot;$NAME$&quot; chs=&quot;$NAME$&quot; eng=&quot;$NAME$&quot;/&gt;&#10;    &lt;Align value=&quot;left&quot;/&gt;&#10;    &lt;Width value=&quot;150&quot;/&gt;&#10;    &lt;Hidden value=&quot;false&quot;/&gt;&#10;&lt;/Column&gt;"
+            description="生成 Layout Column 定义，name 和 Field.value 同步"
+            toReformat="true"
+            toShortenFQNames="false">
+        <variable name="NAME" expression="" defaultValue="" alwaysStopAt="true"/>
+        <context>
+            <option name="XML" value="true"/>
+        </context>
+    </template>
+
+    <template
+            name="colck"
+            value="&lt;Column name=&quot;dummy&quot; type=&quot;int&quot;&gt;&#10;    &lt;Field value=&quot;ck&quot;/&gt;&#10;    &lt;Title value=&quot; &quot; chs=&quot; &quot; eng=&quot; &quot;/&gt;&#10;    &lt;Align value=&quot;left&quot;/&gt;&#10;    &lt;CheckBox value=&quot;true&quot;/&gt;&#10;&lt;/Column&gt;"
+            description="生成 Layout Column(dummy) + Field(ck) + CheckBox 的固定模板"
+            toReformat="true"
+            toShortenFQNames="false">
+        <context>
+            <option name="XML" value="true"/>
+        </context>
+    </template>
+
 </templateSet>

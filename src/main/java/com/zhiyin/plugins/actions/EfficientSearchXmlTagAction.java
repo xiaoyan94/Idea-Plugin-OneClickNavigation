@@ -7,6 +7,7 @@ import com.intellij.openapi.ui.Messages;
 import com.zhiyin.plugins.service.ComboboxUrlService;
 
 import java.util.List;
+import java.util.Set;
 
 public class EfficientSearchXmlTagAction extends AnAction {
 
@@ -18,10 +19,13 @@ public class EfficientSearchXmlTagAction extends AnAction {
         String tagName = Messages.showInputDialog(project, "Enter XML tag name to search:", "Search XML Tag", null);
         if (tagName == null || tagName.isEmpty()) return;
 
-        ComboboxUrlService service = project.getService(ComboboxUrlService.class);
-        service.searchAndCacheXmlTags(tagName, "value");
+        String attr = Messages.showInputDialog(project, "Enter XML attribute name to search:", "Search XML Attribute", null);
+        if (attr == null || attr.isEmpty()) return;
 
-        List<String> cachedResults = service.getCachedResults();
+        ComboboxUrlService service = project.getService(ComboboxUrlService.class);
+        service.searchAndCacheXmlTags(tagName, attr);
+
+        Set<String> cachedResults = service.getCachedResults(tagName, attr);
 
         if (cachedResults.isEmpty()) {
             Messages.showInfoMessage("No matching tags found.", "Search Result");

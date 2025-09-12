@@ -1,5 +1,6 @@
 package com.zhiyin.plugins.referenceContributor;
 
+import com.intellij.codeInsight.completion.PrioritizedLookupElement;
 import com.intellij.codeInsight.lookup.AutoCompletionPolicy;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
@@ -87,15 +88,20 @@ public class MyMocReference extends PsiReferenceBase<PsiLiteralExpression> {
             if (mocList.stream().noneMatch(moc -> MyPsiUtil.isInSameModule(element, moc.getXmlElement()))) {
                 continue;
             }
-            variants.add(LookupElementBuilder.create(mocName)
-                    .withIcon(MyIcons.pandaIconSVG16_2)
-                    .withItemTextItalic(true)
-                    .withTypeText("Moc", AllIcons.FileTypes.Xml, true)
-                    .withBoldness(true)
-                    .withCaseSensitivity(true)
+            LookupElement lookupElement = LookupElementBuilder.create(mocName)
+                                                              .withIcon(MyIcons.pandaIconSVG16_2)
+                                                              .withItemTextItalic(true)
+                                                              .withTypeText("Moc", AllIcons.FileTypes.Xml, true)
+                                                              .withBoldness(true)
+                                                              .withCaseSensitivity(true)
 //                    .withTailText("Moc", true)
-                    .withAutoCompletionPolicy(AutoCompletionPolicy.ALWAYS_AUTOCOMPLETE)
-            );
+                                                              .withAutoCompletionPolicy(
+                                                                      AutoCompletionPolicy.ALWAYS_AUTOCOMPLETE)
+                    ;
+            // 包装成最高优先级
+            LookupElement prioritized = PrioritizedLookupElement.withPriority(lookupElement, 1000.0);
+
+            variants.add(prioritized);
         }
         return variants.toArray();
     }

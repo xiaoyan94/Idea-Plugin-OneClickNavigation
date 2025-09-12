@@ -1,9 +1,11 @@
 package com.zhiyin.plugins.referenceContributor;
 
+import com.intellij.codeInsight.completion.PrioritizedLookupElement;
 import com.intellij.codeInsight.highlighting.HighlightedReference;
 import com.intellij.codeInsight.lookup.AutoCompletionPolicy;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
+import com.intellij.icons.AllIcons;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
 import com.intellij.psi.tree.xml.IXmlLeafElementType;
@@ -70,14 +72,20 @@ final class MyJavaMethodReference extends PsiReferenceBase<PsiLiteralExpression>
         List<LookupElement> variants = new ArrayList<>();
         for (final PsiMethod psiMethod : methods) {
             if (psiMethod != null) {
-                variants.add(LookupElementBuilder.create(psiMethod)
-                        .withIcon(MyIcons.pandaIconSVG16_2)
-                        .withItemTextItalic(true)
-                        .withTypeText(psiClass.getName(), null, true)
-                        .withBoldness(true)
-                        .withCaseSensitivity(false)
-                        .withTailText(psiClass.getQualifiedName(), true)
-                        .withAutoCompletionPolicy(AutoCompletionPolicy.ALWAYS_AUTOCOMPLETE));
+                LookupElement lookupElement = LookupElementBuilder.create(psiMethod)
+                                                                  .withIcon(MyIcons.pandaIconSVG16_2)
+                                                                  .withItemTextItalic(true)
+                                                                  .withTypeText(psiClass.getName(), null, true)
+                                                                  .withBoldness(true)
+                                                                  .withCaseSensitivity(false)
+                                                                  .withTailText(psiClass.getQualifiedName(), true)
+                                                                  .withAutoCompletionPolicy(
+                                                                          AutoCompletionPolicy.ALWAYS_AUTOCOMPLETE)
+                        ;
+
+                // 包装成最高优先级
+                LookupElement prioritized = PrioritizedLookupElement.withPriority(lookupElement, 1000.0);
+                variants.add(prioritized);
             }
         }
         return variants.toArray();

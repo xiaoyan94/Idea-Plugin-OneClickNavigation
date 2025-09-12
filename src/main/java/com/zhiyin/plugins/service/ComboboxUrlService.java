@@ -1,5 +1,6 @@
 package com.zhiyin.plugins.service;
 
+import com.google.common.collect.HashBasedTable;
 import com.intellij.openapi.components.Service;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiFile;
@@ -12,37 +13,36 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.ide.highlighter.XmlFileType;
 import com.intellij.openapi.vfs.VirtualFile;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service(Service.Level.PROJECT)
 public final class ComboboxUrlService {
 
     private final Project project;
-    private List<String> cachedResults = new ArrayList<>();
+    private HashBasedTable<String, String, Set<String>> cache = HashBasedTable.create();
 
     public ComboboxUrlService(Project project) {
         this.project = project;
         searchAndCacheXmlTags("ComboxUrl", "value");
+        searchAndCacheXmlTags("Field", "easyuiClass");
     }
 
-    public List<String> getCachedResults() {
-        if (cachedResults.isEmpty()) {
-            searchAndCacheXmlTags("ComboxUrl", "value");
+    public Set<String> getCachedResults(String tagName, String attr) {
+        Set<String> list = cache.get(tagName, attr);
+        if (!cache.contains(tagName, attr) || list == null || list.isEmpty()) {
+            searchAndCacheXmlTags(tagName, attr);
         }
-        return new ArrayList<>(cachedResults);  // Return a copy to ensure encapsulation
+        return new HashSet<>(list == null ? Collections.emptySet() : list);
     }
 
     public void searchAndCacheXmlTags(String tagName, String attr) {
-        List<String> results = searchXmlTags(tagName, attr);
-        results = results.stream().distinct().collect(Collectors.toList());
-        cachedResults = results;
+        Set<String> results = searchXmlTags(tagName, attr);
+        cache.put(tagName, attr, results);
     }
 
-    private List<String> searchXmlTags(String tagName, String attr) {
-        List<String> results = new ArrayList<>();
+    private Set<String> searchXmlTags(String tagName, String attr) {
+        Set<String> results = new HashSet<>();
         GlobalSearchScope scope = GlobalSearchScope.projectScope(project);
         PsiManager psiManager = PsiManager.getInstance(project);
 
@@ -53,10 +53,10 @@ public final class ComboboxUrlService {
             if (psiFile instanceof XmlFile) {
                 XmlFile xmlFile = (XmlFile) psiFile;
                 if (xmlFile.getRootTag() == null) continue;
-                if (!xmlFile.getRootTag().getName().equals("ViewDefine")) continue;
+                if (!(xmlFile.getRootTag().getName().equals("ViewDefine") || xmlFile.getRootTag().getName().equals("DataGrid"))) continue;
                 Collection<XmlTag> tags = PsiTreeUtil.findChildrenOfType(xmlFile, XmlTag.class);
                 for (XmlTag tag : tags) {
-                    if (tag.getName().equals(tagName)) {
+                    if (tag.getName().equals(tagName) && tag.getAttributeValue(attr) != null) {
                         results.add(tag.getAttributeValue(attr));
                     }
                 }

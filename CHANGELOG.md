@@ -6,6 +6,15 @@
 
 ## [Unreleased]
 
+## [1.0.37] - 2025-09-12
+
+- [x] 适配了单 Grid Layout 文件的资源串
+- [x] 更新了 Layout 布局组合框的代码补全逻辑，支持多个标签和属性
+- [x] 新增了对 Field 和 Column 标签的补全支持
+- [x] 优化了代码补全的显示效果，增加了图标和类型文本
+- [x] 提高了代码补全的优先级，使其在列表中优先显示
+- [x] 修复了一些代码补全中的小问题，优化了使用体验
+
 ## [1.0.36] - 2025-09-06
 
 - [x] 在主工具栏添加构建模块按钮
@@ -357,6 +366,7 @@
 - 支持JavaScript代码中折叠显示I18n中文资源串;
 
 [Unreleased]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-Unreleased.zip
+[1.0.37]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.37.zip
 [1.0.36]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.36.zip
 [1.0.35]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.35.zip
 [1.0.34]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.34.zip
