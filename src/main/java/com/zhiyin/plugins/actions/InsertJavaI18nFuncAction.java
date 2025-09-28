@@ -98,7 +98,7 @@ public class InsertJavaI18nFuncAction extends AnAction {
                     }
                 }
 
-                if (!hasVariable) {
+                if (!hasVariable && false) {
                     // 变量不存在，执行写操作来插入代码
                     // WriteCommandAction 是一个推荐的写操作封装类
                     WriteCommandAction.runWriteCommandAction(project, () -> {

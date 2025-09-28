@@ -162,6 +162,10 @@ public class MyPsiUtil {
             return false;
         }
         XmlFile psiFile = (XmlFile) element.getContainingFile();
+        return isLayoutFile(psiFile);
+    }
+
+    public static boolean isLayoutFile(XmlFile psiFile) {
         XmlTag rootTag = psiFile.getRootTag();
         return rootTag != null && (rootTag.getName().equals("ViewDefine") || rootTag.getName().equals("DataGrid"));
     }

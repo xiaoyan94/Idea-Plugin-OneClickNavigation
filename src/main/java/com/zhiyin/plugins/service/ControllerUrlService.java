@@ -37,6 +37,7 @@ import static com.zhiyin.plugins.utils.MyPsiUtil.*;
 @Service(Service.Level.PROJECT)
 public final class ControllerUrlService {
 
+    private final String DELIMITER = "丨";
     private long lastExecutionTime = 0; // Timestamp of the last execution
     private final long MIN_INTERVAL_MS = TimeUnit.SECONDS.toMillis(60); // Minimum interval between executions (e.g., 5 seconds)
 
@@ -311,20 +312,20 @@ public final class ControllerUrlService {
 //                        }
 //                    }
                     if (methodUrl != null && !methodUrl.isEmpty()) {
-                        String fullUrl = classUrl + methodUrl;
-                        fullUrl = fullUrl.startsWith("/") ? fullUrl : "/" + fullUrl;
-                        methodUrls.add(fullUrl);
-                        if (!(scope.equals(GlobalSearchScope.allScope(project)) || scope.equals(GlobalSearchScope.projectScope(project)))){
-                            List<PsiMethod> methodForUrl = getMethodForUrl(fullUrl);
-                            tempUrlMethodCache.put(fullUrl, methodForUrl);
-//                            System.out.println("collectControllerUrls: methodForUrl: " + methodForUrl + ", fullUrl: " + fullUrl);
+                        for (String splitUrl: methodUrl.split(DELIMITER)) {
+                            String fullUrl = classUrl + splitUrl;
+                            fullUrl = fullUrl.startsWith("/") ? fullUrl : "/" + fullUrl;
+                            methodUrls.add(fullUrl);
+                            if (!(scope.equals(GlobalSearchScope.allScope(project)) || scope.equals(GlobalSearchScope.projectScope(project)))) {
+                                List<PsiMethod> methodForUrl = getMethodForUrl(fullUrl);
+                                tempUrlMethodCache.put(fullUrl, methodForUrl);
+                            }
+                            List<PsiMethod> psiMethods = tempUrlMethodCache.computeIfAbsent(fullUrl, k -> new ArrayList<>());
+                            if (!psiMethods.contains(method)) {
+                                psiMethods.add(method);
+                            }
+                            psiMethods.removeIf(Objects::isNull);
                         }
-                        List<PsiMethod> psiMethods = tempUrlMethodCache.computeIfAbsent(fullUrl, k -> new ArrayList<>());
-                        if (!psiMethods.contains(method)){
-                            psiMethods.add(method);
-                        }
-                        psiMethods.removeIf(Objects::isNull);
-
                     }
                 }
             });
@@ -372,7 +373,11 @@ public final class ControllerUrlService {
         return new ArrayList<>();
     }
 
-    // Fuzzy match against the urlMethodCache keys
+    /** Fuzzy match against the urlMethodCache keys
+     *
+     * @param url to match
+     * @return List of PsiMethods
+     */
     public List<PsiMethod> getMethodsForUrlFuzzy(String url) {
         // List to hold the matching methods
         List<PsiMethod> matchingMethods = new ArrayList<>();
@@ -477,12 +482,26 @@ public final class ControllerUrlService {
         }
         if (memberValue instanceof PsiArrayInitializerMemberValue) {
             PsiArrayInitializerMemberValue arrayValue = (PsiArrayInitializerMemberValue) memberValue;
-            for (PsiAnnotationMemberValue memberValue2 : arrayValue.getInitializers()) {
-                // TODO: multiple values to be supported
-                if (memberValue2 instanceof PsiLiteralExpression) {
-                    Object constant = JavaConstantExpressionEvaluator.computeConstantExpression((PsiExpression) memberValue2, false);
-                    return constant == null ? null : constant.toString();
+            PsiAnnotationMemberValue[] psiAnnotationMemberValues = arrayValue.getInitializers();
+            List<String> toConcat = new ArrayList<>();
+            for (PsiAnnotationMemberValue memberValue2 : psiAnnotationMemberValues) {
+                if (psiAnnotationMemberValues.length == 1) {
+                    if (memberValue2 instanceof PsiLiteralExpression) {
+                        Object constant = JavaConstantExpressionEvaluator.computeConstantExpression((PsiExpression) memberValue2, false);
+                        return constant == null ? null : constant.toString();
+                    }
+                } else {
+                    // TODO: multiple values to be supported
+                    if (memberValue2 instanceof PsiLiteralExpression) {
+                        Object constant = JavaConstantExpressionEvaluator.computeConstantExpression((PsiExpression) memberValue2, false);
+                        if (constant != null) {
+                            toConcat.add(constant.toString());
+                        }
+                    }
                 }
+            }
+            if (!toConcat.isEmpty()) {
+                return String.join(DELIMITER, toConcat);
             }
         }
         try {

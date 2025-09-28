@@ -6,6 +6,31 @@
 
 ## [Unreleased]
 
+## [1.0.41] - 2025-09-28
+
+- [x] 添加右键菜单：在 Feign 接口的 URL 上：一键跳转 RestController 功能
+- [x] 添加右键菜单：在 RestController 中的 URL 上：一键跳转 Feign接口 功能
+- [x] 添加右键菜单：在 HTML/XML 文件中的 URL 上：一键跳转 Controller 功能
+
+## [1.0.40] - 2025-09-25
+
+- [x] 修复已知问题
+
+## [1.0.39] - 2025-09-22
+
+- [x] 修复已知问题
+
+## [1.0.38] - 2025-09-22
+
+- [x] 翻译弹窗中输入中文可直接回车进行翻译、替换key，无需鼠标点击翻译按钮即可操作
+- [x] feat(plugin): 实现HTML指令式资源串的折叠与交互功能
+- [x] 新增HTML中`<@message key="..."/>`等指令的折叠支持
+- [x] 提供可编辑的内联渲染器，源码中资源串中文显示及修改更加快捷。
+- [x] 通过监听文件打开和内容变化事件，自动更新折叠区域及国际化文本显示。
+- [x] 支持鼠标点击编辑、悬停高亮效果，提升开发体验。
+- [x] 同时重构项目组件为Service形式，
+- [x] 确保服务在项目启动时正确加载并注册相关监听器。
+
 ## [1.0.37] - 2025-09-12
 
 - [x] 适配了单 Grid Layout 文件的资源串
@@ -366,6 +391,10 @@
 - 支持JavaScript代码中折叠显示I18n中文资源串;
 
 [Unreleased]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-Unreleased.zip
+[1.0.41]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.41.zip
+[1.0.40]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.40.zip
+[1.0.39]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.39.zip
+[1.0.38]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.38.zip
 [1.0.37]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.37.zip
 [1.0.36]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.36.zip
 [1.0.35]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.35.zip

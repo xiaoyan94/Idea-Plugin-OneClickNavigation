@@ -12,6 +12,7 @@ import com.intellij.openapi.project.DumbAwareAction
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.DialogPanel
 import com.intellij.openapi.ui.DialogWrapper
+import com.intellij.openapi.ui.Messages
 import com.intellij.ui.components.JBTextField
 import com.intellij.ui.dsl.builder.*
 import com.zhiyin.plugins.actions.ClearTranslationCacheAction
@@ -31,6 +32,7 @@ import javax.swing.SwingUtilities
 
 class MyTranslateDialogWrapper(private val project: Project?, private val module: Module?) : DialogWrapper(project) {
 
+    private var canAutoDoOKActionWhenI18nKeyExists: Boolean = true
     private val moduleName = module?.name
     private val simpleModuleName = module?.let { MyPropertiesUtil.getSimpleModuleName(module); }
     private val projectName = project?.name
@@ -42,6 +44,19 @@ class MyTranslateDialogWrapper(private val project: Project?, private val module
 //        isResizable = true
 //        isModal = false
         init()
+        // 监听回车事件
+        sourceCHSTextField.component.addActionListener {
+//            println("Enter pressed")
+            translateButton.component.doClick()
+        }
+        // 监听回车事件
+//        sourceCHSTextField.component.addKeyListener(object : java.awt.event.KeyAdapter() {
+//            override fun keyPressed(e: java.awt.event.KeyEvent) {
+//                if (e.keyCode == java.awt.event.KeyEvent.VK_ENTER) {
+//                    println("Enter Key pressed")
+//                }
+//            }
+//        })
     }
 
     /**
@@ -79,6 +94,14 @@ class MyTranslateDialogWrapper(private val project: Project?, private val module
                         SwingUtilities.invokeLater {
                             translateButton.component.isEnabled = it.text.isNotEmpty()
                             chineseUnicodeTextField.component.text = it.text.toUnicode()
+                            // 修改中文时清空翻译和状态
+                            englishTextField.component.text = ""
+                            englishUnicodeTextField.component.text = ""
+                            chineseTWTextField.component.text = ""
+                            vietnameseTextField.component.text = ""
+                            sourceCHSTextField.comment?.text = "Enter to translate/按回车键翻译"
+                            i18nKeyTextField.component.text = ""
+                            inputModel.propertyKeyExists = false
                         }
                         null
                     }.bindText(inputModel::chinese).comment("")
@@ -319,10 +342,12 @@ class MyTranslateDialogWrapper(private val project: Project?, private val module
                     translateButton.component.isEnabled = true
                     sourceCHSTextField.comment?.text = "值已存在，已复制key到剪切板，key=${key}"
                     // 根据设置，直接复用Key
-                    if (TranslateSettingsComponent.getInstance().state.doOKActionWhenI18nKeyExists){
+                    if (TranslateSettingsComponent.getInstance().state.doOKActionWhenI18nKeyExists
+                        && canAutoDoOKActionWhenI18nKeyExists){
                         doOKAction()
                     } else {
                         getButton(okAction)?.requestFocus()
+                        canAutoDoOKActionWhenI18nKeyExists = TranslateSettingsComponent.getInstance().state.autoClickTranslateButton
                     }
                 }
                 CopyPasteManager.getInstance().setContents(StringSelection(key))
@@ -377,6 +402,7 @@ class MyTranslateDialogWrapper(private val project: Project?, private val module
             translateButton.component.text = getTranslateButtonText()
             translateButton.component.isEnabled = true
             sourceCHSTextField.component.isEditable = true
+            sourceCHSTextField.comment?.text = "Enter to input the key"
 
             invokeLater {
                 getButton(okAction)?.requestFocus()
@@ -433,4 +459,9 @@ class MyTranslateDialogWrapper(private val project: Project?, private val module
 //            null
 //        }
 //    }
+
+    fun clickTranslateButton() {
+        this.canAutoDoOKActionWhenI18nKeyExists = false
+        translateButton.component.doClick()
+    }
 }

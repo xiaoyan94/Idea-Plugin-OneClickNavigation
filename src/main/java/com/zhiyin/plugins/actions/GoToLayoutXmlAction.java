@@ -15,6 +15,8 @@ import com.intellij.psi.xml.XmlFile;
 import com.intellij.psi.xml.XmlTag;
 import com.intellij.util.PsiNavigateUtil;
 import com.zhiyin.plugins.notification.MyPluginMessages;
+import com.zhiyin.plugins.utils.MyPropertiesUtil;
+import com.zhiyin.plugins.utils.MyPsiUtil;
 import org.jetbrains.annotations.NotNull;
 
 public class GoToLayoutXmlAction extends AnAction {
@@ -22,7 +24,18 @@ public class GoToLayoutXmlAction extends AnAction {
     @Override
     public void update(@NotNull AnActionEvent event) {
         PsiFile file = event.getData(CommonDataKeys.PSI_FILE);
-        event.getPresentation().setEnabledAndVisible(file != null && ("HTML".equalsIgnoreCase(file.getVirtualFile().getExtension()) || "XML".equalsIgnoreCase(file.getVirtualFile().getExtension())));
+        boolean isHTML = false;
+        if (file != null) {
+            isHTML = "HTML".equalsIgnoreCase(file.getVirtualFile().getExtension());
+        }
+        boolean isLayoutXML = MyPsiUtil.isLayoutFile(file);
+        event.getPresentation().setEnabledAndVisible(file != null && (isHTML || isLayoutXML));
+        if (isLayoutXML) {
+            event.getPresentation().setText("Go To HTML");
+        }
+        if (isHTML) {
+            event.getPresentation().setText("Go To Layout");
+        }
     }
 
     @Override

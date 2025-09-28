@@ -102,8 +102,10 @@ public class CopySelectedSqlAction extends AnAction {
      * 这里提供一个简单的替换方案，用 '?' 或 '参数值' 代替
      */
     private String replacePlaceholders(String sql) {
-        // 替換 #{language} 和 ${language} 为 'zh_CN'
-        sql = sql.replaceAll("(#\\{language}|\\$\\{language})", "'zh_CN'");
+        // 替換 #{language} 为 'zh_CN'
+        sql = sql.replaceAll("#\\{language}", "'zh_CN'");
+        // 替換 ${language} 为 zh_CN
+        sql = sql.replaceAll("\\$\\{language}", "zh_CN");
         // 替换 #{...} 为 '?'
         String result = sql.replaceAll("#\\{.*?\\}", "'?'");
         // 替换 ${...} 为 '?'

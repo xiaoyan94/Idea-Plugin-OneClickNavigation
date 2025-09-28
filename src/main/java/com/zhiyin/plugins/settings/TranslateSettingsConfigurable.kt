@@ -54,6 +54,14 @@ class TranslateSettingsConfigurable :
 
                     contextHelp("当资源串已经存在时，不用点确认按钮，直接执行复用。若需确认，请取消勾选。", "直接复用已经存在的资源串")
                 }
+                row {
+                    checkBox("无需手动点击翻译按钮")
+                        .bindSelected(
+                            { settings.state.autoClickTranslateButton},
+                            { settings.state.autoClickTranslateButton = it})
+
+                    contextHelp("当翻译弹窗打开时，不用点翻译按钮，直接执行翻译。与“无需确认直接复用Key”不能同时打开。", "自动触发一键翻译")
+                }
             }
             group("翻译提供方") {
                 buttonsGroup("翻译接口") {

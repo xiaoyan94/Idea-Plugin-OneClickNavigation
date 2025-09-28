@@ -29,6 +29,8 @@ data class TranslateSettingsState (
      */
     var doOKActionWhenI18nKeyExists: Boolean = false,
 
+    var autoClickTranslateButton: Boolean = true,
+
     var enableFeignToRestController: Boolean = false,
     var enableHtmlUrlToController: Boolean = false,
     var enableHtmlAnnotator: Boolean = false

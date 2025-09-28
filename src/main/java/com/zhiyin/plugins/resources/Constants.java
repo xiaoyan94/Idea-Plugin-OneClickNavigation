@@ -2,6 +2,8 @@ package com.zhiyin.plugins.resources;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.regex.Pattern;
 
 /**
  * 
@@ -10,6 +12,31 @@ public class Constants {
     public static final String NOTIFICATION_GROUP_ID = "OneClickNavigation";
 
     private Constants() {}
+
+    public static final Pattern HTML_MESSAGE_PATTERN = Pattern.compile("<@message\\s+key\\s*=\\s*['\"](.*?)['\"]\\s*/>");
+    public static final Pattern JS_I18N_PATTERN = Pattern.compile("zhiyin\\.i18n\\.translate\\(\\s*['\"](.*?)['\"]\\s*\\)");
+    public static final Pattern XML_TITLE_PATTERN = Pattern.compile("['\"](com\\.zhiyin\\..*?)['\"]");
+    public static final Pattern XML_COLUMN_I18N_PATTERN = Pattern.compile("['\"](com\\.zhiyin\\..*?)['\"]");
+    public static final Pattern XML_FIELD_LABEL_PATTERN = Pattern.compile("['\"](com\\.zhiyin\\..*?)['\"]");
+    public static final Pattern PATTERN_I18N_JAVA = Pattern.compile("(?:I18nUtil[.\\s]+(?:getMessage|getMessageByFactory)|getSysI18nResource)\\(.*?\\s*,\\s*\"(com\\..*?)\"\\s*\\)");
+    public static final Pattern PATTERN_I18N_JAVA_MESSAGE = Pattern.compile("message\\s*=\\s*\"(.*?)\"");
+    public static final Pattern PATTERN_I18N_JSP_TAG = Pattern.compile("<mes:\\s*message\\s*key\\s*=\\s*\"(.*?)\"\\s*/>");
+
+    // 根据文件扩展名返回对应的 Pattern 数组
+    public static final Map<String, Pattern[]> FILETYPE_PATTERNS = Map.of(
+            "html", new Pattern[]{HTML_MESSAGE_PATTERN, JS_I18N_PATTERN, PATTERN_I18N_JSP_TAG},
+            "htm", new Pattern[]{HTML_MESSAGE_PATTERN, JS_I18N_PATTERN, PATTERN_I18N_JSP_TAG},
+            "jsp", new Pattern[]{HTML_MESSAGE_PATTERN, JS_I18N_PATTERN, PATTERN_I18N_JSP_TAG},
+            "ftl", new Pattern[]{HTML_MESSAGE_PATTERN, JS_I18N_PATTERN, PATTERN_I18N_JSP_TAG},
+            "xml", new Pattern[]{XML_TITLE_PATTERN},
+            "js", new Pattern[]{JS_I18N_PATTERN, HTML_MESSAGE_PATTERN},
+            "java", new Pattern[]{PATTERN_I18N_JAVA, PATTERN_I18N_JAVA_MESSAGE}
+    );
+
+    // 获取文件类型的 Pattern
+    public static Pattern[] getPatternsByExtension(String extension) {
+        return FILETYPE_PATTERNS.getOrDefault(extension, new Pattern[0]);
+    }
 
     public static final String SCOPE_NAME_PROJECT = "Project";
     public static final String SCOPE_NAME_MODULE = "Module";

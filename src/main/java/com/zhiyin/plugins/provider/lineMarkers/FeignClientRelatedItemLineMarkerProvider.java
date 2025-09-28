@@ -172,8 +172,8 @@ public class FeignClientRelatedItemLineMarkerProvider extends RelatedItemLineMar
                 .create(MyIcons.pandaIconSVG16_2)
                 .setAlignment(GutterIconRenderer.Alignment.LEFT)
                 .setTargets(targets)
-                .setTooltipText("Navigate to RestController")
-                .setPopupTitle("Feign Client URLs -> RestController method");
+                .setTooltipText("Feign Client URLs <-> RestController method")
+                .setPopupTitle("Feign Client URLs <-> RestController method");
         RelatedItemLineMarkerInfo<PsiElement> relatedItemLineMarkerInfo = builder.createLineMarkerInfo(registeredLeafElement);
         return relatedItemLineMarkerInfo;
     }

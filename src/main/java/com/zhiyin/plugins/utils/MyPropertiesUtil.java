@@ -80,6 +80,22 @@ public class MyPropertiesUtil {
     }
 
     /**
+     * 在所在模块中查找 datagird Properties 资源文件
+     */
+    public static String findModuleDataGridI18nPropertyValue(Project project, Module module, String key) {
+        List<Property> properties = findModuleDataGridI18nProperties(project, module, key);
+        if (properties.isEmpty()) return null;
+        Property property = properties.get(0);
+        if (property == null || property.getValue() == null) return null;
+        boolean native2AsciiForPropertiesFiles = isNative2AsciiForPropertiesFiles();
+        if (native2AsciiForPropertiesFiles) {
+            return property.getValue();
+        } else {
+            return StringUtil.unicodeToString(property.getValue());
+        }
+    }
+
+    /**
      * 是否开启 native2ascii
      * @return true: 开启 native2ascii
      */
@@ -246,13 +262,23 @@ public class MyPropertiesUtil {
     public static void addPropertyToI18nFile(Project project, Module module, String i18nFileSuffix, String key, String value) {
         String moduleName = getSimpleModuleName(module);
 //        PropertiesComponent.getInstance();
-        addPropertyByFileNames(project, module, new String[]{moduleName + i18nFileSuffix}, key, value, false);
+        if (i18nFileSuffix.startsWith("web")) {
+            addPropertyByFileNames(project, module, new String[]{i18nFileSuffix}, key, value, false);
+        } else {
+            addPropertyByFileNames(project, module, new String[]{moduleName + i18nFileSuffix}, key, value, false);
+        }
     }
 
     public static void addPropertyToI18nFile(Project project, Module module, String i18nFileSuffix, String key, String value, boolean updateIfExist) {
         String moduleName = getSimpleModuleName(module);
 //        PropertiesComponent.getInstance();
-        addPropertyByFileNames(project, module, new String[]{moduleName + i18nFileSuffix}, key, value, updateIfExist);
+        if (i18nFileSuffix.startsWith("web")) {
+            addPropertyByFileNames(project, module, new String[]{i18nFileSuffix}, key, value, false);
+        } else {
+            addPropertyByFileNames(project, module, new String[]{moduleName + i18nFileSuffix}, key, value,
+                                   updateIfExist
+            );
+        }
     }
 
     /**
@@ -308,7 +334,7 @@ public class MyPropertiesUtil {
 
         SlowOperations.allowSlowOperations(() -> {
             DumbService.getInstance(project).runReadActionInSmartMode(() -> {
-                List<VirtualFile> virtualFiles = new ArrayList<>(FilenameIndex.getVirtualFilesByName(moduleName + Constants.I18N_WEB_ZH_CN,
+                List<VirtualFile> virtualFiles = new ArrayList<>(FilenameIndex.getVirtualFilesByName(Constants.I18N_WEB_ZH_CN,
                         GlobalSearchScope.moduleScope(module)));
                 List<IProperty> allProperties = getProperties(project, virtualFiles);
                 Optional<Property> foundProperty = allProperties.stream()
@@ -449,6 +475,10 @@ public class MyPropertiesUtil {
             return "wms";
         } else if ("technics2".equalsIgnoreCase(simpleModuleName)){
             return "technics";
+        } else if ("configure".equalsIgnoreCase(simpleModuleName)){
+            return "basic";
+        } else if ("v2".equalsIgnoreCase(simpleModuleName)){
+            return "basic";
         }
         return simpleModuleName;
     }

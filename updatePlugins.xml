@@ -1,7 +1,7 @@
 
 <plugins>
-    <plugin id="com.zhiyin.plugins.OneClickNavigation" url="https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.37.zip" version="1.0.37">
-        <change-notes>&lt;ul&gt;&lt;li class="task-list-item"&gt;&lt;input type="checkbox" class="task-list-item-checkbox" checked disabled /&gt;适配了单 Grid Layout 文件的资源串&lt;/li&gt;&lt;li class="task-list-item"&gt;&lt;input type="checkbox" class="task-list-item-checkbox" checked disabled /&gt;更新了 Layout 布局组合框的代码补全逻辑，支持多个标签和属性&lt;/li&gt;&lt;li class="task-list-item"&gt;&lt;input type="checkbox" class="task-list-item-checkbox" checked disabled /&gt;新增了对 Field 和 Column 标签的补全支持&lt;/li&gt;&lt;li class="task-list-item"&gt;&lt;input type="checkbox" class="task-list-item-checkbox" checked disabled /&gt;优化了代码补全的显示效果，增加了图标和类型文本&lt;/li&gt;&lt;li class="task-list-item"&gt;&lt;input type="checkbox" class="task-list-item-checkbox" checked disabled /&gt;提高了代码补全的优先级，使其在列表中优先显示&lt;/li&gt;&lt;li class="task-list-item"&gt;&lt;input type="checkbox" class="task-list-item-checkbox" checked disabled /&gt;修复了一些代码补全中的小问题，优化了使用体验&lt;/li&gt;&lt;/ul&gt;&#13;
+    <plugin id="com.zhiyin.plugins.OneClickNavigation" url="https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.41.zip" version="1.0.41">
+        <change-notes>&lt;ul&gt;&lt;li class="task-list-item"&gt;&lt;input type="checkbox" class="task-list-item-checkbox" checked disabled /&gt;添加右键菜单：在 Feign 接口的 URL 上：一键跳转 RestController 功能&lt;/li&gt;&lt;li class="task-list-item"&gt;&lt;input type="checkbox" class="task-list-item-checkbox" checked disabled /&gt;添加右键菜单：在 RestController 中的 URL 上：一键跳转 Feign接口 功能&lt;/li&gt;&lt;li class="task-list-item"&gt;&lt;input type="checkbox" class="task-list-item-checkbox" checked disabled /&gt;添加右键菜单：在 HTML/XML 文件中的 URL 上：一键跳转 Controller 功能&lt;/li&gt;&lt;/ul&gt;&#13;
 &#13;
 &#13;
 </change-notes>
@@ -15,6 +15,34 @@
 &lt;ul&gt;&lt;li&gt;Dao接口方法声明和Service中的Dao方法调用，&lt;strong&gt;一键跳转&lt;/strong&gt;到Mapper SQL&lt;/li&gt;&lt;li&gt;&lt;strong&gt;queryDaoDataT&lt;/strong&gt;方法参数和对应dao方法、xml&lt;strong&gt;互相跳转&lt;/strong&gt;，&lt;strong&gt;自动补全提示&lt;/strong&gt;（&lt;code&gt;Ctrl+空格&lt;/code&gt;），方法参数错误提示。&lt;/li&gt;&lt;li&gt;Moc 相关通用方法，提供Java一键跳转到 Moc xml文件。&lt;/li&gt;&lt;li&gt;大部分场景下的&lt;strong&gt;I18n中文资源串错误提示，中文折叠显示&lt;/strong&gt;。已支持：&lt;ul&gt;&lt;li&gt;Java 中的 I18nUtils.getMessage 相关资源串方法&lt;/li&gt;&lt;li&gt;HTML 中 FreeMarker 模板的 message 指令&lt;/li&gt;&lt;li&gt;JSP 中的 message 标签&lt;/li&gt;&lt;li&gt;JavaScript 中的 i18n 方法&lt;/li&gt;&lt;li&gt;Layout 文件中 DataGrid 的 Title-&amp;gt;value 和 Field-&amp;gt;label&lt;/li&gt;&lt;li&gt;Imp*Mapper 文件中的 i18n&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;&lt;li&gt;大部分场景下的I18n资源串&lt;strong&gt;自动翻译&lt;/strong&gt;（&lt;strong&gt;简繁英越&lt;/strong&gt;）和&lt;strong&gt;自动替换key&lt;/strong&gt;（&lt;code&gt;Alt+Enter&lt;/code&gt; 手动触发或💡&lt;strong&gt;自动修复提示&lt;/strong&gt;）。支持场景同上。&lt;/li&gt;&lt;li&gt;Imp*Mapper 导入模板文件中的 col 列字段&lt;strong&gt;一键自动排序&lt;/strong&gt;。&lt;/li&gt;&lt;li&gt;一键打开当前 java 源文件编译后的 class 文件目录。&lt;/li&gt;&lt;li&gt;一键生成MOC文件。&lt;/li&gt;&lt;li&gt;一键生成Layout文件（测试中）。&lt;/li&gt;&lt;li&gt;一键百度搜索。&lt;/li&gt;&lt;li&gt;💡more useful features...&lt;/li&gt;&lt;/ul&gt;
 
 &lt;p&gt;&lt;strong&gt;历史版本：&lt;/strong&gt;&lt;/p&gt;
+
+&lt;h2&gt;[1.0.38] - 2025-09-22&lt;/h2&gt;
+
+&lt;ul&gt;&lt;li class="task-list-item"&gt;&lt;input type="checkbox" class="task-list-item-checkbox" checked disabled /&gt;翻译弹窗中输入中文可直接回车进行翻译、替换key，无需鼠标点击翻译按钮即可操作&lt;/li&gt;&lt;li class="task-list-item"&gt;&lt;input type="checkbox" class="task-list-item-checkbox" checked disabled /&gt;feat(plugin): 实现HTML指令式资源串的折叠与交互功能&lt;/li&gt;&lt;li class="task-list-item"&gt;&lt;input type="checkbox" class="task-list-item-checkbox" checked disabled /&gt;新增HTML中&lt;code&gt;&amp;lt;@message key=&amp;quot;...&amp;quot;/&amp;gt;&lt;/code&gt;等指令的折叠支持&lt;/li&gt;&lt;li class="task-list-item"&gt;&lt;input type="checkbox" class="task-list-item-checkbox" checked disabled /&gt;提供可编辑的内联渲染器，源码中资源串中文显示及修改更加快捷。&lt;/li&gt;&lt;li class="task-list-item"&gt;&lt;input type="checkbox" class="task-list-item-checkbox" checked disabled /&gt;通过监听文件打开和内容变化事件，自动更新折叠区域及国际化文本显示。&lt;/li&gt;&lt;li class="task-list-item"&gt;&lt;input type="checkbox" class="task-list-item-checkbox" checked disabled /&gt;支持鼠标点击编辑、悬停高亮效果，提升开发体验。&lt;/li&gt;&lt;li class="task-list-item"&gt;&lt;input type="checkbox" class="task-list-item-checkbox" checked disabled /&gt;同时重构项目组件为Service形式，&lt;/li&gt;&lt;li class="task-list-item"&gt;&lt;input type="checkbox" class="task-list-item-checkbox" checked disabled /&gt;确保服务在项目启动时正确加载并注册相关监听器。&lt;/li&gt;&lt;/ul&gt;
+
+&lt;h2&gt;[1.0.37] - 2025-09-12&lt;/h2&gt;
+
+&lt;ul&gt;&lt;li class="task-list-item"&gt;&lt;input type="checkbox" class="task-list-item-checkbox" checked disabled /&gt;适配了单 Grid Layout 文件的资源串&lt;/li&gt;&lt;li class="task-list-item"&gt;&lt;input type="checkbox" class="task-list-item-checkbox" checked disabled /&gt;更新了 Layout 布局组合框的代码补全逻辑，支持多个标签和属性&lt;/li&gt;&lt;li class="task-list-item"&gt;&lt;input type="checkbox" class="task-list-item-checkbox" checked disabled /&gt;新增了对 Field 和 Column 标签的补全支持&lt;/li&gt;&lt;li class="task-list-item"&gt;&lt;input type="checkbox" class="task-list-item-checkbox" checked disabled /&gt;优化了代码补全的显示效果，增加了图标和类型文本&lt;/li&gt;&lt;li class="task-list-item"&gt;&lt;input type="checkbox" class="task-list-item-checkbox" checked disabled /&gt;提高了代码补全的优先级，使其在列表中优先显示&lt;/li&gt;&lt;li class="task-list-item"&gt;&lt;input type="checkbox" class="task-list-item-checkbox" checked disabled /&gt;修复了一些代码补全中的小问题，优化了使用体验&lt;/li&gt;&lt;/ul&gt;
+
+&lt;h2&gt;[1.0.36] - 2025-09-06&lt;/h2&gt;
+
+&lt;ul&gt;&lt;li class="task-list-item"&gt;&lt;input type="checkbox" class="task-list-item-checkbox" checked disabled /&gt;在主工具栏添加构建模块按钮&lt;/li&gt;&lt;li class="task-list-item"&gt;&lt;input type="checkbox" class="task-list-item-checkbox" checked disabled /&gt;添加自定义提交日志模板前缀&lt;/li&gt;&lt;/ul&gt;
+
+&lt;h2&gt;[1.0.35] - 2025-09-05&lt;/h2&gt;
+
+&lt;h3&gt;Improved&lt;/h3&gt;
+
+&lt;ul&gt;&lt;li class="task-list-item"&gt;&lt;input type="checkbox" class="task-list-item-checkbox" checked disabled /&gt;优化 JS I18n 辅助功能使用体验&lt;/li&gt;&lt;li class="task-list-item"&gt;&lt;input type="checkbox" class="task-list-item-checkbox" checked disabled /&gt;优化 Layout Combobox Url 代码提示加载速度&lt;/li&gt;&lt;/ul&gt;
+
+&lt;h3&gt;Fixed&lt;/h3&gt;
+
+&lt;ul&gt;&lt;li class="task-list-item"&gt;&lt;input type="checkbox" class="task-list-item-checkbox" checked disabled /&gt;修复已知问题&lt;/li&gt;&lt;/ul&gt;
+
+&lt;h2&gt;[1.0.34] - 2025-09-03&lt;/h2&gt;
+
+&lt;h3&gt;Added&lt;/h3&gt;
+
+&lt;ul&gt;&lt;li class="task-list-item"&gt;&lt;input type="checkbox" class="task-list-item-checkbox" checked disabled /&gt;拼写检查：自动加载数据库表及字段信息、MocName等生成词典，并自动完成自定义词典配置；&lt;/li&gt;&lt;li class="task-list-item"&gt;&lt;input type="checkbox" class="task-list-item-checkbox" checked disabled /&gt;代码提示：将数据库表及字段信息、MocName等上述信息加入字面量的代码提示中，&lt;code&gt;Ctrl&lt;/code&gt;+&lt;code&gt;空格&lt;/code&gt; 触发代码提示。&lt;/li&gt;&lt;/ul&gt;
 
 &lt;h2&gt;[1.0.33] - 2025-09-02&lt;/h2&gt;
 

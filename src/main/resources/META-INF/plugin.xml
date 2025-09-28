@@ -37,6 +37,9 @@
          Read more: https://plugins.jetbrains.com/docs/intellij/plugin-extension-points.html -->
     <extensions defaultExtensionNs="com.intellij">
 
+        <!--保证项目启动时就会加载 HtmlFoldingProjectService-->
+        <postStartupActivity implementation="com.zhiyin.plugins.activities.HtmlFoldingStartupActivity"/>
+
         <lang.foldingBuilder language="JAVA" implementationClass="com.zhiyin.plugins.foldingBuilder.MyJavaFoldingBuilder"/>
 
         <!--JavaScript: js 文件和 html 中嵌入的script 标签 js-->
@@ -45,7 +48,7 @@
         <!--HTML: js 文件中的 js 不生效, 仅 html 中嵌入的script 标签内的 js生效-->
 <!--        <lang.foldingBuilder language="HTML" implementationClass="com.zhiyin.plugins.foldingBuilder.MyJavaScriptFoldingBuilder"/>-->
 
-        <lang.foldingBuilder language="HTML" implementationClass="com.zhiyin.plugins.foldingBuilder.MyHTMLFoldingBuilder"/>
+        <lang.foldingBuilder language="HTML" implementationClass="com.zhiyin.plugins.foldingBuilder.CustomHtmlFoldingBuilder"/>
 
         <lang.foldingBuilder language="XML" implementationClass="com.zhiyin.plugins.foldingBuilder.MyXMLFoldingBuilder"/>
 
@@ -177,7 +180,7 @@
                     icon="com.zhiyin.plugins.resources.MyIcons.pandaIconSVG16_2"
                     text="复制格式化后的SQL"
                     description="复制可执行SQL（自动替换language、移除标签、移除行首空白）">
-                <add-to-group group-id="EditorPopupMenu" anchor="after" relative-to-action="Copy"/>
+                <add-to-group group-id="EditorPopupMenu" anchor="after" relative-to-action="com.zhiyin.plugins.actions.ConvertToCDATAAction"/>
             </action>
 
             <action id="com.zhiyin.plugins.actions.ImportMapperXMLSortColumnAction"
@@ -192,6 +195,20 @@
                     text="打开class文件"
                     icon="com.zhiyin.plugins.resources.MyIcons.pandaIconSVG16_2"
                     description="Opens the corresponding .class file for the current Java file">
+            </action>
+
+            <action id="com.zhiyin.plugins.actions.FindControllerByFeignUrlAction"
+                    class="com.zhiyin.plugins.actions.FindControllerByFeignUrlAction"
+                    text="Go To Controller"
+                    icon="com.zhiyin.plugins.resources.MyIcons.pandaIconSVG16_2"
+                    description="FindControllerByFeignUrlAction">
+            </action>
+
+            <action id="com.zhiyin.plugins.actions.FindFeignByControllerUrlAction"
+                    class="com.zhiyin.plugins.actions.FindFeignByControllerUrlAction"
+                    text="Go To Feign"
+                    icon="com.zhiyin.plugins.resources.MyIcons.pandaIconSVG16_2"
+                    description="FindFeignByControllerUrlAction">
             </action>
 
             <action id="com.zhiyin.plugins.actions.GoToLayoutXmlAction"
@@ -217,7 +234,7 @@
 
             <action id="com.zhiyin.plugins.actions.InsertFreeMarkerI18nDirectiveAction"
                     class="com.zhiyin.plugins.actions.InsertFreeMarkerI18nDirectiveAction"
-                    text="FreeMarker/JSP: 插入I18n Message指令/标签"
+                    text="FreeMarker/JSP: 插入message指令/标签"
                     icon="com.zhiyin.plugins.resources.MyIcons.pandaIconSVG16_2"
                     description="FreeMarker中插入&lt;@message指令; JSP中插入&lt;mes:message标签">
             </action>
@@ -305,5 +322,10 @@
                   topic="com.intellij.openapi.editor.event.EditorMouseMotionListener"/>-->
     </projectListeners>
 
+<!--    <project-components>
+        <component>
+            <implementation-class>com.zhiyin.plugins.component.HtmlFoldingProjectComponent</implementation-class>
+        </component>
+    </project-components>-->
 
 </idea-plugin>
