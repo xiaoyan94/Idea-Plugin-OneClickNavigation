@@ -164,9 +164,8 @@ public final class MyProjectService {
 
             // indicator.setText("OneClickNavigation loading data completed");
 
-            ApplicationManager.getApplication().invokeLater(() -> {
-                createDictionaryFile(project); // 创建字典文件
-            });
+            // 在 BGT 中执行即可，方法中读索引的部分使用 ReadAction 包裹起来即可
+            createDictionaryFile(project); // 创建字典文件
         }
 //        });
 

@@ -6,6 +6,10 @@
 
 ## [Unreleased]
 
+## [1.0.43] - 2025-10-10
+
+- [x] 修复阻塞EDT的问题，满足IntelliJ平台对索引访问的线程安全要求
+
 ## [1.0.42] - 2025-10-10
 
 - [x] 修复翻译对话框确定按钮焦点和启用状态在特定复用key场景下的问题
@@ -395,6 +399,7 @@
 - 支持JavaScript代码中折叠显示I18n中文资源串;
 
 [Unreleased]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-Unreleased.zip
+[1.0.43]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.43.zip
 [1.0.42]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.42.zip
 [1.0.41]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.41.zip
 [1.0.40]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.40.zip

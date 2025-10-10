@@ -2,6 +2,7 @@ package com.zhiyin.plugins.utils;
 
 import com.intellij.lang.properties.PropertiesFileType;
 import com.intellij.lang.properties.psi.Property;
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.Service;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -23,10 +24,12 @@ public final class DatabaseConnectionFinder {
     }
 
     private void collectPropertiesFiles(Project project, List<Map<String, String>> connectionInfoList) {
-        Collection<VirtualFile> files = FileTypeIndex.getFiles(PropertiesFileType.INSTANCE, GlobalSearchScope.projectScope(project));
-        for (VirtualFile file : files) {
-           extractDatabaseConnectionInfo(file, connectionInfoList, project);
-        }
+        ApplicationManager.getApplication().runReadAction(() -> {
+            Collection<VirtualFile> files = FileTypeIndex.getFiles(PropertiesFileType.INSTANCE, GlobalSearchScope.projectScope(project));
+            for (VirtualFile file : files) {
+                extractDatabaseConnectionInfo(file, connectionInfoList, project);
+            }
+        });
     }
 
     private void extractDatabaseConnectionInfo(VirtualFile file, List<Map<String, String>> connectionInfoList, Project project) {

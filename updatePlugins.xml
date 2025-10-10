@@ -1,7 +1,7 @@
 
 <plugins>
-    <plugin id="com.zhiyin.plugins.OneClickNavigation" url="https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.42.zip" version="1.0.42">
-        <change-notes>&lt;ul&gt;&lt;li class="task-list-item"&gt;&lt;input type="checkbox" class="task-list-item-checkbox" checked disabled /&gt;修复翻译对话框确定按钮焦点和启用状态在特定复用key场景下的问题&lt;/li&gt;&lt;/ul&gt;&#13;
+    <plugin id="com.zhiyin.plugins.OneClickNavigation" url="https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.43.zip" version="1.0.43">
+        <change-notes>&lt;ul&gt;&lt;li class="task-list-item"&gt;&lt;input type="checkbox" class="task-list-item-checkbox" checked disabled /&gt;修复阻塞EDT的问题，满足IntelliJ平台对索引访问的线程安全要求&lt;/li&gt;&lt;/ul&gt;&#13;
 &#13;
 &#13;
 </change-notes>
