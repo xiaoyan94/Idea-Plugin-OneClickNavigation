@@ -346,7 +346,9 @@ class MyTranslateDialogWrapper(private val project: Project?, private val module
                         && canAutoDoOKActionWhenI18nKeyExists){
                         doOKAction()
                     } else {
-                        getButton(okAction)?.requestFocus()
+                        val okButton = getButton(okAction)
+                        okButton?.requestFocus()
+                        okButton?.isEnabled = true
                         canAutoDoOKActionWhenI18nKeyExists = TranslateSettingsComponent.getInstance().state.autoClickTranslateButton
                     }
                 }

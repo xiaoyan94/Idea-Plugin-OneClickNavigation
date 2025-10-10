@@ -6,6 +6,10 @@
 
 ## [Unreleased]
 
+## [1.0.42] - 2025-10-10
+
+- [x] 修复翻译对话框确定按钮焦点和启用状态在特定复用key场景下的问题
+
 ## [1.0.41] - 2025-09-28
 
 - [x] 添加右键菜单：在 Feign 接口的 URL 上：一键跳转 RestController 功能
@@ -391,6 +395,7 @@
 - 支持JavaScript代码中折叠显示I18n中文资源串;
 
 [Unreleased]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-Unreleased.zip
+[1.0.42]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.42.zip
 [1.0.41]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.41.zip
 [1.0.40]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.40.zip
 [1.0.39]: https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.39.zip

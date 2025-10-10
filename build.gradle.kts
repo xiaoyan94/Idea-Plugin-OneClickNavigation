@@ -15,6 +15,10 @@ fun properties(key: String) = project.findProperty(key).toString()
 
 buildscript {
     repositories {
+        // 先使用阿里云镜像，防止 SSL / TLS 证书问题
+        maven { url = uri("https://maven.aliyun.com/repository/public") }
+        maven { url = uri("https://maven.aliyun.com/repository/gradle-plugin") }
+
         mavenCentral()
         google()
         gradlePluginPortal()
@@ -31,7 +35,7 @@ buildscript {
 
 plugins {
     id("java")
-    id("org.jetbrains.intellij") version "1.17.2"
+    id("org.jetbrains.intellij") version "1.17.4"
     id("org.jetbrains.kotlin.jvm") version "1.9.23"
 
     id("org.jetbrains.changelog") version "2.2.0" // Gradle Changelog Plugin
