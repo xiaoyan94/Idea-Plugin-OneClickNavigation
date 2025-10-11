@@ -87,7 +87,7 @@ public class ${ObjectName}Service extends BaseService {
         excelImportService.insertTempDataByExcel(dataResult);
 
         // 插入业务表
-        // ${objectName}Dao.import${objectName}(params);
+        // ${objectName}Dao.import${ObjectName}(params);
         bizCommonService.resetSeq("${tableName}");
         Map retMap;
         if (!errorMessages.isEmpty()) {
