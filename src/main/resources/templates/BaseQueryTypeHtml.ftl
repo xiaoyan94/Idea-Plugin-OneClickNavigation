@@ -91,7 +91,8 @@
                 }
             };
             loadMultiDataGrid(queryData, columnQryUrl, dataGridMap);
-            // bindValidateDateEvent('querymaintaintimefrom', 'querymaintaintimeto');
+            // bindValidateDateEvent('querymaintaindatefrom', 'querymaintaindateto');
+            // bindValidateDateTimeEvent('querymaintaintimefrom', 'querymaintaintimeto');
 
             bindImportSaveEvent();
             bindImportCloseEvent();

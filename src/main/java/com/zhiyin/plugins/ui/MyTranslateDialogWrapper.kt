@@ -340,7 +340,7 @@ class MyTranslateDialogWrapper(private val project: Project?, private val module
                     }
 
                     translateButton.component.isEnabled = true
-                    sourceCHSTextField.comment?.text = "值已存在，已复制key到剪切板，key=${key}"
+                    sourceCHSTextField.comment?.text = "值已存在，key=${key}"
                     // 根据设置，直接复用Key
                     if (TranslateSettingsComponent.getInstance().state.doOKActionWhenI18nKeyExists
                         && canAutoDoOKActionWhenI18nKeyExists){
@@ -352,7 +352,7 @@ class MyTranslateDialogWrapper(private val project: Project?, private val module
                         canAutoDoOKActionWhenI18nKeyExists = TranslateSettingsComponent.getInstance().state.autoClickTranslateButton
                     }
                 }
-                CopyPasteManager.getInstance().setContents(StringSelection(key))
+                // CopyPasteManager.getInstance().setContents(StringSelection(key))
             } else {
                 // 如果key不存在，则翻译
                 SwingUtilities.invokeLater{

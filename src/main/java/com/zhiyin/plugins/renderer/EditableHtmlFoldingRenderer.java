@@ -424,7 +424,9 @@ public class EditableHtmlFoldingRenderer implements EditorCustomElementRenderer 
         if (module == null) return;
 
         MyTranslateDialogWrapper myTranslateDialogWrapper = createMyTranslateDialogWrapper(project, module, newValue, this);
-        myTranslateDialogWrapper.clickTranslateButton();
+        if (!newValue.startsWith("com")) {
+            myTranslateDialogWrapper.clickTranslateButton();
+        }
         ApplicationManager.getApplication().invokeLater(() -> {
             if (myTranslateDialogWrapper.showAndGet()) {
                 MyTranslateDialogWrapper.InputModel inputModel = myTranslateDialogWrapper.getInputModel();
