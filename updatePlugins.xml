@@ -1,7 +1,7 @@
 
 <plugins>
-    <plugin id="com.zhiyin.plugins.OneClickNavigation" url="https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.43.zip" version="1.0.43">
-        <change-notes>&lt;ul&gt;&lt;li class="task-list-item"&gt;&lt;input type="checkbox" class="task-list-item-checkbox" checked disabled /&gt;修复阻塞EDT的问题，满足IntelliJ平台对索引访问的线程安全要求&lt;/li&gt;&lt;/ul&gt;&#13;
+    <plugin id="com.zhiyin.plugins.OneClickNavigation" url="https://idea-plugin.oss.vaetech.uk/OneClickNavigation-1.0.44.zip" version="1.0.44">
+        <change-notes>&lt;ul&gt;&lt;li class="task-list-item"&gt;&lt;input type="checkbox" class="task-list-item-checkbox" checked disabled /&gt;优化使用体验&lt;/li&gt;&lt;/ul&gt;&#13;
 &#13;
 &#13;
 </change-notes>
